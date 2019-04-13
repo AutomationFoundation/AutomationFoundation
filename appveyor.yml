@@ -17,7 +17,10 @@ before_build:
 - cmd: nuget sources add -name "myget.org" -source "https://www.myget.org/F/winnster/api/v3/index.json"
 - cmd: nuget restore
 build:
+  publish_nuget: true
   verbosity: minimal
+deploy:
+  provider: MyGet.org - NuGet
 artifacts:
 - path: src\AutomationFoundation\bin\$(configuration)\AutomationFoundation.*.nupkg
   name: NuGet Package
