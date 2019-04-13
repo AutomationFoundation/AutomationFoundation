@@ -1,6 +1,6 @@
 version: 0.1.{build}
 image: Visual Studio 2017
-configuration: Release
+configuration: Debug
 platform: Any CPU
 dotnet_csproj:
   patch: true
@@ -14,9 +14,10 @@ nuget:
   account_feed: true
   disable_publish_on_pr: true
 before_build:
+- cmd: nuget sources add -name "myget.org" -source "https://www.myget.org/F/winnster/api/v3/index.json"
 - cmd: nuget restore
 build:
   verbosity: minimal
 artifacts:
-- path: src\AutomationFoundation\bin\Release\AutomationFoundation.*.nupkg
+- path: src\AutomationFoundation\bin\$(configuration)\AutomationFoundation.*.nupkg
   name: NuGet Package
