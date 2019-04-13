@@ -3,6 +3,9 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <Authors>Winnster.io</Authors>
+    <Version>1.0.0</Version>
+    <PackageVersion>$(Version)</PackageVersion>
+    <InformationalVersion>$(Version)</InformationalVersion>
     <GeneratePackageOnBuild Condition=" '$(Configuration)' == 'Release' ">true</GeneratePackageOnBuild>
     <Product>Automation Foundation</Product>
   </PropertyGroup>
