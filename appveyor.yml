@@ -1,0 +1,22 @@
+version: 0.1.{build}
+image: Visual Studio 2017
+configuration: Release
+platform: Any CPU
+dotnet_csproj:
+  patch: true
+  file: '**\*.csproj'
+  version: '{version}'
+  package_version: '{version}'
+  assembly_version: '{version}'
+  file_version: '{version}'
+  informational_version: '{version}-preview'
+nuget:
+  account_feed: true
+  disable_publish_on_pr: true
+before_build:
+- cmd: nuget restore
+build:
+  verbosity: minimal
+artifacts:
+- path: src\AutomationFoundation\bin\Release\AutomationFoundation.*.nupkg
+  name: NuGet Package
