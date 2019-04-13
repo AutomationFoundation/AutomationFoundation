@@ -2,9 +2,8 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <Version>1.0.0-alpha</Version>
+    <Version>0.1.0-preview</Version>
     <Authors>Winnster.io</Authors>
-    <Company>Winnster Solutions, LLC</Company>
     <PackageProjectUrl></PackageProjectUrl>
     <PackageLicenseUrl></PackageLicenseUrl>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
