@@ -1,0 +1,25 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <Authors>Winnster.io</Authors>
+    <Version>1.0.0</Version>
+    <PackageVersion>$(Version)</PackageVersion>
+    <InformationalVersion>$(Version)</InformationalVersion>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <RepositoryType>git</RepositoryType>
+    <RepositoryUrl>https://github.com/winnster/AutomationFoundation.Runtime</RepositoryUrl>
+    <PackageTags>automation,automationfoundation,runtime</PackageTags>
+    <Description>Contains the runtime for the AutomationFoundation framework.</Description>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <DocumentationFile>obj\AutomationFoundation.Runtime.xml</DocumentationFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\AutomationFoundation.Runtime.Abstractions\AutomationFoundation.Runtime.Abstractions.csproj" />
+    <ProjectReference Include="..\AutomationFoundation\AutomationFoundation.csproj" />
+  </ItemGroup>
+
+</Project>

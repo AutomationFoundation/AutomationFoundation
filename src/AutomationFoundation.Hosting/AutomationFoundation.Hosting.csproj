@@ -1,0 +1,29 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <Authors>Winnster.io</Authors>
+    <Version>1.0.0</Version>
+    <PackageVersion>$(Version)</PackageVersion>
+    <InformationalVersion>$(Version)</InformationalVersion>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <RepositoryUrl>https://github.com/winnster/AutomationFoundation.Hosting</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>automation,automationfoundation,hosting</PackageTags>
+    <Description>Contains the implementation of Hosting components for the AutomationFoundation runtime.</Description>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <DocumentationFile>obj\AutomationFoundation.Hosting.xml</DocumentationFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="2.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\AutomationFoundation.Hosting.Abstractions\AutomationFoundation.Hosting.Abstractions.csproj" />
+    <ProjectReference Include="..\AutomationFoundation.Runtime\AutomationFoundation.Runtime.csproj" />
+  </ItemGroup>
+
+</Project>

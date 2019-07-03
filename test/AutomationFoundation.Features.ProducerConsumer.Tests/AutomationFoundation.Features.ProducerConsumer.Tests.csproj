@@ -1,0 +1,24 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net471</TargetFramework>
+    <RootNamespace>AutomationFoundation.Features.ProducerConsumer.Tests</RootNamespace>
+    <AssemblyName>AutomationFoundation.Features.ProducerConsumer.Tests</AssemblyName>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="ConsumerRunnerTests.cs" />
+    <Compile Remove="ProducedItemContextTests.cs" />
+    <Compile Remove="ProducerConsumerProcessorTests.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Moq" Version="4.8.2" />
+    <PackageReference Include="NUnit" Version="3.10.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\AutomationFoundation.Features.ProducerConsumer\AutomationFoundation.Features.ProducerConsumer.csproj" />
+  </ItemGroup>
+
+</Project>
