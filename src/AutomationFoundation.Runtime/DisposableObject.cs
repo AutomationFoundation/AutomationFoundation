@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace AutomationFoundation
+namespace AutomationFoundation.Runtime
 {
     /// <summary>
     /// Represents a disposable object. This class must be inherited.

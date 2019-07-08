@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace AutomationFoundation
+namespace AutomationFoundation.Runtime
 {
     /// <summary>
     /// Represents a processor. This class must be inherited.
@@ -74,7 +74,7 @@ namespace AutomationFoundation
         {
             if (State >= ProcessorState.Started)
             {
-                throw new RuntimeException(Resources.Exception_ProcessorAlreadyStarted);
+                throw new RuntimeException("The processor has already been started.");
             }
         }
 
@@ -121,7 +121,7 @@ namespace AutomationFoundation
         {
             if (State >= ProcessorState.Stopping && State <= ProcessorState.Stopped)
             {
-                throw new RuntimeException(Resources.Exception_ProcessorHasNotBeenStarted);
+                throw new RuntimeException("The processor has not been started.");
             }
         }
 
@@ -137,7 +137,7 @@ namespace AutomationFoundation
         {
             if (State <= ProcessorState.Error)
             {
-                throw new RuntimeException(Resources.Error_ProcessorInAnErrorState);
+                throw new RuntimeException("The processor has encountered an unrecoverable error and can no longer be started.");
             }
         }
     }

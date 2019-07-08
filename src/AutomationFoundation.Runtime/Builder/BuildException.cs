@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.Serialization;
 
-namespace AutomationFoundation.Builder
+namespace AutomationFoundation.Runtime.Builder
 {
     /// <summary>
     /// Thrown when an exception occurs while building an object.

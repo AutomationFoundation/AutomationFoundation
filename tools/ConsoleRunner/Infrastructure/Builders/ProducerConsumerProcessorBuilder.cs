@@ -1,5 +1,4 @@
 ﻿using System;
-using AutomationFoundation;
 using AutomationFoundation.Features.ProducerConsumer;
 using AutomationFoundation.Features.ProducerConsumer.Abstractions;
 using AutomationFoundation.Features.ProducerConsumer.Configuration;

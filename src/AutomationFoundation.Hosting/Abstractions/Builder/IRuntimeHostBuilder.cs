@@ -1,5 +1,5 @@
 ﻿using System;
-using AutomationFoundation.Builder;
+using AutomationFoundation.Runtime.Abstractions;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace AutomationFoundation.Hosting.Abstractions.Builder

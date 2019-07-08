@@ -1,6 +1,7 @@
 ﻿using System;
+using AutomationFoundation.Runtime.Abstractions;
 
-namespace AutomationFoundation
+namespace AutomationFoundation.Runtime
 {
     /// <summary>
     /// Represents a scheduler for a pre-determined interval.

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace AutomationFoundation
+namespace AutomationFoundation.Runtime.Abstractions
 {
     /// <summary>
     /// Identifies a scheduler.

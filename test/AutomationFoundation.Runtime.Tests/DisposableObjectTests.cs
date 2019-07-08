@@ -1,7 +1,7 @@
-﻿using AutomationFoundation.Tests.Stubs;
+﻿using AutomationFoundation.Runtime.Tests.Stubs;
 using NUnit.Framework;
 
-namespace AutomationFoundation.Tests
+namespace AutomationFoundation.Runtime.Tests
 {
     [TestFixture]
     public class DisposableObjectTests

@@ -1,4 +1,4 @@
-﻿namespace AutomationFoundation.Builder
+﻿namespace AutomationFoundation.Runtime.Abstractions
 {
     /// <summary>
     /// Identifies an object which builds an object.

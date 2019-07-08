@@ -1,4 +1,4 @@
-﻿namespace AutomationFoundation
+﻿namespace AutomationFoundation.Runtime
 {
     /// <summary>
     /// Defines the processor states.

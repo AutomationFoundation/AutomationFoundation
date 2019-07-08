@@ -19,7 +19,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\AutomationFoundation.Runtime.Abstractions\AutomationFoundation.Runtime.Abstractions.csproj" />
-    <ProjectReference Include="..\AutomationFoundation\AutomationFoundation.csproj" />
   </ItemGroup>
 
 </Project>

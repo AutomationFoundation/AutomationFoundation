@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace AutomationFoundation.Tests.Stubs
+namespace AutomationFoundation.Runtime.Tests.Stubs
 {
     public class StubDisposableObject : DisposableObject
     {

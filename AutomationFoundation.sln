@@ -10,10 +10,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		README.md = README.md
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AutomationFoundation", "src\AutomationFoundation\AutomationFoundation.csproj", "{17E1F5FC-68B3-4225-B812-BB7EA6B96DE8}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AutomationFoundation.Tests", "test\AutomationFoundation.Tests\AutomationFoundation.Tests.csproj", "{8AC2D445-E299-41DF-A570-7848CA20D136}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{FCA4596F-9EC1-4086-8CA1-6F70D0716F49}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AutomationFoundation.Transactions.Abstractions", "src\AutomationFoundation.Transactions.Abstractions\AutomationFoundation.Transactions.Abstractions.csproj", "{2A6E0E15-A334-4AAE-A0F4-38C6D08492A4}"
@@ -52,14 +48,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{17E1F5FC-68B3-4225-B812-BB7EA6B96DE8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{17E1F5FC-68B3-4225-B812-BB7EA6B96DE8}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{17E1F5FC-68B3-4225-B812-BB7EA6B96DE8}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{17E1F5FC-68B3-4225-B812-BB7EA6B96DE8}.Release|Any CPU.Build.0 = Release|Any CPU
-		{8AC2D445-E299-41DF-A570-7848CA20D136}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{8AC2D445-E299-41DF-A570-7848CA20D136}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{8AC2D445-E299-41DF-A570-7848CA20D136}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{8AC2D445-E299-41DF-A570-7848CA20D136}.Release|Any CPU.Build.0 = Release|Any CPU
 		{2A6E0E15-A334-4AAE-A0F4-38C6D08492A4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{2A6E0E15-A334-4AAE-A0F4-38C6D08492A4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2A6E0E15-A334-4AAE-A0F4-38C6D08492A4}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -113,8 +101,6 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{17E1F5FC-68B3-4225-B812-BB7EA6B96DE8} = {FCA4596F-9EC1-4086-8CA1-6F70D0716F49}
-		{8AC2D445-E299-41DF-A570-7848CA20D136} = {51336679-9F77-4B62-8A82-F4B875371473}
 		{2A6E0E15-A334-4AAE-A0F4-38C6D08492A4} = {FCA4596F-9EC1-4086-8CA1-6F70D0716F49}
 		{90619238-E346-4E38-B41D-9B23904860AB} = {7CFB3B8F-7B60-4DBD-9BB5-A4D4F7554A8E}
 		{9254578E-B092-4491-927D-466A5F25C0DD} = {7CFB3B8F-7B60-4DBD-9BB5-A4D4F7554A8E}
