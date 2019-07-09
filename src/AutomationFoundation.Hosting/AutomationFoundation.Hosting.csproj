@@ -23,7 +23,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\AutomationFoundation.Hosting.Abstractions\AutomationFoundation.Hosting.Abstractions.csproj" />
-    <ProjectReference Include="..\AutomationFoundation.Runtime\AutomationFoundation.Runtime.csproj" />
+    <ProjectReference Include="..\AutomationFoundation.Runtime.Abstractions\AutomationFoundation.Runtime.Abstractions.csproj" />
   </ItemGroup>
 
 </Project>

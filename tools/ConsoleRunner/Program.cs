@@ -1,5 +1,6 @@
 ﻿using System;
 using Autofac.Extensions.DependencyInjection;
+using AutomationFoundation;
 using AutomationFoundation.Hosting;
 using AutomationFoundation.Hosting.Abstractions;
 using AutomationFoundation.Hosting.Abstractions.Builder;
@@ -21,7 +22,7 @@ namespace ConsoleRunner
 
         private static IRuntimeHostBuilder CreateRuntimeHostBuilder()
         {
-            return RuntimeHost.CreateDefaultBuilder()
+            return RuntimeHost.CreateBuilder<DefaultRuntimeHostBuilder>()
                 .ConfigureServices(services => services.AddAutofac())
                 .UseStartup<Startup>();
         }

@@ -1,11 +1,12 @@
 ﻿using System;
+using AutomationFoundation.Runtime.Abstractions;
 
 namespace AutomationFoundation.Runtime
 {
     /// <summary>
     /// Represents a processor. This class must be inherited.
     /// </summary>
-    public abstract class Processor : DisposableObject
+    public abstract class Processor : DisposableObject, IProcessor
     {
         /// <summary>
         /// Gets the object used for thread synchronization.

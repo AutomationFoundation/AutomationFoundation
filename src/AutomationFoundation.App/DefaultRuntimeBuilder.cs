@@ -4,12 +4,12 @@ using AutomationFoundation.Hosting.Abstractions.Builder;
 using AutomationFoundation.Runtime;
 using AutomationFoundation.Runtime.Abstractions;
 
-namespace AutomationFoundation.Hosting.Builder
+namespace AutomationFoundation
 {
     internal class DefaultRuntimeBuilder : IRuntimeBuilder
     {
-        private readonly IList<IBuilder<Processor>> processorBuilders = new List<IBuilder<Processor>>();
-        private readonly IList<Processor> processors = new List<Processor>();
+        private readonly IList<IBuilder<IProcessor>> processorBuilders = new List<IBuilder<IProcessor>>();
+        private readonly IList<IProcessor> processors = new List<IProcessor>();
 
         public IServiceProvider ApplicationServices { get; }
 
@@ -18,7 +18,7 @@ namespace AutomationFoundation.Hosting.Builder
             ApplicationServices = applicationServices ?? throw new ArgumentNullException(nameof(applicationServices));
         }
 
-        public void RegisterProcessor(Processor processor)
+        public void RegisterProcessor(IProcessor processor)
         {
             if (processor == null)
             {
@@ -33,7 +33,7 @@ namespace AutomationFoundation.Hosting.Builder
             processors.Add(processor);
         }
 
-        public IRuntimeBuilder RegisterProcessor<T>(IProcessorBuilder<T> builder) where T : Processor
+        public IRuntimeBuilder RegisterProcessor<T>(IProcessorBuilder<T> builder) where T : IProcessor
         {
             if (builder == null)
             {

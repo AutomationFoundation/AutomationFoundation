@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading;
 
-namespace AutomationFoundation
+namespace AutomationFoundation.Runtime
 {
     /// <summary>
     /// Provides contextual information of work being processed by the runtime.

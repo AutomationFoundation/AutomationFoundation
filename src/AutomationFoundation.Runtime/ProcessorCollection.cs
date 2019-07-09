@@ -7,7 +7,7 @@ namespace AutomationFoundation.Runtime
     /// <summary>
     /// Represents a collection of processors.
     /// </summary>
-    public sealed class ProcessorCollection : Collection<Processor>
+    public sealed class ProcessorCollection : Collection<IProcessor>
     {
         private readonly IRuntime parent;
 
@@ -29,7 +29,7 @@ namespace AutomationFoundation.Runtime
         }
 
         /// <inheritdoc />
-        protected override void InsertItem(int index, Processor item)
+        protected override void InsertItem(int index, IProcessor item)
         {
             if (Contains(item))
             {
@@ -49,7 +49,7 @@ namespace AutomationFoundation.Runtime
         }
 
         /// <inheritdoc />
-        protected override void SetItem(int index, Processor item)
+        protected override void SetItem(int index, IProcessor item)
         {
             GuardMustNotBeActive();
 

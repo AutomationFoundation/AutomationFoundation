@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using AutomationFoundation.Runtime.Abstractions;
 
@@ -9,12 +10,12 @@ namespace AutomationFoundation.Runtime
     /// </summary>
     public sealed class AutomationRuntime : DisposableObject, IRuntime
     {
-        private readonly ICollection<Processor> processors;
+        private readonly ICollection<IProcessor> processors;
 
         /// <summary>
         /// Gets the collection of processors.
         /// </summary>
-        public ICollection<Processor> Processors
+        public ICollection<IProcessor> Processors
         {
             get
             {
@@ -72,7 +73,7 @@ namespace AutomationFoundation.Runtime
             {
                 foreach (var processor in Processors)
                 {
-                    processor.Dispose();
+                    (processor as IDisposable)?.Dispose();
                 }
             }
 

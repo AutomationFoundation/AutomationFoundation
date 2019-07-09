@@ -1,5 +1,6 @@
 ﻿using System;
 using AutomationFoundation.Features.ProducerConsumer.Abstractions;
+using AutomationFoundation.Runtime;
 using AutomationFoundation.Runtime.Abstractions.Synchronization;
 using Microsoft.Extensions.DependencyInjection;
 

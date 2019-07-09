@@ -1,7 +1,6 @@
 ﻿using System;
 using AutomationFoundation.Hosting.Abstractions;
 using AutomationFoundation.Hosting.Abstractions.Builder;
-using AutomationFoundation.Hosting.Builder;
 using AutomationFoundation.Runtime.Abstractions;
 
 namespace AutomationFoundation.Hosting
@@ -39,15 +38,6 @@ namespace AutomationFoundation.Hosting
         public void Stop()
         {
             runtime.Stop();
-        }
-
-        /// <summary>
-        /// Create the default runtime host builder.
-        /// </summary>
-        /// <returns>The runtime host builder.</returns>
-        public static IRuntimeHostBuilder CreateDefaultBuilder()
-        {
-            return CreateBuilder<DefaultRuntimeHostBuilder>();
         }
 
         /// <summary>

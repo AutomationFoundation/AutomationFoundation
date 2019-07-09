@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.Serialization;
 
-namespace AutomationFoundation
+namespace AutomationFoundation.Runtime
 {
     /// <summary>
     /// Thrown when an exception occurs within the runtime.

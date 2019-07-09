@@ -1,5 +1,4 @@
 ﻿using System;
-using AutomationFoundation.Runtime;
 using AutomationFoundation.Runtime.Abstractions;
 
 namespace AutomationFoundation.Hosting.Abstractions.Builder
@@ -18,6 +17,6 @@ namespace AutomationFoundation.Hosting.Abstractions.Builder
         /// Registers a processor with the builder.
         /// </summary>
         /// <param name="processor">The processor to register.</param>
-        void RegisterProcessor(Processor processor);
+        void RegisterProcessor(IProcessor processor);
     }
 }

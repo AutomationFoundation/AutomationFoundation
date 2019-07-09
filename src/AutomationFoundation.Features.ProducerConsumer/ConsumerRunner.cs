@@ -2,6 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using AutomationFoundation.Features.ProducerConsumer.Abstractions;
+using AutomationFoundation.Runtime;
 
 namespace AutomationFoundation.Features.ProducerConsumer
 {

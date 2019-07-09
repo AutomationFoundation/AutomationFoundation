@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using AutomationFoundation.Hosting;
 using AutomationFoundation.Hosting.Abstractions;
 using AutomationFoundation.Hosting.Abstractions.Builder;
 using AutomationFoundation.Runtime.Builder;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace AutomationFoundation.Hosting.Builder
+namespace AutomationFoundation
 {
-    internal class DefaultRuntimeHostBuilder : IRuntimeHostBuilder
+    public class DefaultRuntimeHostBuilder : IRuntimeHostBuilder
     {
         private readonly IList<Action<IServiceCollection>> configurationCallbacks = new List<Action<IServiceCollection>>();
         private IStartup startup;

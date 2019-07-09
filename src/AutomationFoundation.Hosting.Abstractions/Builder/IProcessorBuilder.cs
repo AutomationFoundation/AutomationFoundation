@@ -1,5 +1,4 @@
-﻿using AutomationFoundation.Runtime;
-using AutomationFoundation.Runtime.Abstractions;
+﻿using AutomationFoundation.Runtime.Abstractions;
 
 namespace AutomationFoundation.Hosting.Abstractions.Builder
 {
@@ -7,8 +6,8 @@ namespace AutomationFoundation.Hosting.Abstractions.Builder
     /// Identifies a builder for processors.
     /// </summary>
     /// <typeparam name="TProcessor">The type of processor being built.</typeparam>
-    public interface IProcessorBuilder<out TProcessor> : IBuilder<TProcessor>
-        where TProcessor : Processor
+    public interface IProcessorBuilder<TProcessor> : IBuilder<IProcessor>
+        where TProcessor : IProcessor
     {
     }
 }
