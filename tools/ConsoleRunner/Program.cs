@@ -1,6 +1,5 @@
 ﻿using System;
 using Autofac.Extensions.DependencyInjection;
-using AutomationFoundation;
 using AutomationFoundation.Hosting;
 using AutomationFoundation.Hosting.Abstractions;
 using AutomationFoundation.Hosting.Abstractions.Builder;

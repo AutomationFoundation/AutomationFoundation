@@ -3,7 +3,7 @@ using System.Linq;
 using AutomationFoundation.Hosting.Abstractions;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace AutomationFoundation
+namespace AutomationFoundation.Hosting
 {
     internal static class StartupExtensions
     {
