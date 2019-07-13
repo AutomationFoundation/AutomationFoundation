@@ -10,6 +10,6 @@ namespace AutomationFoundation.Features.ProducerConsumer
         /// <summary>
         /// Gets or sets the callback which will be executed when an item has been produced.
         /// </summary>
-        public Action<ProducedItemContext> OnProducedCallback { get; set; }
+        public Action<ProducerConsumerContext> OnProducedCallback { get; set; }
     }
 }

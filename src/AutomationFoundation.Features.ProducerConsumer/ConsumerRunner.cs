@@ -24,7 +24,7 @@ namespace AutomationFoundation.Features.ProducerConsumer
         }
 
         /// <inheritdoc />
-        public async Task Run(ProducedItemContext context, CancellationToken cancellationToken)
+        public async Task Run(ProducerConsumerContext context, CancellationToken cancellationToken)
         {
             if (context == null)
             {

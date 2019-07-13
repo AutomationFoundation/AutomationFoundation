@@ -1,46 +1,46 @@
-﻿using System;
-using NUnit.Framework;
+﻿//using System;
+//using NUnit.Framework;
 
-namespace AutomationFoundation.Runtime.Tests
-{
-    [TestFixture]
-    public class ProcessingContextTests
-    {
-        [Test]
-        public void ReturnsTheIdCorrectly()
-        {
-            Guid expected = Guid.NewGuid();
-            var target = new ProcessingContext(expected);
+//namespace AutomationFoundation.Runtime.Tests
+//{
+//    [TestFixture]
+//    public class ProcessingContextTests
+//    {
+//        [Test]
+//        public void ReturnsTheIdCorrectly()
+//        {
+//            Guid expected = Guid.NewGuid();
+//            var target = new ProcessingContext(expected);
 
-            Assert.AreEqual(expected, target.Id);
-        }
+//            Assert.AreEqual(expected, target.Id);
+//        }
 
-        [Test]
-        public void SetsTheCurrentContext()
-        {
-            var expected = new ProcessingContext(Guid.NewGuid());
-            ProcessingContext.SetCurrent(expected);
+//        [Test]
+//        public void SetsTheCurrentContext()
+//        {
+//            var expected = new ProcessingContext(Guid.NewGuid());
+//            ProcessingContext.SetCurrent(expected);
 
-            var result = ProcessingContext.Current;
+//            var result = ProcessingContext.Current;
 
-            Assert.AreEqual(expected, result);
-        }
+//            Assert.AreEqual(expected, result);
+//        }
 
-        [Test]
-        public void ThrowsAnExceptionWhenTheContextIsNull()
-        {
-            Assert.Throws<ArgumentNullException>(() => ProcessingContext.SetCurrent(null));
-        }
+//        [Test]
+//        public void ThrowsAnExceptionWhenTheContextIsNull()
+//        {
+//            Assert.Throws<ArgumentNullException>(() => ProcessingContext.SetCurrent(null));
+//        }
 
-        [Test]
-        public void ClearsTheCurrentContext()
-        {
-            ProcessingContext.SetCurrent(new ProcessingContext(Guid.NewGuid()));
-            Assert.IsNotNull(ProcessingContext.Current);
+//        [Test]
+//        public void ClearsTheCurrentContext()
+//        {
+//            ProcessingContext.SetCurrent(new ProcessingContext(Guid.NewGuid()));
+//            Assert.IsNotNull(ProcessingContext.Current);
 
-            ProcessingContext.Clear();
+//            ProcessingContext.Clear();
 
-            Assert.IsNull(ProcessingContext.Current);
-        }
-    }
-}
+//            Assert.IsNull(ProcessingContext.Current);
+//        }
+//    }
+//}

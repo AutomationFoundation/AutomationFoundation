@@ -17,6 +17,6 @@ namespace AutomationFoundation.Features.ProducerConsumer.Abstractions
         /// Consumes the item.
         /// </summary>
         /// <param name="context">The object containing contextual information about an item which was produced.</param>
-        void Consume(ProducedItemContext context);
+        void Consume(ProducerConsumerContext context);
     }
 }

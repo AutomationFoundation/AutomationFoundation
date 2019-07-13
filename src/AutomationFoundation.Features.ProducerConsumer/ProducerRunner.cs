@@ -34,7 +34,7 @@ namespace AutomationFoundation.Features.ProducerConsumer
         }
 
         /// <inheritdoc />
-        public async Task<bool> Run(Action<ProducedItemContext> onProducedCallback, CancellationToken cancellationToken)
+        public async Task<bool> Run(Action<ProducerConsumerContext> onProducedCallback, CancellationToken cancellationToken)
         {
             if (onProducedCallback == null)
             {
@@ -55,7 +55,7 @@ namespace AutomationFoundation.Features.ProducerConsumer
                 var item = await ProduceItemAsync(cancellationToken);
                 if (ShouldExecuteCallback(item))
                 {
-                    onProducedCallback(new ProducedItemContext(id, new ProducedItem(item), scope, synchronizationLock));
+                    //onProducedCallback(new ProducedItemContext(id, new ProducedItem(item), scope, synchronizationLock));
                     called = true;
                 }
             }

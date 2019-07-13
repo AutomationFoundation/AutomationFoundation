@@ -91,7 +91,7 @@ namespace AutomationFoundation.Features.ProducerConsumer
             return Task.WhenAll(tasks);
         }
 
-        private void OnProducedCallback(ProducedItemContext context)
+        private void OnProducedCallback(ProducerConsumerContext context)
         {
             consumerEngine.Consume(context);
         }

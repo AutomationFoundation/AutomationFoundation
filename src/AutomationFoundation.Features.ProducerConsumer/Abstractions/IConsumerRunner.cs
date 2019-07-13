@@ -13,6 +13,6 @@ namespace AutomationFoundation.Features.ProducerConsumer.Abstractions
         /// </summary>
         /// <param name="context">The contextual information about the item produced.</param>
         /// <param name="cancellationToken">The cancellation token to monitor for cancellation requests.</param>
-        Task Run(ProducedItemContext context, CancellationToken cancellationToken);
+        Task Run(ProducerConsumerContext context, CancellationToken cancellationToken);
     }
 }
