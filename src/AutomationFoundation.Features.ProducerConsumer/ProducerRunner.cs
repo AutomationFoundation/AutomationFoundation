@@ -137,7 +137,7 @@ namespace AutomationFoundation.Features.ProducerConsumer
         /// <returns>true if the callback should be executed, otherwise false.</returns>
         protected virtual bool ShouldExecuteCallback(ProducerConsumerContext<TItem> context)
         {
-            return alwaysExecuteOnDefaultValue || !Equals(context.Item, default);
+            return alwaysExecuteOnDefaultValue || !Equals(context.Item, default(TItem));
         }
     }
 }
