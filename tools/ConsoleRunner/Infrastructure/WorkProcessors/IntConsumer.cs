@@ -16,7 +16,7 @@ namespace ConsoleRunner.Infrastructure.WorkProcessors
         public Task ConsumeAsync(IProducerConsumerContext<int> context)
         {
             Monitor.Increment();
-
+            
             return Task.CompletedTask;
         }
     }

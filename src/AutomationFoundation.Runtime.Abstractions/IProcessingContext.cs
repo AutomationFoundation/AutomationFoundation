@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace AutomationFoundation.Runtime
@@ -17,5 +18,10 @@ namespace AutomationFoundation.Runtime
         /// Gets the service scope.
         /// </summary>
         IServiceScope ServiceScope { get; }
+
+        /// <summary>
+        /// Gets the cancellation token to monitor for cancellation requests.
+        /// </summary>
+        CancellationToken CancellationToken { get; }
     }
 }

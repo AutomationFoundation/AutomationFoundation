@@ -28,7 +28,5 @@ namespace AutomationFoundation.Features.ProducerConsumer.Abstractions
         /// Gets the synchronization lock for the produced item.
         /// </summary>
         ISynchronizationLock SynchronizationLock { get; }
-
-
     }
 }

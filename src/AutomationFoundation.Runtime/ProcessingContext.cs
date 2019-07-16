@@ -7,7 +7,7 @@ namespace AutomationFoundation.Runtime
     /// <summary>
     /// Provides contextual information of work being processed by the runtime.
     /// </summary>
-    public class ProcessingContext : DisposableObject, IProcessingContext
+    public abstract class ProcessingContext : DisposableObject, IProcessingContext
     {
         private static readonly AsyncLocal<ProcessingContext> Local = new AsyncLocal<ProcessingContext>();
 
@@ -62,6 +62,11 @@ namespace AutomationFoundation.Runtime
         /// Gets the service scope.
         /// </summary>
         public IServiceScope ServiceScope { get; }
+
+        /// <summary>
+        /// Gets or sets the cancellation token to monitor for cancellation requests.
+        /// </summary>
+        public CancellationToken CancellationToken { get; set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ProcessingContext"/> class.

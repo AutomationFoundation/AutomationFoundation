@@ -86,6 +86,7 @@ namespace AutomationFoundation.Features.ProducerConsumer
         private void OnProducedCallback(ProducerConsumerContext<TItem> context)
         {
             context.Processor = this;
+            context.CancellationToken = cancellationSource.CancellationToken;
 
             consumerEngine.Consume(context);
         }
