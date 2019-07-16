@@ -10,20 +10,21 @@ namespace AutomationFoundation.Features.ProducerConsumer
     /// <summary>
     /// Provides a processor implementation for the Producer/Consumer pattern.
     /// </summary>
-    public class ProducerConsumerProcessor : Processor
+    /// <typeparam name="TItem">The type of item to be produced and consumed.</typeparam>
+    public class ProducerConsumerProcessor<TItem> : Processor
     {
-        private readonly IEnumerable<IProducerEngine> producerEngines;
-        private readonly IConsumerEngine consumerEngine;
+        private readonly IEnumerable<IProducerEngine<TItem>> producerEngines;
+        private readonly IConsumerEngine<TItem> consumerEngine;
 
         private CancellationSource cancellationSource;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ProducerConsumerProcessor"/> class.
+        /// Initializes a new instance of the <see cref="ProducerConsumerProcessor{TItem}"/> class.
         /// </summary>
         /// <param name="name">The name of the processor.</param>
         /// <param name="producerEngines">The engines which will produce objects to process.</param>
         /// <param name="consumerEngine">The consumer engine which will consume objects which were produced.</param>
-        public ProducerConsumerProcessor(string name, IEnumerable<IProducerEngine> producerEngines, IConsumerEngine consumerEngine)
+        public ProducerConsumerProcessor(string name, IEnumerable<IProducerEngine<TItem>> producerEngines, IConsumerEngine<TItem> consumerEngine)
             : base(name)
         {
             this.producerEngines = producerEngines ?? throw new ArgumentNullException(nameof(producerEngines));
@@ -34,9 +35,7 @@ namespace AutomationFoundation.Features.ProducerConsumer
         protected override void OnStart()
         {
             InitializeCancellationSource();
-
             InitializeProducerEngines();
-            InitializeConsumerEngine();
 
             using (var t1 = StartProducerEngines())
             using (var t2 = StartConsumerEngine())
@@ -55,13 +54,10 @@ namespace AutomationFoundation.Features.ProducerConsumer
         {
             foreach (var producerEngine in producerEngines)
             {
-                producerEngine.Initialize(cancellationSource.CancellationToken);
+                producerEngine.Initialize(
+                    OnProducedCallback,
+                    cancellationSource.CancellationToken);
             }
-        }
-
-        private void InitializeConsumerEngine()
-        {
-            consumerEngine.Initialize(cancellationSource.CancellationToken);
         }
 
         /// <inheritdoc />
@@ -80,19 +76,17 @@ namespace AutomationFoundation.Features.ProducerConsumer
 
             foreach (var producerEngine in producerEngines)
             {
-                var task = producerEngine.StartAsync(new ProducerEngineContext
-                {
-                    OnProducedCallback = OnProducedCallback
-                });
-
+                var task = producerEngine.StartAsync();
                 tasks.Add(task);
             }
 
             return Task.WhenAll(tasks);
         }
 
-        private void OnProducedCallback(ProducerConsumerContext context)
+        private void OnProducedCallback(ProducerConsumerContext<TItem> context)
         {
+            context.Processor = this;
+
             consumerEngine.Consume(context);
         }
 

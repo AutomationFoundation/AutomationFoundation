@@ -34,13 +34,13 @@ namespace ConsoleRunner.Infrastructure.Builders
 
             var consumerEngine = BuildConsumerEngine(runtimeBuilder, config);
 
-            return new ProducerConsumerProcessor(
+            return new ProducerConsumerProcessor<int>(
                 config.Name,
                 new[] { producerEngine1 },
                 consumerEngine);
         }
 
-        private IConsumerEngine BuildConsumerEngine(IRuntimeBuilder runtimeBuilder, AppProcessor config)
+        private IConsumerEngine<int> BuildConsumerEngine(IRuntimeBuilder runtimeBuilder, AppProcessor config)
         {
             //return new AsynchronousConsumerEngine(
             //    WorkerPool.Create(),
@@ -49,15 +49,15 @@ namespace ConsoleRunner.Infrastructure.Builders
             //    new StrategyErrorHandler(
             //        new LogToConsoleErrorStrategy(new ConsoleWriter(), LoggingLevel.All)));
 
-            return new SynchronousConsumerEngine(
+            return new SynchronousConsumerEngine<int>(
                 WorkerPool.Create(),
                 new ConsumerRunner<int>(
                     new IntConsumer()));
         }
 
-        private IProducerEngine BuildProducerEngine(IRuntimeBuilder runtimeBuilder, AppProcessor config, ISynchronizationPolicy synchronizationPolicy)
+        private IProducerEngine<int> BuildProducerEngine(IRuntimeBuilder runtimeBuilder, AppProcessor config, ISynchronizationPolicy synchronizationPolicy)
         {
-            return new ScheduledProducerEngine(
+            return new ScheduledProducerEngine<int>(
                 new ProducerRunner<int>(
                     runtimeBuilder.ApplicationServices.GetRequiredService<IServiceScopeFactory>(),
                     new RandomIntProducer(),

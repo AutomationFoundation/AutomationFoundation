@@ -15,7 +15,7 @@ namespace AutomationFoundation.Features.ProducerConsumer
         /// </summary>
         /// <param name="engine">The consumer engine.</param>
         /// <returns>The task being used to start the engine, otherwise a completed task if no task was required.</returns>
-        public static Task StartIfAsynchronous(this IConsumerEngine engine)
+        public static Task StartIfAsynchronous<TItem>(this IConsumerEngine<TItem> engine)
         {
             if (engine == null)
             {
@@ -31,7 +31,7 @@ namespace AutomationFoundation.Features.ProducerConsumer
         /// </summary>
         /// <param name="engine">The consumer engine.</param>
         /// <returns>The task being used to stop the engine, otherwise a completed task if no task was required.</returns>
-        public static Task StopIfAsynchronous(this IConsumerEngine engine)
+        public static Task StopIfAsynchronous<TItem>(this IConsumerEngine<TItem> engine)
         {
             if (engine == null)
             {

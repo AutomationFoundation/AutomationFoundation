@@ -1,4 +1,5 @@
 ﻿using System;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace AutomationFoundation.Runtime
 {
@@ -11,5 +12,10 @@ namespace AutomationFoundation.Runtime
         /// Gets the identifier of the item being processed.
         /// </summary>
         Guid Id { get; }
+
+        /// <summary>
+        /// Gets the service scope.
+        /// </summary>
+        IServiceScope ServiceScope { get; }
     }
 }

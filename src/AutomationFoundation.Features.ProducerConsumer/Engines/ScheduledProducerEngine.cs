@@ -12,14 +12,17 @@ namespace AutomationFoundation.Features.ProducerConsumer.Engines
     /// <summary>
     /// Provides a producer engine which uses a schedule to check the producer for work availability.
     /// </summary>
-    public class ScheduledProducerEngine : DisposableObject, IProducerEngine
+    /// <typeparam name="TItem">The type of item being produced.</typeparam>
+    public class ScheduledProducerEngine<TItem> : DisposableObject, IProducerEngine<TItem>
     {
-        private readonly IProducerRunner runner;
+        private readonly IProducerRunner<TItem> runner;
         private readonly IErrorHandler errorHandler;
         private readonly IScheduler scheduler;
         private readonly ScheduledEngineOptions options;
 
         private CancellationSource cancellationSource;
+        private Action<ProducerConsumerContext<TItem>> onProducedCallback;
+
         private bool initialized;
         private Task task;
 
@@ -29,13 +32,13 @@ namespace AutomationFoundation.Features.ProducerConsumer.Engines
         public bool IsRunning => task != null && !task.IsCanceled && !task.IsCompleted && !task.IsFaulted;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ScheduledProducerEngine"/> class.
+        /// Initializes a new instance of the <see cref="ScheduledProducerEngine{TItem}"/> class.
         /// </summary>
         /// <param name="runner">The runner to execute.</param>
         /// <param name="errorHandler">The error handler to use if errors within the engine.</param>
         /// <param name="scheduler">The scheduler.</param>
         /// <param name="options">The engine configuration options.</param>
-        public ScheduledProducerEngine(IProducerRunner runner, IErrorHandler errorHandler, IScheduler scheduler, ScheduledEngineOptions options)
+        public ScheduledProducerEngine(IProducerRunner<TItem> runner, IErrorHandler errorHandler, IScheduler scheduler, ScheduledEngineOptions options)
         {
             this.runner = runner ?? throw new ArgumentNullException(nameof(runner));
             this.errorHandler = errorHandler ?? throw new ArgumentNullException(nameof(errorHandler));
@@ -44,13 +47,20 @@ namespace AutomationFoundation.Features.ProducerConsumer.Engines
         }
 
         /// <inheritdoc />
-        public void Initialize(CancellationToken cancellationToken)
+        public void Initialize(Action<ProducerConsumerContext<TItem>> onProducedCallback, CancellationToken cancellationToken)
         {
+            if (onProducedCallback == null)
+            {
+                throw new ArgumentNullException(nameof(onProducedCallback));
+            }
+
             GuardMustNotBeDisposed();
             GuardMustNotBeInitialized();
 
             cancellationSource?.Dispose();
             cancellationSource = new CancellationSource(cancellationToken);
+
+            this.onProducedCallback = onProducedCallback;
 
             initialized = true;
         }
@@ -64,12 +74,15 @@ namespace AutomationFoundation.Features.ProducerConsumer.Engines
         }
 
         /// <inheritdoc />
-        public Task StartAsync(ProducerEngineContext context)
+        public Task StartAsync()
         {
             GuardMustNotBeDisposed();
             GuardMustBeInitialized();
 
-            return Task.Run(() => StartBackgroundTask(context));
+            task = new Task(Run, TaskCreationOptions.LongRunning);
+            task.Start();
+
+            return Task.CompletedTask;
         }
 
         private void GuardMustBeInitialized()
@@ -80,13 +93,7 @@ namespace AutomationFoundation.Features.ProducerConsumer.Engines
             }
         }
 
-        private void StartBackgroundTask(ProducerEngineContext context)
-        {
-            task = new Task(() => Run(context), TaskCreationOptions.LongRunning);
-            task.Start();
-        }
-
-        private async void Run(ProducerEngineContext context)
+        private async void Run()
         {
             while (ShouldContinueExecution())
             {
@@ -97,7 +104,7 @@ namespace AutomationFoundation.Features.ProducerConsumer.Engines
                 {
                     try
                     {
-                        found = await runner.Run(context.OnProducedCallback, cancellationSource.CancellationToken);
+                        found = await runner.Run(onProducedCallback, cancellationSource.CancellationToken);
                     }
                     catch (Exception ex)
                     {

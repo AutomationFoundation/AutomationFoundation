@@ -9,22 +9,22 @@ namespace AutomationFoundation.Features.ProducerConsumer
     /// <summary>
     /// Provides an adapter which runs the consumer.
     /// </summary>
-    /// <typeparam name="T">The type of object being consumed.</typeparam>
-    public class ConsumerRunner<T> : IConsumerRunner
+    /// <typeparam name="TItem">The type of object being consumed.</typeparam>
+    public class ConsumerRunner<TItem> : IConsumerRunner<TItem>
     {
-        private readonly IConsumer<T> consumer;
+        private readonly IConsumer<TItem> consumer;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ConsumerRunner{T}"/> class.
         /// </summary>
         /// <param name="consumer">The consumer being wrapped by this adapter instance.</param>
-        public ConsumerRunner(IConsumer<T> consumer)
+        public ConsumerRunner(IConsumer<TItem> consumer)
         {
             this.consumer = consumer ?? throw new ArgumentNullException(nameof(consumer));
         }
 
         /// <inheritdoc />
-        public async Task Run(ProducerConsumerContext context, CancellationToken cancellationToken)
+        public async Task Run(ProducerConsumerContext<TItem> context)
         {
             if (context == null)
             {
@@ -35,9 +35,11 @@ namespace AutomationFoundation.Features.ProducerConsumer
             {
                 ProcessingContext.SetCurrent(context);
 
+                context.Consumer = consumer;
+
                 try
                 {
-                    await consumer.Consume(context.Item.GetItem<T>(), cancellationToken);
+                    await consumer.ConsumeAsync(context);
                 }
                 finally
                 {
@@ -46,7 +48,7 @@ namespace AutomationFoundation.Features.ProducerConsumer
             }
             finally
             {
-                context.SynchronizationLock?.Release();
+                context.Dispose();
             }
         }
     }
