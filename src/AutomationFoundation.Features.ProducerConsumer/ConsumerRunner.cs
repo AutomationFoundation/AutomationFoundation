@@ -24,7 +24,7 @@ namespace AutomationFoundation.Features.ProducerConsumer
         }
 
         /// <inheritdoc />
-        public async Task Run(ProducerConsumerContext<TItem> context)
+        public async Task RunAsync(ProducerConsumerContext<TItem> context)
         {
             if (context == null)
             {

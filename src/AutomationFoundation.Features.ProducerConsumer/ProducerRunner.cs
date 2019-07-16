@@ -35,7 +35,7 @@ namespace AutomationFoundation.Features.ProducerConsumer
         }
 
         /// <inheritdoc />
-        public async Task<bool> Run(Action<ProducerConsumerContext<TItem>> onProducedCallback, CancellationToken cancellationToken)
+        public async Task<bool> RunAsync(Action<ProducerConsumerContext<TItem>> onProducedCallback, CancellationToken cancellationToken)
         {
             if (onProducedCallback == null)
             {

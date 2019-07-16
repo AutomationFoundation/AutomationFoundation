@@ -56,7 +56,7 @@ namespace AutomationFoundation.Features.ProducerConsumer.Engines
         /// <param name="context">The contextual information about what was produced.</param>
         protected virtual void OnConsume(ProducerConsumerContext<TItem> context)
         {
-            using (var task = runner.Run(context))
+            using (var task = runner.RunAsync(context))
             {
                 Task.WaitAll(task);
             }

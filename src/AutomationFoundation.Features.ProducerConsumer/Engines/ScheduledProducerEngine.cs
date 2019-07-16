@@ -104,7 +104,7 @@ namespace AutomationFoundation.Features.ProducerConsumer.Engines
                 {
                     try
                     {
-                        found = await runner.Run(onProducedCallback, cancellationSource.CancellationToken);
+                        found = await runner.RunAsync(onProducedCallback, cancellationSource.CancellationToken);
                     }
                     catch (Exception ex)
                     {

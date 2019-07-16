@@ -12,6 +12,6 @@ namespace AutomationFoundation.Features.ProducerConsumer.Abstractions
         /// Runs the consumer.
         /// </summary>
         /// <param name="context">The contextual information about the item produced.</param>
-        Task Run(ProducerConsumerContext<TItem> context);
+        Task RunAsync(ProducerConsumerContext<TItem> context);
     }
 }
