@@ -4,6 +4,9 @@
     <TargetFramework>net471</TargetFramework>
     <RootNamespace>AutomationFoundation.Features.ProducerConsumer.Tests</RootNamespace>
     <AssemblyName>AutomationFoundation.Features.ProducerConsumer.Tests</AssemblyName>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>..\..\Public.snk</AssemblyOriginatorKeyFile>
+    <DelaySign>false</DelaySign>
   </PropertyGroup>
 
   <ItemGroup>
@@ -20,5 +23,9 @@
   <ItemGroup>
     <ProjectReference Include="..\..\src\AutomationFoundation.Features.ProducerConsumer\AutomationFoundation.Features.ProducerConsumer.csproj" />
   </ItemGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DefineConstants>TRACE</DefineConstants>
+  </PropertyGroup>
 
 </Project>
