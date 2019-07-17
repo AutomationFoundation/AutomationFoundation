@@ -8,7 +8,7 @@ namespace ConsoleRunner.Infrastructure.WorkProcessors
     {
         private static readonly Monitor Monitor = new Monitor("Consumed", new ConsoleWriter());
 
-        public IntConsumer()
+        static IntConsumer()
         {
             Monitor.Start();
         }
