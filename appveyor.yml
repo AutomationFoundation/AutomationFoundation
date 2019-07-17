@@ -20,7 +20,7 @@ dotnet_csproj:
 nuget:
   disable_publish_on_pr: true
 before_build:
-- cmd: appveyor-tools\secure-file.exe -decrypt C:\projects\dotras\Winnster.snk.enc -secret %snk_passphrase%
+- cmd: appveyor-tools\secure-file.exe -decrypt .\Winnster.snk.enc -secret %snk_passphrase%
 - cmd: choco install "sonarscanner-msbuild-net46" -y
 - cmd: SonarScanner.MSBuild.exe begin /k:"AutomationFoundation" /d:"sonar.host.url=https://sonarcloud.io" /o:"winnster" /d:"sonar.login=%sonarcloud_token%"
 - cmd: nuget sources add -name "myget.org" -source "https://www.myget.org/F/winnster/api/v3/index.json"
