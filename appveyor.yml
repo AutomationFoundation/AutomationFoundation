@@ -3,7 +3,7 @@ image: Visual Studio 2017
 environment:
   sonarcloud_token:
     secure: WSZCNtuf3h9M4BxNiFQ7SQPwGkg3+LqSMZRyfYruiicYvc1BzYaN90n8pNEsPAKs
-configuration: Debug
+configuration: Release
 platform: Any CPU
 dotnet_csproj:
   patch: true
