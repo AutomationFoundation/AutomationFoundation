@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <RootNamespace>AutomationFoundation.Runtime</RootNamespace>
-    <Version>1.0.0</Version>
+    <Version>0.0.0</Version>
     <PackageVersion>$(Version)</PackageVersion>
     <InformationalVersion>$(Version)</InformationalVersion>
     <Authors>Winnster.io</Authors>
@@ -11,7 +11,7 @@
     <RepositoryType>git</RepositoryType>
     <PackageTags>automation,automationfoundation,runtime</PackageTags>
     <RepositoryUrl>https://github.com/winnster/AutomationFoundation.Runtime.Abstractions</RepositoryUrl>
-    <Description>Contains the abstractions for the AutomationFoundation runtime.</Description>
+    <Description>Contains the abstractions for the Automation Foundation runtime.</Description>
   </PropertyGroup>
 
   <PropertyGroup>
