@@ -1,5 +1,8 @@
 version: 0.1.{build}
 image: Visual Studio 2017
+environment:
+  sonarcloud_token:
+    secure: WSZCNtuf3h9M4BxNiFQ7SQPwGkg3+LqSMZRyfYruiicYvc1BzYaN90n8pNEsPAKs
 configuration: Debug
 platform: Any CPU
 dotnet_csproj:
@@ -13,10 +16,14 @@ dotnet_csproj:
 nuget:
   disable_publish_on_pr: true
 before_build:
+- cmd: choco install "sonarscanner-msbuild-net46" -y
+- cmd: SonarScanner.MSBuild.exe begin /k:"AutomationFoundation" /d:"sonar.host.url=https://sonarcloud.io" /o:"winnster" /d:"sonar.login=%sonarcloud_token%"
 - cmd: nuget sources add -name "myget.org" -source "https://www.myget.org/F/winnster/api/v3/index.json"
 - cmd: nuget restore
 build:
   verbosity: minimal
+after_build:
+- cmd: SonarScanner.MSBuild.exe end /d:"sonar.login=%sonarsource_token%"
 artifacts:
 - path: src\AutomationFoundation\bin\$(configuration)\AutomationFoundation.*.nupkg
   name: NuGet Package
