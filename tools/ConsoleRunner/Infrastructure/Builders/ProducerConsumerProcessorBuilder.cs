@@ -36,7 +36,7 @@ namespace ConsoleRunner.Infrastructure.Builders
 
             return new ProducerConsumerProcessor<int>(
                 config.Name,
-                new[] { producerEngine1 },
+                new[] { producerEngine1, producerEngine2 },
                 consumerEngine);
         }
 
@@ -52,7 +52,7 @@ namespace ConsoleRunner.Infrastructure.Builders
             return new SynchronousConsumerEngine<int>(
                 WorkerPool.Create(),
                 new ConsumerRunner<int>(
-                    new IntConsumer()));
+                    scope => new IntConsumer()));
         }
 
         private IProducerEngine<int> BuildProducerEngine(IRuntimeBuilder runtimeBuilder, AppProcessor config, ISynchronizationPolicy synchronizationPolicy)
@@ -60,7 +60,7 @@ namespace ConsoleRunner.Infrastructure.Builders
             return new ScheduledProducerEngine<int>(
                 new ProducerRunner<int>(
                     runtimeBuilder.ApplicationServices.GetRequiredService<IServiceScopeFactory>(),
-                    new RandomIntProducer(),
+                    scope => new RandomIntProducer(),
                     synchronizationPolicy,
                     false),
                 new StrategyErrorHandler(
