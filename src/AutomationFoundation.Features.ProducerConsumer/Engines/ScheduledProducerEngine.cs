@@ -79,7 +79,7 @@ namespace AutomationFoundation.Features.ProducerConsumer.Engines
             GuardMustNotBeDisposed();
             GuardMustBeInitialized();
 
-            task = new Task(Run, TaskCreationOptions.LongRunning);
+            task = new Task(async() => await RunAsync(), TaskCreationOptions.LongRunning);
             task.Start();
 
             return Task.CompletedTask;
@@ -93,7 +93,7 @@ namespace AutomationFoundation.Features.ProducerConsumer.Engines
             }
         }
 
-        private async void Run()
+        private async Task RunAsync()
         {
             while (ShouldContinueExecution())
             {
