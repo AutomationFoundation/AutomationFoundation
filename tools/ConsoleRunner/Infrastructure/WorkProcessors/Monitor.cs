@@ -6,6 +6,9 @@ namespace ConsoleRunner.Infrastructure.WorkProcessors
 {
     public class Monitor
     {
+        /// <summary>
+        /// Defines the span of time for thirty seconds.
+        /// </summary>
         private readonly TimeSpan ThirtySeconds = new TimeSpan(0, 0, 0, 30);
 
         private readonly Timer timer;
@@ -15,7 +18,8 @@ namespace ConsoleRunner.Infrastructure.WorkProcessors
 
         public Monitor(string name, IConsoleWriter writer)
         {
-            this.timer = new Timer(OnTimerCallback);
+            timer = new Timer(OnTimerCallback);
+
             this.name = name;
             this.writer = writer;
         }
@@ -36,7 +40,7 @@ namespace ConsoleRunner.Infrastructure.WorkProcessors
             Reset();
 
             var itemsPerSecond = temp / ThirtySeconds.TotalSeconds;
-            writer.WriteLine($"{DateTime.Now:hh:mm:ss}: {itemsPerSecond}/sec");
+            writer.WriteLine($"{name}@{DateTime.Now:hh:mm:ss}: {itemsPerSecond}/sec");
         }
 
         public void Increment()

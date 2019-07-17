@@ -29,10 +29,10 @@ namespace ConsoleRunner.Infrastructure.Builders
                 throw new ArgumentNullException(nameof(config));
             }
 
-            var producerEngine1 = BuildProducerEngine(runtimeBuilder, config, null);
-            var producerEngine2 = BuildProducerEngine(runtimeBuilder, config, null);
+            var producerEngine1 = BuildProducerEngine(runtimeBuilder, null);
+            var producerEngine2 = BuildProducerEngine(runtimeBuilder, null);
 
-            var consumerEngine = BuildConsumerEngine(runtimeBuilder, config);
+            var consumerEngine = BuildConsumerEngine();
 
             return new ProducerConsumerProcessor<int>(
                 config.Name,
@@ -40,7 +40,7 @@ namespace ConsoleRunner.Infrastructure.Builders
                 consumerEngine);
         }
 
-        private IConsumerEngine<int> BuildConsumerEngine(IRuntimeBuilder runtimeBuilder, AppProcessor config)
+        private IConsumerEngine<int> BuildConsumerEngine()
         {
             //return new AsynchronousConsumerEngine(
             //    WorkerPool.Create(),
@@ -55,7 +55,7 @@ namespace ConsoleRunner.Infrastructure.Builders
                     scope => new IntConsumer()));
         }
 
-        private IProducerEngine<int> BuildProducerEngine(IRuntimeBuilder runtimeBuilder, AppProcessor config, ISynchronizationPolicy synchronizationPolicy)
+        private IProducerEngine<int> BuildProducerEngine(IRuntimeBuilder runtimeBuilder, ISynchronizationPolicy synchronizationPolicy)
         {
             return new ScheduledProducerEngine<int>(
                 new ProducerRunner<int>(
