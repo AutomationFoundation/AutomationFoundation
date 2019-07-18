@@ -24,13 +24,18 @@ namespace AutomationFoundation.Features.ProducerConsumer
         }
 
         /// <inheritdoc />
-        public async Task RunAsync(ProducerConsumerContext<TItem> context)
+        public Task RunAsync(ProducerConsumerContext<TItem> context)
         {
             if (context == null)
             {
                 throw new ArgumentNullException(nameof(context));
             }
 
+            return RunAsyncImpl(context);
+        }
+
+        private async Task RunAsyncImpl(ProducerConsumerContext<TItem> context)
+        {
             try
             {
                 ProcessingContext.SetCurrent(context);
