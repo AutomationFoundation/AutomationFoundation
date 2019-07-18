@@ -37,7 +37,7 @@ namespace AutomationFoundation.Features.ProducerConsumer.Engines
         }
 
         /// <inheritdoc />
-        public async void Consume(ProducerConsumerContext<TItem> context)
+        public void Consume(ProducerConsumerContext<TItem> context)
         {
             if (context == null)
             {
@@ -46,6 +46,15 @@ namespace AutomationFoundation.Features.ProducerConsumer.Engines
 
             GuardMustNotBeDisposed();
 
+            using (var task = ConsumeAsyncImpl(context))
+            {
+                task.Start();
+                task.Wait();
+            }
+        }
+
+        private async Task ConsumeAsyncImpl(ProducerConsumerContext<TItem> context)
+        {
             IWorker worker = null;
 
             try
