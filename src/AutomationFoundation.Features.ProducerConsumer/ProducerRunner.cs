@@ -35,13 +35,18 @@ namespace AutomationFoundation.Features.ProducerConsumer
         }
 
         /// <inheritdoc />
-        public async Task<bool> RunAsync(Action<ProducerConsumerContext<TItem>> onProducedCallback, CancellationToken cancellationToken)
+        public Task<bool> RunAsync(Action<ProducerConsumerContext<TItem>> onProducedCallback, CancellationToken cancellationToken)
         {
             if (onProducedCallback == null)
             {
                 throw new ArgumentNullException(nameof(onProducedCallback));
             }
 
+            return RunAsyncImpl(onProducedCallback, cancellationToken);
+        }
+
+        private async Task<bool> RunAsyncImpl(Action<ProducerConsumerContext<TItem>> onProducedCallback, CancellationToken cancellationToken)
+        {
             IServiceScope scope = null;
 
             try
@@ -62,8 +67,8 @@ namespace AutomationFoundation.Features.ProducerConsumer
 
                     await AcquireSynchronizationLockAsync(context);
                     await CreateProducerAsync(context);
-
                     await ProduceAsync(context);
+
                     if (ShouldExecuteCallback(context))
                     {
                         onProducedCallback(context);
