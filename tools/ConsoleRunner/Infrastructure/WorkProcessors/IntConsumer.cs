@@ -1,5 +1,4 @@
-﻿using System.Threading;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using AutomationFoundation.Features.ProducerConsumer.Abstractions;
 using ConsoleRunner.Infrastructure.IO;
 
@@ -7,21 +6,18 @@ namespace ConsoleRunner.Infrastructure.WorkProcessors
 {
     public class IntConsumer : IConsumer<int>
     {
-        private readonly Monitor monitor = new Monitor("Consumed", new ConsoleWriter());
+        private static readonly Monitor Monitor = new Monitor("Consumed", new ConsoleWriter());
 
-        public IntConsumer()
+        static IntConsumer()
         {
-            monitor.Start();
+            Monitor.Start();
         }
 
-        public Task Consume(int item, CancellationToken cancellationToken)
+        public Task ConsumeAsync(IProducerConsumerContext<int> context)
         {
-            return Task.Run(() => OnConsume(item, cancellationToken), cancellationToken);
-        }
-
-        private void OnConsume(int item, CancellationToken cancellationToken)
-        {
-            monitor.Increment();
+            Monitor.Increment();
+            
+            return Task.CompletedTask;
         }
     }
 }

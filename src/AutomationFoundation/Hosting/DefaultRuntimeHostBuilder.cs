@@ -1,18 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
-using AutomationFoundation.Hosting;
 using AutomationFoundation.Hosting.Abstractions;
 using AutomationFoundation.Hosting.Abstractions.Builder;
 using AutomationFoundation.Runtime.Builder;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace AutomationFoundation
+namespace AutomationFoundation.Hosting
 {
-    public class DefaultRuntimeHostBuilder : IRuntimeHostBuilder
+    /// <summary>
+    /// Provides the default runtime host builder.
+    /// </summary>
+    public sealed class DefaultRuntimeHostBuilder : IRuntimeHostBuilder
     {
         private readonly IList<Action<IServiceCollection>> configurationCallbacks = new List<Action<IServiceCollection>>();
         private IStartup startup;
 
+        /// <inheritdoc />
         public IRuntimeHostBuilder ConfigureServices(Action<IServiceCollection> callback)
         {
             if (callback == null)
@@ -24,12 +27,14 @@ namespace AutomationFoundation
             return this;
         }
 
+        /// <inheritdoc />
         public IRuntimeHostBuilder UseStartup<TStartup>() where TStartup : IStartup, new()
         {
             startup = new TStartup();
             return this;
         }
 
+        /// <inheritdoc />
         public IRuntimeHost Build()
         {
             GuardStartupMustBeConfigured();

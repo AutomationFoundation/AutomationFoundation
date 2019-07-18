@@ -4,7 +4,7 @@ using AutomationFoundation.Hosting.Abstractions.Builder;
 using AutomationFoundation.Runtime;
 using AutomationFoundation.Runtime.Abstractions;
 
-namespace AutomationFoundation
+namespace AutomationFoundation.Hosting
 {
     internal class DefaultRuntimeBuilder : IRuntimeBuilder
     {

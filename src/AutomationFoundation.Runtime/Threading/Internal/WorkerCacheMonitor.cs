@@ -25,7 +25,7 @@ namespace AutomationFoundation.Runtime.Threading.Internal
         {
             GuardMustNotBeDisposed();
 
-            timer.Start(options.PollingInterval, OnTimerElapsed, OnErrorOccurred);
+            timer.Start(options.PollingInterval, ProcessCacheEntries, OnErrorOccurred);
         }
 
         /// <inheritdoc />
@@ -37,18 +37,6 @@ namespace AutomationFoundation.Runtime.Threading.Internal
             }
 
             base.Dispose(disposing);
-        }
-
-        private void OnTimerElapsed()
-        {
-            try
-            {
-                ProcessCacheEntries();
-            }
-            catch (Exception ex)
-            {
-                OnErrorOccurred(ex);
-            }
         }
 
         private void ProcessCacheEntries()
@@ -78,8 +66,9 @@ namespace AutomationFoundation.Runtime.Threading.Internal
             }
         }
 
-        private void OnErrorOccurred(Exception error)
+        private void OnErrorOccurred(Exception ex)
         {
+            // Swallow the exception to ensure the error does not cause a fatal exception.
         }
     }
 }

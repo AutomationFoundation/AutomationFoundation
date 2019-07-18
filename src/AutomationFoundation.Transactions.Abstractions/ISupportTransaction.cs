@@ -3,12 +3,12 @@
     /// <summary>
     /// Identifies an object which supports transactions.
     /// </summary>
-    public interface ITransactional
+    public interface ISupportTransaction
     {
         /// <summary>
         /// Begins a transaction.
         /// </summary>
-        /// <returns>The transaction which was created.</returns>
+        /// <returns>The transaction which was started.</returns>
         ITransaction BeginTransaction();
     }
 }

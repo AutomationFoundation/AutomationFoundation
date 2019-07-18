@@ -11,84 +11,127 @@ namespace AutomationFoundation.Features.ProducerConsumer
     /// <summary>
     /// Provides a runner for producing objects.
     /// </summary>
-    public class ProducerRunner<T> : IProducerRunner
+    /// <typeparam name="TItem">The type of item being produced.</typeparam>
+    public class ProducerRunner<TItem> : IProducerRunner<TItem>
     {
         private readonly IServiceScopeFactory scopeFactory;
         private readonly ISynchronizationPolicy synchronizationPolicy;
-        private readonly IProducer<T> producer;
+        private readonly Func<IServiceScope, IProducer<TItem>> producerFactory;
         private readonly bool alwaysExecuteOnDefaultValue;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ProducerRunner{T}"/> class.
         /// </summary>
         /// <param name="scopeFactory">The factory for creating service scopes.</param>
-        /// <param name="producer">The producer to run.</param>
+        /// <param name="producerFactory">The factory for creating producers.</param>
         /// <param name="synchronizationPolicy">The policy used to synchronize the producer and consumer engines to prevent over producing work.</param>
         /// <param name="alwaysExecuteOnDefaultValue">true to always execute the callback, even if the value produced is the default; otherwise false.</param>
-        public ProducerRunner(IServiceScopeFactory scopeFactory, IProducer<T> producer, ISynchronizationPolicy synchronizationPolicy, bool alwaysExecuteOnDefaultValue)
+        public ProducerRunner(IServiceScopeFactory scopeFactory, Func<IServiceScope, IProducer<TItem>> producerFactory, ISynchronizationPolicy synchronizationPolicy, bool alwaysExecuteOnDefaultValue)
         {
             this.scopeFactory = scopeFactory ?? throw new ArgumentNullException(nameof(scopeFactory));
-            this.producer = producer ?? throw new ArgumentNullException(nameof(producer));
+            this.producerFactory = producerFactory ?? throw new ArgumentNullException(nameof(producerFactory));
             this.synchronizationPolicy = synchronizationPolicy;
             this.alwaysExecuteOnDefaultValue = alwaysExecuteOnDefaultValue;
         }
 
         /// <inheritdoc />
-        public async Task<bool> Run(Action<ProducedItemContext> onProducedCallback, CancellationToken cancellationToken)
+        public Task<bool> RunAsync(Action<ProducerConsumerContext<TItem>> onProducedCallback, CancellationToken cancellationToken)
         {
             if (onProducedCallback == null)
             {
                 throw new ArgumentNullException(nameof(onProducedCallback));
             }
 
-            ISynchronizationLock synchronizationLock = null;
-            IServiceScope scope = null;
+            return RunAsyncImpl(onProducedCallback, cancellationToken);
+        }
 
-            var called = false;
-            var id = GenerateIdentifier();
+        private async Task<bool> RunAsyncImpl(Action<ProducerConsumerContext<TItem>> onProducedCallback, CancellationToken cancellationToken)
+        {
+            IServiceScope scope = null;
 
             try
             {
                 scope = CreateChildScope();
-                synchronizationLock = AcquireSynchronizationLock(cancellationToken);
 
-                var item = await ProduceItemAsync(cancellationToken);
-                if (ShouldExecuteCallback(item))
+                ProducerConsumerContext<TItem> context = null;
+                var called = false;
+
+                try
                 {
-                    onProducedCallback(new ProducedItemContext(id, new ProducedItem(item), scope, synchronizationLock));
-                    called = true;
+                    var id = GenerateIdentifier(scope);
+
+                    context = new ProducerConsumerContext<TItem>(id, scope)
+                    {
+                        CancellationToken = cancellationToken
+                    };
+
+                    await AcquireSynchronizationLockAsync(context);
+                    await CreateProducerAsync(context);
+                    await ProduceAsync(context);
+
+                    if (ShouldExecuteCallback(context))
+                    {
+                        onProducedCallback(context);
+                        called = true;
+                    }
                 }
+                finally
+                {
+                    if (!called)
+                    {
+                        context?.Dispose();
+                    }
+                }
+
+                return called;
             }
-            finally
+            catch (Exception)
             {
-                if (!called)
-                {
-                    synchronizationLock?.Release();
-                    scope?.Dispose();
-                }
+                scope?.Dispose();
+                throw;
             }
-
-            return called;
         }
 
         /// <summary>
         /// Acquires a synchronization lock for the item to be produced.
         /// </summary>
-        /// <param name="cancellationToken">The cancellation token to monitor for cancellation requests.</param>
+        /// <param name="context">The contextual information for the item which was produced.</param>
         /// <returns>The synchronization lock.</returns>
-        protected virtual ISynchronizationLock AcquireSynchronizationLock(CancellationToken cancellationToken)
+        protected virtual Task AcquireSynchronizationLockAsync(ProducerConsumerContext<TItem> context)
         {
-            return synchronizationPolicy?.AcquireLock(cancellationToken);
+            if (synchronizationPolicy != null)
+            {
+               context.SynchronizationLock = synchronizationPolicy.AcquireLock(context.CancellationToken);
+            }
+
+            return Task.CompletedTask;
         }
 
         /// <summary>
-        /// Produces an item asynchronously.
+        /// Creates a producer.
         /// </summary>
-        /// <param name="cancellationToken">The cancellation token to monitor for cancellation requests.</param>
-        /// <returns>The task for producing the item.</returns>
-        protected virtual Task<T> ProduceItemAsync(CancellationToken cancellationToken)
+        /// <param name="context">The contextual information for the item which was produced.</param>
+        protected virtual Task CreateProducerAsync(ProducerConsumerContext<TItem> context)
         {
-            return producer.ProduceAsync(cancellationToken);
+            var producer = producerFactory(context.ServiceScope);
+            if (producer == null)
+            {
+                throw new InvalidOperationException("The producer was not created.");
+            }
+
+            context.Producer = producer;
+
+            return Task.CompletedTask;
+        }
+
+        /// <summary>
+        /// Produces an item.
+        /// </summary>
+        /// <returns>The task to await.</returns>
+        protected virtual async Task ProduceAsync(ProducerConsumerContext<TItem> context)
+        {
+            context.Producer = producerFactory(context.ServiceScope);
+            context.Item = await context.Producer.ProduceAsync(context.CancellationToken);
         }
 
         /// <summary>
@@ -109,8 +152,9 @@ namespace AutomationFoundation.Features.ProducerConsumer
         /// <summary>
         /// Generates a new identifier.
         /// </summary>
+        /// <param name="scope">The scope to use when creating the identifier.</param>
         /// <returns>The new identifier.</returns>
-        protected virtual Guid GenerateIdentifier()
+        protected virtual Guid GenerateIdentifier(IServiceScope scope)
         {
             return Guid.NewGuid();
         }
@@ -118,11 +162,11 @@ namespace AutomationFoundation.Features.ProducerConsumer
         /// <summary>
         /// Determines whether the callback should be executed.
         /// </summary>
-        /// <param name="item">The item which was produced (could be null for reference types).</param>
+        /// <param name="context">The contextual information for the item which was produced.</param>
         /// <returns>true if the callback should be executed, otherwise false.</returns>
-        protected virtual bool ShouldExecuteCallback(object item)
+        protected virtual bool ShouldExecuteCallback(ProducerConsumerContext<TItem> context)
         {
-            return alwaysExecuteOnDefaultValue || !Equals(item, default(T));
+            return alwaysExecuteOnDefaultValue || !Equals(context.Item, default(TItem));
         }
     }
 }

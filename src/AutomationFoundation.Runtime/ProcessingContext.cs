@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Threading;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace AutomationFoundation.Runtime
 {
     /// <summary>
     /// Provides contextual information of work being processed by the runtime.
     /// </summary>
-    public class ProcessingContext
+    public abstract class ProcessingContext : DisposableObject, IProcessingContext
     {
         private static readonly AsyncLocal<ProcessingContext> Local = new AsyncLocal<ProcessingContext>();
 
@@ -58,12 +59,24 @@ namespace AutomationFoundation.Runtime
         public Guid Id { get; }
 
         /// <summary>
+        /// Gets the service scope.
+        /// </summary>
+        public IServiceScope ServiceScope { get; }
+
+        /// <summary>
+        /// Gets or sets the cancellation token to monitor for cancellation requests.
+        /// </summary>
+        public CancellationToken CancellationToken { get; set; }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="ProcessingContext"/> class.
         /// </summary>
-        /// <param name="id">The unique identifier.</param>
-        public ProcessingContext(Guid id)
+        /// <param name="id">The unique identifier of the context.</param>
+        /// <param name="serviceScope">The scope of the request used for dependency injection.</param>
+        protected ProcessingContext(Guid id, IServiceScope serviceScope)
         {
             Id = id;
+            ServiceScope = serviceScope;
         }
     }
 }

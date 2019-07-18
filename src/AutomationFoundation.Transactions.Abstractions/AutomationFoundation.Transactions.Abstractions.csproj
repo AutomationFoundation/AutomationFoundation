@@ -3,19 +3,33 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <Product>AutomationFoundation.Transactions.Abstractions</Product>
-    <Version>1.0.0</Version>
+    <Version>0.0.0</Version>
     <PackageVersion>$(Version)</PackageVersion>
     <InformationalVersion>$(Version)</InformationalVersion>
     <Authors>Winnster.io</Authors>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Description>Contains the abstractions for transactions used within the AutomationFoundation runtime.</Description>
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/winnster/AutomationFoundation.Transactions.Abstractions</RepositoryUrl>
     <PackageTags>automation,automationfoundation,transactions</PackageTags>
+    <Description>Contains the abstractions for transactions used within the Automation Foundation runtime.</Description>
   </PropertyGroup>
 
   <PropertyGroup>
     <DocumentationFile>obj\AutomationFoundation.Transactions.Abstractions.xml</DocumentationFile>
   </PropertyGroup>
- 
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DefineConstants>TRACE</DefineConstants>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>..\..\Public.snk</AssemblyOriginatorKeyFile>
+    <DelaySign>false</DelaySign>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>..\..\Winnster.snk</AssemblyOriginatorKeyFile>
+    <DelaySign>false</DelaySign>
+  </PropertyGroup>
+
 </Project>

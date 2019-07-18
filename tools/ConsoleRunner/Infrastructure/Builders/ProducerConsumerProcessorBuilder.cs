@@ -29,18 +29,18 @@ namespace ConsoleRunner.Infrastructure.Builders
                 throw new ArgumentNullException(nameof(config));
             }
 
-            var producerEngine1 = BuildProducerEngine(runtimeBuilder, config, null);
-            var producerEngine2 = BuildProducerEngine(runtimeBuilder, config, null);
+            var producerEngine1 = BuildProducerEngine(runtimeBuilder, null);
+            var producerEngine2 = BuildProducerEngine(runtimeBuilder, null);
 
-            var consumerEngine = BuildConsumerEngine(runtimeBuilder, config);
+            var consumerEngine = BuildConsumerEngine();
 
-            return new ProducerConsumerProcessor(
+            return new ProducerConsumerProcessor<int>(
                 config.Name,
-                new[] { producerEngine1 },
+                new[] { producerEngine1, producerEngine2 },
                 consumerEngine);
         }
 
-        private IConsumerEngine BuildConsumerEngine(IRuntimeBuilder runtimeBuilder, AppProcessor config)
+        private IConsumerEngine<int> BuildConsumerEngine()
         {
             //return new AsynchronousConsumerEngine(
             //    WorkerPool.Create(),
@@ -49,18 +49,18 @@ namespace ConsoleRunner.Infrastructure.Builders
             //    new StrategyErrorHandler(
             //        new LogToConsoleErrorStrategy(new ConsoleWriter(), LoggingLevel.All)));
 
-            return new SynchronousConsumerEngine(
+            return new SynchronousConsumerEngine<int>(
                 WorkerPool.Create(),
                 new ConsumerRunner<int>(
-                    new IntConsumer()));
+                    scope => new IntConsumer()));
         }
 
-        private IProducerEngine BuildProducerEngine(IRuntimeBuilder runtimeBuilder, AppProcessor config, ISynchronizationPolicy synchronizationPolicy)
+        private IProducerEngine<int> BuildProducerEngine(IRuntimeBuilder runtimeBuilder, ISynchronizationPolicy synchronizationPolicy)
         {
-            return new ScheduledProducerEngine(
+            return new ScheduledProducerEngine<int>(
                 new ProducerRunner<int>(
                     runtimeBuilder.ApplicationServices.GetRequiredService<IServiceScopeFactory>(),
-                    new RandomIntProducer(),
+                    scope => new RandomIntProducer(),
                     synchronizationPolicy,
                     false),
                 new StrategyErrorHandler(

@@ -8,15 +8,21 @@
     <InformationalVersion>$(Version)</InformationalVersion>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <RepositoryUrl>https://github.com/winnster/AutomationFoundation.Hosting</RepositoryUrl>
+    <RepositoryUrl>https://github.com/winnster/AutomationFoundation</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
-    <PackageTags>automation,automationfoundation,hosting</PackageTags>
-    <Description>Contains the implementation of Hosting components for the Automation Foundation runtime.</Description>
+    <PackageTags>automation,automationfoundation</PackageTags>
+    <Description>Contains a metapackage for consuming the Automation Foundation framework.</Description>
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\AutomationFoundation.Hosting.Abstractions\AutomationFoundation.Hosting.Abstractions.csproj" />
-    <ProjectReference Include="..\AutomationFoundation.Runtime.Abstractions\AutomationFoundation.Runtime.Abstractions.csproj" />
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="2.2.0" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="2.2.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging" Version="2.2.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\AutomationFoundation.Hosting\AutomationFoundation.Hosting.csproj" />
+    <ProjectReference Include="..\AutomationFoundation.Runtime\AutomationFoundation.Runtime.csproj" />
   </ItemGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

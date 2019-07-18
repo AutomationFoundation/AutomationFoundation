@@ -1,7 +1,17 @@
 version: 0.1.{build}
 image: Visual Studio 2017
-configuration: Debug
+configuration: Release
 platform: Any CPU
+
+environment:
+  sonarcloud_token:
+    secure: WSZCNtuf3h9M4BxNiFQ7SQPwGkg3+LqSMZRyfYruiicYvc1BzYaN90n8pNEsPAKs
+  snk_passphrase: 
+    secure: yoQCo1s+v9GmfdhozxKIYjBhh4CbdgKYfnt2iabOqfg=
+
+install:
+  - ps: iex ((New-Object Net.WebClient).DownloadString('https://raw.githubusercontent.com/appveyor/secure-file/master/install.ps1'))
+
 dotnet_csproj:
   patch: true
   file: '**\*.csproj'
@@ -10,13 +20,29 @@ dotnet_csproj:
   assembly_version: '{version}-preview'
   file_version: '{version}'
   informational_version: '{version}-preview'
+
 nuget:
   disable_publish_on_pr: true
+
 before_build:
+- cmd: appveyor-tools\secure-file.exe -decrypt Winnster.snk.enc -secret %snk_passphrase%
+- cmd: choco install "sonarscanner-msbuild-net46" -y
+- cmd: SonarScanner.MSBuild.exe begin /k:"AutomationFoundation" /v:"%APPVEYOR_BUILD_VERSION%-preview" /d:"sonar.host.url=https://sonarcloud.io" /o:"winnster" /d:"sonar.login=%sonarcloud_token%"
 - cmd: nuget sources add -name "myget.org" -source "https://www.myget.org/F/winnster/api/v3/index.json"
 - cmd: nuget restore
+
 build:
   verbosity: minimal
+
+after_build:
+- cmd: SonarScanner.MSBuild.exe end /d:"sonar.login=%sonarcloud_token%"
+
 artifacts:
-- path: src\AutomationFoundation\bin\$(configuration)\AutomationFoundation.*.nupkg
+- path: src\**\*.nupkg
   name: NuGet Package
+
+deploy:
+- provider: environment
+  name: MyGet.org
+  on:
+    branch: master

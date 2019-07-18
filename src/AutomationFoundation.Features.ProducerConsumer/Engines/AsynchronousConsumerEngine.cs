@@ -1,38 +1,35 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 using AutomationFoundation.Features.ProducerConsumer.Abstractions;
 using AutomationFoundation.Runtime;
 using AutomationFoundation.Runtime.Abstractions;
 using AutomationFoundation.Runtime.Abstractions.Threading;
 using AutomationFoundation.Runtime.Abstractions.Threading.Primitives;
-using AutomationFoundation.Runtime.Threading.Primitives;
 
 namespace AutomationFoundation.Features.ProducerConsumer.Engines
 {
     /// <summary>
     /// Provides a consumer engine which consumes objects asynchronously.
     /// </summary>
-    public class AsynchronousConsumerEngine : DisposableObject, IConsumerEngine, IStoppable
+    /// <typeparam name="TItem">The type of item being consumed.</typeparam>
+    public class AsynchronousConsumerEngine<TItem> : DisposableObject, IConsumerEngine<TItem>, IStoppable
     {
         private readonly object syncRoot = new object();
 
         private readonly ISet<IWorker> workers = new HashSet<IWorker>();
-        private readonly IConsumerRunner runner;
+        private readonly IConsumerRunner<TItem> runner;
         private readonly IWorkerPool pool;
         private readonly IErrorHandler errorHandler;
 
-        private CancellationSource cancellationSource;
-
         /// <summary>
-        /// Initializes a new instance of the <see cref="AsynchronousConsumerEngine"/> class.
+        /// Initializes a new instance of the <see cref="AsynchronousConsumerEngine{TItem}"/> class.
         /// </summary>
         /// <param name="pool">The pool of workers available to consume the objects.</param>
         /// <param name="runner">The consumer runner which will consume the objects produced.</param>
         /// <param name="errorHandler">The error handler to use if errors within the engine.</param>
-        public AsynchronousConsumerEngine(IWorkerPool pool, IConsumerRunner runner, IErrorHandler errorHandler)
+        public AsynchronousConsumerEngine(IWorkerPool pool, IConsumerRunner<TItem> runner, IErrorHandler errorHandler)
         {
             this.runner = runner ?? throw new ArgumentNullException(nameof(runner));
             this.pool = pool ?? throw new ArgumentNullException(nameof(pool));
@@ -40,7 +37,7 @@ namespace AutomationFoundation.Features.ProducerConsumer.Engines
         }
 
         /// <inheritdoc />
-        public async void Consume(ProducedItemContext context)
+        public void Consume(ProducerConsumerContext<TItem> context)
         {
             if (context == null)
             {
@@ -49,6 +46,15 @@ namespace AutomationFoundation.Features.ProducerConsumer.Engines
 
             GuardMustNotBeDisposed();
 
+            using (var task = ConsumeAsyncImpl(context))
+            {
+                task.Start();
+                task.Wait();
+            }
+        }
+
+        private async Task ConsumeAsyncImpl(ProducerConsumerContext<TItem> context)
+        {
             IWorker worker = null;
 
             try
@@ -71,7 +77,7 @@ namespace AutomationFoundation.Features.ProducerConsumer.Engines
         /// </summary>
         /// <param name="context">The contextual information about what was produced.</param>
         /// <returns>The worker used to work the produced item.</returns>
-        protected virtual IWorker CreateWorker(ProducedItemContext context)
+        protected virtual IWorker CreateWorker(ProducerConsumerContext<TItem> context)
         {
             if (context == null)
             {
@@ -101,9 +107,9 @@ namespace AutomationFoundation.Features.ProducerConsumer.Engines
         /// Occurs when an item is being consumed.
         /// </summary>
         /// <param name="context">The contextual information about what was produced.</param>
-        protected virtual void OnConsume(ProducedItemContext context)
+        protected virtual void OnConsume(ProducerConsumerContext<TItem> context)
         {
-            using (var task = runner.Run(context, cancellationSource.CancellationToken))
+            using (var task = runner.RunAsync(context))
             {
                 Task.WaitAll(task);
             }
@@ -125,15 +131,6 @@ namespace AutomationFoundation.Features.ProducerConsumer.Engines
                 workers.Remove(worker);
                 worker.Dispose();
             }
-        }
-
-        /// <inheritdoc />
-        public void Initialize(CancellationToken cancellationToken)
-        {
-            GuardMustNotBeDisposed();
-
-            cancellationSource?.Dispose();
-            cancellationSource = new CancellationSource(cancellationToken);
         }
 
         /// <inheritdoc />

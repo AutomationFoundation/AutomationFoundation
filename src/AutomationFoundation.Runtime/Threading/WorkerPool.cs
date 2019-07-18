@@ -54,28 +54,28 @@ namespace AutomationFoundation.Runtime.Threading
             }
 
             Timer timer = null;
-            WorkerCache cache = null;
-            WorkerCacheMonitor cacheMonitor = null;
+            WorkerCache workerCache = null;
+            WorkerCacheMonitor workerCacheMonitor = null;
 
             try
             {
                 timer = new Timer();
 
-                cache = new WorkerCache();
-                cacheMonitor = new WorkerCacheMonitor(
+                workerCache = new WorkerCache();
+                workerCacheMonitor = new WorkerCacheMonitor(
                     timer,
-                    cache,
+                    workerCache,
                     options);
 
-                cacheMonitor.Start();
+                workerCacheMonitor.Start();
 
-                return new WorkerPool(cache, cacheMonitor);
+                return new WorkerPool(workerCache, workerCacheMonitor);
             }
             catch (Exception)
             {
                 timer?.Dispose();
-                cache?.Dispose();
-                cacheMonitor?.Dispose();
+                workerCache?.Dispose();
+                workerCacheMonitor?.Dispose();
 
                 throw;
             }

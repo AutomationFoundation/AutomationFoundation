@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
 using AutomationFoundation.Runtime.Abstractions;
 
 namespace AutomationFoundation.Features.ProducerConsumer.Abstractions
@@ -6,12 +7,14 @@ namespace AutomationFoundation.Features.ProducerConsumer.Abstractions
     /// <summary>
     /// Identifies a producer engine.
     /// </summary>
-    public interface IProducerEngine : IStartable<ProducerEngineContext>, IStoppable
+    /// <typeparam name="TItem">The type of item being produced.</typeparam>
+    public interface IProducerEngine<TItem> : IStartable, IStoppable
     {
         /// <summary>
         /// Initializes the engine.
         /// </summary>
+        /// <param name="onProducedCallback">The callback to execute when an item is produced.</param>
         /// <param name="cancellationToken">The cancellation token to monitor for cancellation requests.</param>
-        void Initialize(CancellationToken cancellationToken);
+        void Initialize(Action<ProducerConsumerContext<TItem>> onProducedCallback, CancellationToken cancellationToken);
     }
 }

@@ -2,6 +2,9 @@
 
   <PropertyGroup>
     <TargetFramework>net471</TargetFramework>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>..\..\Public.snk</AssemblyOriginatorKeyFile>
+    <DelaySign>false</DelaySign>
   </PropertyGroup>
 
   <ItemGroup>
@@ -16,5 +19,9 @@
   <ItemGroup>
     <ProjectReference Include="..\..\src\AutomationFoundation.Hosting\AutomationFoundation.Hosting.csproj" />
   </ItemGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DefineConstants>TRACE</DefineConstants>
+  </PropertyGroup>
 
 </Project>

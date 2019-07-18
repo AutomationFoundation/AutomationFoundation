@@ -1,43 +1,49 @@
 ﻿using System;
-using System.Threading;
 using System.Threading.Tasks;
 using AutomationFoundation.Features.ProducerConsumer.Abstractions;
 using AutomationFoundation.Runtime;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace AutomationFoundation.Features.ProducerConsumer
 {
     /// <summary>
     /// Provides an adapter which runs the consumer.
     /// </summary>
-    /// <typeparam name="T">The type of object being consumed.</typeparam>
-    public class ConsumerRunner<T> : IConsumerRunner
+    /// <typeparam name="TItem">The type of object being consumed.</typeparam>
+    public class ConsumerRunner<TItem> : IConsumerRunner<TItem>
     {
-        private readonly IConsumer<T> consumer;
+        private readonly Func<IServiceScope, IConsumer<TItem>> consumerFactory;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ConsumerRunner{T}"/> class.
         /// </summary>
-        /// <param name="consumer">The consumer being wrapped by this adapter instance.</param>
-        public ConsumerRunner(IConsumer<T> consumer)
+        /// <param name="consumerFactory">The consumer being wrapped by this adapter instance.</param>
+        public ConsumerRunner(Func<IServiceScope, IConsumer<TItem>> consumerFactory)
         {
-            this.consumer = consumer ?? throw new ArgumentNullException(nameof(consumer));
+            this.consumerFactory = consumerFactory ?? throw new ArgumentNullException(nameof(consumerFactory));
         }
 
         /// <inheritdoc />
-        public async Task Run(ProducedItemContext context, CancellationToken cancellationToken)
+        public Task RunAsync(ProducerConsumerContext<TItem> context)
         {
             if (context == null)
             {
                 throw new ArgumentNullException(nameof(context));
             }
 
+            return RunAsyncImpl(context);
+        }
+
+        private async Task RunAsyncImpl(ProducerConsumerContext<TItem> context)
+        {
             try
             {
                 ProcessingContext.SetCurrent(context);
+                CreateConsumer(context);
 
                 try
                 {
-                    await consumer.Consume(context.Item.GetItem<T>(), cancellationToken);
+                    await ConsumeAsync(context);
                 }
                 finally
                 {
@@ -46,8 +52,26 @@ namespace AutomationFoundation.Features.ProducerConsumer
             }
             finally
             {
-                context.SynchronizationLock?.Release();
+                context.Dispose();
             }
+        }
+
+        /// <summary>
+        /// Creates the consumer which will consume the object.
+        /// </summary>
+        /// <param name="context">The contextual information about the item being consumed.</param>
+        protected virtual void CreateConsumer(ProducerConsumerContext<TItem> context)
+        {
+            context.Consumer = consumerFactory(context.ServiceScope);
+        }
+
+        /// <summary>
+        /// Consumes the item.
+        /// </summary>
+        /// <param name="context">The contextual information about the item being consumed.</param>
+        protected virtual async Task ConsumeAsync(ProducerConsumerContext<TItem> context)
+        {
+            await context.Consumer.ConsumeAsync(context);
         }
     }
 }
