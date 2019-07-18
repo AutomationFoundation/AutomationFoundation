@@ -7,11 +7,15 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace AutomationFoundation.Hosting
 {
-    public class DefaultRuntimeHostBuilder : IRuntimeHostBuilder
+    /// <summary>
+    /// Provides the default runtime host builder.
+    /// </summary>
+    public sealed class DefaultRuntimeHostBuilder : IRuntimeHostBuilder
     {
         private readonly IList<Action<IServiceCollection>> configurationCallbacks = new List<Action<IServiceCollection>>();
         private IStartup startup;
 
+        /// <inheritdoc />
         public IRuntimeHostBuilder ConfigureServices(Action<IServiceCollection> callback)
         {
             if (callback == null)
@@ -23,12 +27,14 @@ namespace AutomationFoundation.Hosting
             return this;
         }
 
+        /// <inheritdoc />
         public IRuntimeHostBuilder UseStartup<TStartup>() where TStartup : IStartup, new()
         {
             startup = new TStartup();
             return this;
         }
 
+        /// <inheritdoc />
         public IRuntimeHost Build()
         {
             GuardStartupMustBeConfigured();
