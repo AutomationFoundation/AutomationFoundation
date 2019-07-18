@@ -40,9 +40,3 @@ after_build:
 artifacts:
 - path: src\**\*.nupkg
   name: NuGet Package
-
-deploy:
-- provider: environment
-  name: MyGet.org
-  on:
-    branch: master
