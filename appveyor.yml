@@ -10,7 +10,7 @@ environment:
     secure: yoQCo1s+v9GmfdhozxKIYjBhh4CbdgKYfnt2iabOqfg=
 
 install:
-  - ps: iex ((New-Object Net.WebClient).DownloadString('https://raw.githubusercontent.com/appveyor/secure-file/master/install.ps1'))
+  - ps: iex ((New-Object Net.WebClient).DownloadString('https://raw.githubusercontent.com/jeff-winn/secure-file/master/install.ps1'))
 
 dotnet_csproj:
   patch: true
