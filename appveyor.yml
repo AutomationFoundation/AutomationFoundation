@@ -51,5 +51,5 @@ artifacts:
     name: NuGet
   - path: '**\*.coveragexml'
     name: Coverage Results
-  - path: '**\*.trx'
+  - path: '**\TestResult.xml'
     name: Test Results
