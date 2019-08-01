@@ -14,8 +14,6 @@ environment:
     secure: tIuRlNokDRTBkah55IRfeATr4WWOEfQOLDqUjrDMMcPEmgq4yOTHzQFKEky67G9rk51D2VvdMFsTcDQrecDonA==
 
 init:
-  - cmd: set path=%ProgramFiles(X86)%\Microsoft Visual Studio\2017\TestAgent\Common7\IDE\CommonExtensions\Microsoft\TestWindow;%ProgramFiles(X86)%\Microsoft Visual Studio\2017\TestAgent\Team Tools\Dynamic Code Coverage Tools;%path%
-  - ps: set-alias CodeCoverage "${env:ProgramFiles(X86)}\Microsoft Visual Studio\2017\TestAgent\Team Tools\Dynamic Code Coverage Tools\CodeCoverage.exe"
   - cmd: nuget sources add -name "myget.org" -source "https://www.myget.org/F/winnster/api/v3/index.json"
 
 install:
@@ -36,20 +34,17 @@ nuget:
 
 before_build:
 - cmd: appveyor-tools\secure-file.exe -decrypt Winnster.snk.enc -secret %snk_passphrase% -salt %snk_salt%
-- cmd: SonarScanner.MSBuild.exe begin /k:"AutomationFoundation" /v:"%APPVEYOR_BUILD_VERSION%-preview" /d:"sonar.host.url=https://sonarcloud.io" /o:"winnster" /d:"sonar.login=%sonarcloud_token%" /d:"sonar.cs.vstest.reportsPaths=**/*.trx" /d:"sonar.cs.vscoveragexml.reportsPaths=**/*.coveragexml"
+- cmd: SonarScanner.MSBuild.exe begin /k:"AutomationFoundation" /v:"%APPVEYOR_BUILD_VERSION%-preview" /d:"sonar.host.url=https://sonarcloud.io" /o:"winnster" /d:"sonar.login=%sonarcloud_token%" /d:"sonar.cs.nunit.reportsPaths=**/TestResult.xml"
 - cmd: nuget restore
 
 build:
   verbosity: minimal
 
 after_test:
-- ps: Get-ChildItem *.coverage -recurse | ?{ $_.FullName -notmatch '\\In\\' } | %{ codecoverage analyze /output:"$((Join-Path (Split-Path -Path $_.FullName) "$($_.BaseName).coveragexml"))" "$($_.FullName)" }
 - cmd: SonarScanner.MSBuild.exe end /d:"sonar.login=%sonarcloud_token%"
 
 artifacts:
   - path: '**\*.nupkg'
     name: NuGet
-  - path: '**\*.coveragexml'
-    name: Coverage Results
   - path: '**\TestResult.xml'
     name: Test Results
