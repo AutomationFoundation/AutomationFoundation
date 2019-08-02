@@ -15,10 +15,11 @@ environment:
 
 init:
   - cmd: nuget sources add -name "myget.org" -source "https://www.myget.org/F/winnster/api/v3/index.json"
+  - ps: iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
 
 install:
   - cmd: choco install opencover
-  - cmd: choco install "sonarscanner-msbuild-net46" -y
+  - cmd: choco install sonarscanner-msbuild-net46
   - ps: iex ((New-Object Net.WebClient).DownloadString('https://raw.githubusercontent.com/jeff-winn/secure-file/master/install.ps1'))
 
 dotnet_csproj:
@@ -41,8 +42,13 @@ before_build:
 build:
   verbosity: minimal
 
+test_script:
+
 after_test:
 - cmd: SonarScanner.MSBuild.exe end /d:"sonar.login=%sonarcloud_token%"
+
+on_finish:
+  - ps: $blockRdp = $true; iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
 
 artifacts:
   - path: '**\*.nupkg'
