@@ -17,6 +17,7 @@ init:
   - cmd: nuget sources add -name "myget.org" -source "https://www.myget.org/F/winnster/api/v3/index.json"
 
 install:
+  - cmd: choco install opencover
   - cmd: choco install "sonarscanner-msbuild-net46" -y
   - ps: iex ((New-Object Net.WebClient).DownloadString('https://raw.githubusercontent.com/jeff-winn/secure-file/master/install.ps1'))
 
