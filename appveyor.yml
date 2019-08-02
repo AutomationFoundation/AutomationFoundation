@@ -35,7 +35,7 @@ nuget:
 
 before_build:
 - cmd: appveyor-tools\secure-file.exe -decrypt Winnster.snk.enc -secret %snk_passphrase% -salt %snk_salt%
-- cmd: SonarScanner.MSBuild.exe begin /k:"AutomationFoundation" /v:"%APPVEYOR_BUILD_VERSION%-preview" /d:"sonar.host.url=https://sonarcloud.io" /o:"winnster" /d:"sonar.login=%sonarcloud_token%" /d:"sonar.cs.nunit.reportsPaths=**/TestResult.xml"
+- cmd: SonarScanner.MSBuild.exe begin /k:"AutomationFoundation" /v:"%APPVEYOR_BUILD_VERSION%-preview" /d:"sonar.host.url=https://sonarcloud.io" /o:"winnster" /d:"sonar.login=%sonarcloud_token%" /d:"sonar.cs.nunit.reportsPaths=**/TestResult.xml" /d:"sonar.cs.opencover.reportsPaths=**/opencover.xml"
 - cmd: nuget restore
 
 build:
@@ -49,3 +49,4 @@ artifacts:
     name: NuGet
   - path: '**\TestResult.xml'
     name: Test Results
+  - path: '**\opencover.xml'
