@@ -50,3 +50,4 @@ artifacts:
   - path: '**\TestResult.xml'
     name: Test Results
   - path: '**\opencover.xml'
+    name: Coverage Results
