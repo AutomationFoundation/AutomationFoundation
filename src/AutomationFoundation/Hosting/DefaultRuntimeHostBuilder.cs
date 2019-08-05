@@ -10,7 +10,7 @@ namespace AutomationFoundation.Hosting
     /// <summary>
     /// Provides the default runtime host builder.
     /// </summary>
-    public sealed class DefaultRuntimeHostBuilder : IRuntimeHostBuilder
+    public class DefaultRuntimeHostBuilder : IRuntimeHostBuilder
     {
         private readonly IList<Action<IServiceCollection>> configurationCallbacks = new List<Action<IServiceCollection>>();
         private bool startupHasBeenConfigured;
@@ -63,15 +63,19 @@ namespace AutomationFoundation.Hosting
 
             using (var sp = serviceCollection.BuildServiceProvider())
             {
-                var startup = sp.GetRequiredService<IStartup>();
-
-                var applicationServices = startup.TryConfigureContainer(serviceCollection);
-                if (applicationServices == null)
+                var startup = ResolveStartupInstance(sp);
+                if (startup == null)
                 {
-                    throw new InvalidOperationException("The services was not configured.");
+                    throw new BuildException("The startup instance was not resolved.");
                 }
 
-                var runtimeBuilder = new DefaultRuntimeBuilder(applicationServices);
+                var applicationServices = ConfigureApplicationServices(startup, serviceCollection);
+                if (applicationServices == null)
+                {
+                    throw new BuildException("The services were not configured.");
+                }
+
+                var runtimeBuilder = CreateRuntimeBuilder(applicationServices);
                 startup.ConfigureProcessors(runtimeBuilder);
 
                 var runtime = runtimeBuilder.Build();
@@ -86,7 +90,61 @@ namespace AutomationFoundation.Hosting
             }
         }
 
-        private void GuardStartupMustBeConfigured()
+        /// <summary>
+        /// Creates a runtime builder.
+        /// </summary>
+        /// <param name="applicationServices">The application services to use with the builder.</param>
+        /// <returns>The runtime builder instance.</returns>
+        protected virtual IRuntimeBuilder CreateRuntimeBuilder(IServiceProvider applicationServices)
+        {
+            if (applicationServices == null)
+            {
+                throw new ArgumentNullException(nameof(applicationServices));
+            }
+
+            return new DefaultRuntimeBuilder(applicationServices);
+        }
+
+        /// <summary>
+        /// Resolves the startup instance.
+        /// </summary>
+        /// <param name="serviceProvider">The service provider to use to resolve the startup instance.</param>
+        /// <returns>An <see cref="IStartup"/> to handle startup operations.</returns>
+        protected virtual IStartup ResolveStartupInstance(IServiceProvider serviceProvider)
+        {
+            if (serviceProvider == null)
+            {
+                throw new ArgumentNullException(nameof(serviceProvider));
+            }
+
+            return serviceProvider.GetRequiredService<IStartup>();
+        }
+
+        /// <summary>
+        /// Configures the application services.
+        /// </summary>
+        /// <param name="startup">The startup class handling startup operations.</param>
+        /// <param name="serviceCollection">The collection of services for the application.</param>
+        /// <returns>The service provider containing the application services.</returns>
+        protected virtual IServiceProvider ConfigureApplicationServices(IStartup startup, IServiceCollection serviceCollection)
+        {
+            if (startup == null)
+            {
+                throw new ArgumentNullException(nameof(startup));
+            }
+            else if (serviceCollection == null)
+            {
+                throw new ArgumentNullException(nameof(serviceCollection));
+            }
+
+            return startup.TryConfigureContainer(serviceCollection);
+        }
+
+        /// <summary>
+        /// Ensures the startup has been configured.
+        /// </summary>
+        /// <exception cref="BuildException">The startup has not been configured.</exception>
+        protected void GuardStartupMustBeConfigured()
         {
             if (!startupHasBeenConfigured)
             {

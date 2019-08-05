@@ -1,6 +1,9 @@
-﻿using AutomationFoundation.Hosting;
+﻿using System;
+using AutomationFoundation.Hosting;
+using AutomationFoundation.Hosting.Abstractions.Builder;
 using AutomationFoundation.Runtime.Builder;
 using AutomationFoundation.Tests.Stubs;
+using Moq;
 using NUnit.Framework;
 
 namespace AutomationFoundation.Tests.Hosting
@@ -12,9 +15,59 @@ namespace AutomationFoundation.Tests.Hosting
         public void ThrowAnExceptionWhenStartupHasNotBeenConfigured()
         {
             var target = new DefaultRuntimeHostBuilder();
-            Assert.Throws<BuildException>(() => target.Build(), "The startup must be configured.");
+            var ex = Assert.Throws<BuildException>(() => target.Build());
+
+            Assert.AreEqual("The startup must be configured.", ex.Message);
         }
-        
+
+        [Test]
+        public void ThrowsAnExceptionWhenCallbackIsNull()
+        {
+            var target = new DefaultRuntimeHostBuilder();
+            Assert.Throws<ArgumentNullException>(() => target.ConfigureServices(null));
+        }
+
+        [Test]
+        public void ThrowsAnExceptionWhenStartupInstanceIsNull()
+        {
+            var target = new DefaultRuntimeHostBuilder();
+            Assert.Throws<ArgumentNullException>(() => target.UseStartup(null));
+        }
+
+        [Test]
+        public void ThrowAnExceptionWhenStartupIsNotResolved()
+        {
+            var target = new TestableRuntimeHostBuilder(sp => null);
+            target.UseStartup<StubStartup>();
+
+            var ex = Assert.Throws<BuildException>(() => target.Build());
+            Assert.AreEqual("The startup instance was not resolved.", ex.Message);
+        }
+
+        [Test]
+        public void ThrowAnExceptionWhenApplicationServicesIsNotReturned()
+        {
+            var target = new TestableRuntimeHostBuilder(applicationServicesResolver: (sp, sc) => null);
+            target.UseStartup<StubStartup>();
+
+            var ex = Assert.Throws<BuildException>(() => target.Build());
+            Assert.AreEqual("The services were not configured.", ex.Message);
+        }
+
+        [Test]
+        public void ThrowsAnExceptionWhenTheRuntimeIsNull()
+        {
+            var builder = new Mock<IRuntimeBuilder>();
+
+            var target = new TestableRuntimeHostBuilder(runtimeBuilderResolver: _ => builder.Object);
+            target.UseStartup<StubStartup>();
+
+            var ex = Assert.Throws<BuildException>(() => target.Build());
+            Assert.AreEqual("The runtime could not be built.", ex.Message);
+
+            builder.Verify(o => o.Build(), Times.Once);
+        }
+
         [Test]
         public void ShouldRunTheCallbackWhenBeingBuilt()
         {
