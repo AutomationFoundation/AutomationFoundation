@@ -13,7 +13,7 @@ namespace AutomationFoundation.Hosting
     public sealed class DefaultRuntimeHostBuilder : IRuntimeHostBuilder
     {
         private readonly IList<Action<IServiceCollection>> configurationCallbacks = new List<Action<IServiceCollection>>();
-        private IStartup startup;
+        private bool startupHasBeenConfigured;
 
         /// <inheritdoc />
         public IRuntimeHostBuilder ConfigureServices(Action<IServiceCollection> callback)
@@ -28,9 +28,25 @@ namespace AutomationFoundation.Hosting
         }
 
         /// <inheritdoc />
-        public IRuntimeHostBuilder UseStartup<TStartup>() where TStartup : IStartup, new()
+        public IRuntimeHostBuilder UseStartup<TStartup>() where TStartup : IStartup
         {
-            startup = new TStartup();
+            configurationCallbacks.Add(services => services.AddScoped(typeof(IStartup), typeof(TStartup)));
+            startupHasBeenConfigured = true;
+
+            return this;
+        }
+
+        /// <inheritdoc />
+        public IRuntimeHostBuilder UseStartup(IStartup startup)
+        {
+            if (startup == null)
+            {
+                throw new ArgumentNullException(nameof(startup));
+            }
+
+            configurationCallbacks.Add(services => services.AddSingleton(typeof(IStartup), (sp) => startup));
+            startupHasBeenConfigured = true;
+
             return this;
         }
 
@@ -45,31 +61,36 @@ namespace AutomationFoundation.Hosting
                 configurationCallback(serviceCollection);
             }
 
-            var applicationServices = startup.TryConfigureContainer(serviceCollection);
-            if (applicationServices == null)
+            using (var sp = serviceCollection.BuildServiceProvider())
             {
-                throw new InvalidOperationException("The services was not configured.");
+                var startup = sp.GetRequiredService<IStartup>();
+
+                var applicationServices = startup.TryConfigureContainer(serviceCollection);
+                if (applicationServices == null)
+                {
+                    throw new InvalidOperationException("The services was not configured.");
+                }
+
+                var runtimeBuilder = new DefaultRuntimeBuilder(applicationServices);
+                startup.ConfigureProcessors(runtimeBuilder);
+
+                var runtime = runtimeBuilder.Build();
+                if (runtime == null)
+                {
+                    throw new BuildException("The runtime could not be built.");
+                }
+
+                return new RuntimeHost(
+                    runtime,
+                    applicationServices);
             }
-
-            var runtimeBuilder = new DefaultRuntimeBuilder(applicationServices);
-            startup.ConfigureProcessors(runtimeBuilder);
-
-            var runtime = runtimeBuilder.Build();
-            if (runtime == null)
-            {
-                throw new BuildException("The runtime could not be built.");
-            }
-
-            return new RuntimeHost(
-                runtime,
-                applicationServices);
         }
 
         private void GuardStartupMustBeConfigured()
         {
-            if (startup == null)
+            if (!startupHasBeenConfigured)
             {
-                throw new BuildException("The startup class must be configured.");
+                throw new BuildException("The startup must be configured.");
             }
         }
     }

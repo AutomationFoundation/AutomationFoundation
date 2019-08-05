@@ -22,6 +22,13 @@ namespace AutomationFoundation.Hosting.Abstractions.Builder
         /// </summary>
         /// <typeparam name="TStartup">The type of startup to use when starting the host.</typeparam>
         /// <returns>The current runtime host builder instance.</returns>
-        IRuntimeHostBuilder UseStartup<TStartup>() where TStartup : IStartup, new();
+        IRuntimeHostBuilder UseStartup<TStartup>() where TStartup : IStartup;
+
+        /// <summary>
+        /// Identifies the startup instance which should be used.
+        /// </summary>
+        /// <param name="startup">The startup instance which should be used during runtime startup.</param>
+        /// <returns>The current runtime host builder instance.</returns>
+        IRuntimeHostBuilder UseStartup(IStartup startup);
     }
 }

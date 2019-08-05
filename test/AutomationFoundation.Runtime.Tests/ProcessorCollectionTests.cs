@@ -6,7 +6,6 @@ using NUnit.Framework;
 
 namespace AutomationFoundation.Runtime.Tests
 {
-#if DEBUG
     [TestFixture]
     public class ProcessorCollectionTests
     {
@@ -123,6 +122,4 @@ namespace AutomationFoundation.Runtime.Tests
             Assert.Throws<NotSupportedException>(() => target.Remove(processor));
         }
     }
-
-#endif
 }
