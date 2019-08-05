@@ -22,7 +22,7 @@ install:
   - cmd: choco install sonarscanner-msbuild-net46
   - ps: set-alias opencover "${env:LocalAppData}\Apps\OpenCover\OpenCover.Console.exe"
   - ps: set-alias securefile ".\appveyor-tools\secure-file.exe"
-  - ps: iex ((New-Object Net.WebClient).DownloadString('https://raw.githubusercontent.com/jeff-winn/secure-file/master/install.ps1'))
+  - ps: iex ((New-Object Net.WebClient).DownloadString('https://raw.githubusercontent.com/appveyor/secure-file/master/install.ps1'))
 
 dotnet_csproj:
   patch: true
