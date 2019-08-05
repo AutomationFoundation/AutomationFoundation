@@ -3,7 +3,6 @@ using NUnit.Framework;
 
 namespace AutomationFoundation.Runtime.Tests
 {
-#if DEBUG
     [TestFixture]
     public class AutomationRuntimeTests
     {
@@ -25,5 +24,4 @@ namespace AutomationFoundation.Runtime.Tests
             Assert.Throws<ObjectDisposedException>(() => target.Stop());
         }
     }
-#endif
 }

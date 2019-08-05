@@ -42,6 +42,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConsoleRunner.BizServices.D
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AutomationFoundation", "src\AutomationFoundation\AutomationFoundation.csproj", "{86FB5F41-85DD-43E0-883D-72DB4EBB447C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutomationFoundation.Tests", "test\AutomationFoundation.Tests\AutomationFoundation.Tests.csproj", "{7EF40655-C9A1-4087-B842-A9249DE5C4BF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -100,6 +102,10 @@ Global
 		{86FB5F41-85DD-43E0-883D-72DB4EBB447C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{86FB5F41-85DD-43E0-883D-72DB4EBB447C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{86FB5F41-85DD-43E0-883D-72DB4EBB447C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7EF40655-C9A1-4087-B842-A9249DE5C4BF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7EF40655-C9A1-4087-B842-A9249DE5C4BF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7EF40655-C9A1-4087-B842-A9249DE5C4BF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7EF40655-C9A1-4087-B842-A9249DE5C4BF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -116,6 +122,7 @@ Global
 		{F54A3C71-5D1B-44F5-B313-5920CEBBD502} = {51336679-9F77-4B62-8A82-F4B875371473}
 		{3953110A-5625-450E-A9B5-3F1D16D6DFA4} = {51336679-9F77-4B62-8A82-F4B875371473}
 		{86FB5F41-85DD-43E0-883D-72DB4EBB447C} = {FCA4596F-9EC1-4086-8CA1-6F70D0716F49}
+		{7EF40655-C9A1-4087-B842-A9249DE5C4BF} = {51336679-9F77-4B62-8A82-F4B875371473}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {A5E424F8-8EDD-4829-B7A0-49D3AA7A5AE9}

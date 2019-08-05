@@ -3,7 +3,6 @@
   <PropertyGroup>
     <TargetFramework>net471</TargetFramework>
     <OutputType>Exe</OutputType>
-    <SonarQubeExclude>true</SonarQubeExclude>
   </PropertyGroup>
 
   <ItemGroup>
