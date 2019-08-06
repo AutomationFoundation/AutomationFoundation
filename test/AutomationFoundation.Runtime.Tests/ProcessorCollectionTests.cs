@@ -58,11 +58,13 @@ namespace AutomationFoundation.Runtime.Tests
             var parent = new Mock<IRuntime>();
             var target = new ProcessorCollection(parent.Object);
 
-            var processor = new StubProcessor();
-            target.Add(processor);
+            using (var processor = new StubProcessor())
+            {
+                target.Add(processor);
 
-            Assert.AreEqual(1, target.Count);
-            Assert.Throws<ArgumentException>(() => target.Add(processor));
+                Assert.AreEqual(1, target.Count);
+                Assert.Throws<ArgumentException>(() => target.Add(processor));
+            }
         }
 
         [Test]
@@ -73,10 +75,11 @@ namespace AutomationFoundation.Runtime.Tests
 
             var target = new ProcessorCollection(parent.Object);
 
-            var processor = new StubProcessor();
-
-            Assert.Throws<NotSupportedException>(() => target.Add(processor));
-            Assert.AreEqual(0, target.Count);
+            using (var processor = new StubProcessor())
+            {
+                Assert.Throws<NotSupportedException>(() => target.Add(processor));
+                Assert.AreEqual(0, target.Count);
+            }
         }
 
         [Test]

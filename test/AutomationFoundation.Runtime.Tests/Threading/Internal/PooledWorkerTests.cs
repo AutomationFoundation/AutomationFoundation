@@ -14,13 +14,25 @@ namespace AutomationFoundation.Runtime.Tests.Threading.Internal
         [Test]
         public void ThrowsAnExceptionWhenTheCacheIsNull()
         {
-            Assert.Throws<ArgumentNullException>(() => new PooledWorker(null, new Mock<IRuntimeWorker>().Object));
+            Assert.Throws<ArgumentNullException>(() =>
+            {
+                using (new PooledWorker(null, new Mock<IRuntimeWorker>().Object))
+                {
+                    // This code block intentionally left blank.
+                }
+            });
         }
 
         [Test]
         public void ThrowsAnExceptionWhenTheWorkerIsNull()
         {
-            Assert.Throws<ArgumentNullException>(() => new PooledWorker(new Mock<IWorkerCache>().Object, null));
+            Assert.Throws<ArgumentNullException>(() =>
+            {
+                using (new PooledWorker(new Mock<IWorkerCache>().Object, null))
+                {
+                    // This code block intentionally left blank.
+                }
+            });
         }
 
         [Test]
@@ -29,10 +41,12 @@ namespace AutomationFoundation.Runtime.Tests.Threading.Internal
             var cache = new Mock<IWorkerCache>();
             var worker = new Mock<IRuntimeWorker>();
 
-            var target = new PooledWorker(cache.Object, worker.Object);
-            target.RunAsync();            
+            using (var target = new PooledWorker(cache.Object, worker.Object))
+            {
+                target.RunAsync();
 
-            worker.Verify(o => o.RunAsync(), Times.Once);
+                worker.Verify(o => o.RunAsync(), Times.Once);
+            }
         }
 
         [Test]
@@ -41,10 +55,12 @@ namespace AutomationFoundation.Runtime.Tests.Threading.Internal
             var cache = new Mock<IWorkerCache>();
             var worker = new Mock<IRuntimeWorker>();
 
-            var target = new PooledWorker(cache.Object, worker.Object);
-            target.Run();
+            using (var target = new PooledWorker(cache.Object, worker.Object))
+            {
+                target.Run();
 
-            worker.Verify(o => o.Run(), Times.Once);
+                worker.Verify(o => o.Run(), Times.Once);
+            }
         }
 
         [Test]
@@ -55,6 +71,7 @@ namespace AutomationFoundation.Runtime.Tests.Threading.Internal
 
             using (new PooledWorker(cache.Object, worker.Object))
             {
+                // This code block intentionally left blank.
             }
 
             cache.Verify(o => o.Release(worker.Object), Times.Once);

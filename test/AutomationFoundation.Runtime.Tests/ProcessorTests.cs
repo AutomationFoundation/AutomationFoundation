@@ -10,19 +10,23 @@ namespace AutomationFoundation.Runtime.Tests
         [Test]
         public void ThrowsAnExceptionWhenStartingWhileInTheErrorState()
         {
-            var target = new StubProcessor();
-            target.SetState(ProcessorState.Error);
+            using (var target = new StubProcessor())
+            {
+                target.SetState(ProcessorState.Error);
 
-            Assert.Throws<RuntimeException>(() => target.Start());
+                Assert.Throws<RuntimeException>(() => target.Start());
+            }
         }
 
         [Test]
         public void ThrowsAnExceptionWhenStoppingWhileInTheErrorState()
         {
-            var target = new StubProcessor();
-            target.SetState(ProcessorState.Error);
+            using (var target = new StubProcessor())
+            {
+                target.SetState(ProcessorState.Error);
 
-            Assert.Throws<RuntimeException>(() => target.Stop());
+                Assert.Throws<RuntimeException>(() => target.Stop());
+            }
         }
 
         [Test]
@@ -30,7 +34,10 @@ namespace AutomationFoundation.Runtime.Tests
         {
             Assert.Throws<ArgumentNullException>(() =>
             {
-                var unused = new StubProcessor(null);
+                using (new StubProcessor(null))
+                {
+                    // This code block intentionally left blank.
+                }
             }, "name");
         }
 
@@ -39,53 +46,66 @@ namespace AutomationFoundation.Runtime.Tests
         {
             Assert.Throws<ArgumentNullException>(() =>
             {
-                var unused = new StubProcessor("   ");
+                using (new StubProcessor("   "))
+                {
+                    // This code block intentionally left blank.
+                }
             }, "name");
         }
 
         [Test]
         public void ReturnsTheCreatedStateUponNew()
         {
-            var target = new StubProcessor();
-            Assert.AreEqual(ProcessorState.Created, target.State);
+            using (var target = new StubProcessor())
+            {
+                Assert.AreEqual(ProcessorState.Created, target.State);
+            }
         }
 
         [Test]
         public void StoppingTwiceThrowsAnException()
         {
-            var target = new StubProcessor();
-            target.Start();
-            target.Stop();
+            using (var target = new StubProcessor())
+            {
+                target.Start();
+                target.Stop();
 
-            Assert.Throws<RuntimeException>(() => target.Stop());
+                Assert.Throws<RuntimeException>(() => target.Stop());
+            }
         }
 
         [Test]
         public void SetsTheNamePropertyDuringInitialization()
         {
-            var target = new StubProcessor("Test");
-            Assert.AreEqual("Test", target.Name);
+            using (var target = new StubProcessor("Test"))
+            {
+                Assert.AreEqual("Test", target.Name);
+            }
         }
 
         [Test]
         public void ChangeToAnErrorStateWhenExceptionThrownDuringStart()
-        { 
-            var target = new StubProcessor();
-            target.SetupCallbacks(() => throw new Exception("This is a test exception"));
+        {
+            using (var target = new StubProcessor())
+            {
+                target.SetupCallbacks(() => throw new Exception("This is a test exception"));
 
-            Assert.Throws<Exception>(() => target.Start());
-            Assert.AreEqual(ProcessorState.Error, target.State);
+                Assert.Throws<Exception>(() => target.Start());
+                Assert.AreEqual(ProcessorState.Error, target.State);
+            }
         }
 
         [Test]
         public void ChangeToAnErrorStateWhenExceptionThrownDuringStop()
         {
-            var target = new StubProcessor();
-            target.SetupCallbacks(onStopCallback: () => throw new Exception("This is a test exception"));
-            target.Start();
+            using (var target = new StubProcessor())
+            {
+                target.SetupCallbacks(onStopCallback: () => throw new Exception("This is a test exception"));
+                target.Start();
 
-            Assert.Throws<Exception>(() => target.Stop());
-            Assert.AreEqual(ProcessorState.Error, target.State);
+                Assert.Throws<Exception>(() => target.Stop());
+                Assert.AreEqual(ProcessorState.Error, target.State);
+            }
         }
 
         [Test]
@@ -93,17 +113,19 @@ namespace AutomationFoundation.Runtime.Tests
         {
             var tested = false;
 
-            var target = new StubProcessor();
-            target.SetupCallbacks(() =>
+            using (var target = new StubProcessor())
             {
-                Assert.AreEqual(ProcessorState.Starting, target.State);
-                tested = true;
-            });
+                target.SetupCallbacks(() =>
+                {
+                    Assert.AreEqual(ProcessorState.Starting, target.State);
+                    tested = true;
+                });
 
-            target.Start();
+                target.Start();
 
-            Assert.True(tested);
-            Assert.AreEqual(ProcessorState.Started, target.State);
+                Assert.True(tested);
+                Assert.AreEqual(ProcessorState.Started, target.State);
+            }
         }
 
         [Test]
@@ -111,42 +133,47 @@ namespace AutomationFoundation.Runtime.Tests
         {
             var tested = false;
 
-            var target = new StubProcessor();
-            target.SetupCallbacks(onStopCallback: () =>
+            using (var target = new StubProcessor())
             {
-                Assert.AreEqual(ProcessorState.Stopping, target.State);
-                tested = true;
-            });
+                target.SetupCallbacks(onStopCallback: () =>
+                {
+                    Assert.AreEqual(ProcessorState.Stopping, target.State);
+                    tested = true;
+                });
 
-            target.Start();
-            target.Stop();
+                target.Start();
+                target.Stop();
 
-            Assert.True(tested);
-            Assert.AreEqual(ProcessorState.Stopped, target.State);
+                Assert.True(tested);
+                Assert.AreEqual(ProcessorState.Stopped, target.State);
+            }
         }
 
         [Test]
         public void ThrowAnExceptionWhenTheProcessorIsAlreadyStarted()
         {
-            var target = new StubProcessor();
-            target.Start();
+            using (var target = new StubProcessor())
+            {
+                target.Start();
 
-            Assert.AreEqual(ProcessorState.Started, target.State);
-
-            Assert.Throws<RuntimeException>(() => target.ExecuteGuardMustNotAlreadyBeStarted());
+                Assert.AreEqual(ProcessorState.Started, target.State);
+                Assert.Throws<RuntimeException>(() => target.ExecuteGuardMustNotAlreadyBeStarted());
+            }
         }
 
         [Test]
         public void ThrowAnExceptionWhenTheProcessorIsAlreadyStopped()
         {
-            var target = new StubProcessor();
-            target.Start();
-            Assert.AreEqual(ProcessorState.Started, target.State);
+            using (var target = new StubProcessor())
+            {
+                target.Start();
+                Assert.AreEqual(ProcessorState.Started, target.State);
 
-            target.Stop();
-            Assert.AreEqual(ProcessorState.Stopped, target.State);
+                target.Stop();
+                Assert.AreEqual(ProcessorState.Stopped, target.State);
 
-            Assert.Throws<RuntimeException>(() => target.ExecuteGuardMustNotAlreadyBeStopped());
+                Assert.Throws<RuntimeException>(() => target.ExecuteGuardMustNotAlreadyBeStopped());
+            }
         }
 
         [Test]

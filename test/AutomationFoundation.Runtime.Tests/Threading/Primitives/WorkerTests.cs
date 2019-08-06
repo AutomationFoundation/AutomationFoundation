@@ -11,22 +11,26 @@ namespace AutomationFoundation.Runtime.Tests.Threading.Primitives
         [Test]
         public void CleanUpTheWorkerAsExpectedBeforeInitialize()
         {
-            var target = new Worker();
-            Assert.False(target.Initialized);
+            using (var target = new Worker())
+            {
+                Assert.False(target.Initialized);
 
-            target.Reset();
+                target.Reset();
 
-            Assert.False(target.Initialized);
+                Assert.False(target.Initialized);
+            }
         }
 
         [Test]
         public void ThrowsAnExceptionIfInitializedWhileAlreadyInitialized()
         {
-            var target = new Worker();
-            target.Initialize(new WorkerExecutionContext());
+            using (var target = new Worker())
+            {
+                target.Initialize(new WorkerExecutionContext());
 
-            Assert.True(target.Initialized);
-            Assert.Throws<InvalidOperationException>(() => target.Initialize(new WorkerExecutionContext()));
+                Assert.True(target.Initialized);
+                Assert.Throws<InvalidOperationException>(() => target.Initialize(new WorkerExecutionContext()));
+            }
         }
 
         [Test]
@@ -91,17 +95,19 @@ namespace AutomationFoundation.Runtime.Tests.Threading.Primitives
         [Test]
         public void ThrowsAnExceptionIfRunAsyncCalledBeforeInitialize()
         {
-            var target = new Worker();
-
-            Assert.Throws<InvalidOperationException>(() => target.RunAsync());
+            using (var target = new Worker())
+            {
+                Assert.Throws<InvalidOperationException>(() => target.RunAsync());
+            }
         }
 
         [Test]
         public void ThrowsAnExceptionIfRunSynchronouslyCalledBeforeInitialize()
         {
-            var target = new Worker();
-
-            Assert.Throws<InvalidOperationException>(() => target.Run());
+            using (var target = new Worker())
+            {
+                Assert.Throws<InvalidOperationException>(() => target.Run());
+            }
         }
 
         [Test]

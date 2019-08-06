@@ -15,21 +15,34 @@ namespace AutomationFoundation.Runtime.Tests.Threading
         [Test]
         public void ThrowsAnExceptionWhenTheCacheIsNull()
         {
-            Assert.Throws<ArgumentNullException>(() => new WorkerPool(null, new Mock<IWorkerCacheMonitor>().Object));
+            Assert.Throws<ArgumentNullException>(() =>
+            {
+                using (new WorkerPool(null, new Mock<IWorkerCacheMonitor>().Object))
+                {
+                    // This code block intentionally left blank.
+                }
+            });
         }
 
         [Test]
         public void ThrowsAnExceptionWhenTheCacheMonitorIsNull()
         {
-            Assert.Throws<ArgumentNullException>(() => new WorkerPool(new Mock<IWorkerCache>().Object, null));
+            Assert.Throws<ArgumentNullException>(() =>
+            {
+                using (new WorkerPool(new Mock<IWorkerCache>().Object, null))
+                {
+                    // This code block intentionally left blank.
+                }
+            });
         }
 
         [Test]
         public void CreatesThePoolAsExpected()
         {
-            var target = WorkerPool.Create();
-
-            Assert.IsNotNull(target);
+            using (var target = WorkerPool.Create())
+            {
+                Assert.IsNotNull(target);
+            }
         }
 
         [Test]
@@ -41,11 +54,13 @@ namespace AutomationFoundation.Runtime.Tests.Threading
             var cache = new Mock<IWorkerCache>();
             cache.Setup(o => o.Get()).Returns(worker.Object);
 
-            var target = new WorkerPool(cache.Object, cacheMonitor.Object);
-            var result = target.Get(OnRun, OnCompleted);
+            using (var target = new WorkerPool(cache.Object, cacheMonitor.Object))
+            {
+                var result = target.Get(OnRun, OnCompleted);
 
-            Assert.IsNotNull(result);
-            Assert.IsInstanceOf<PooledWorker>(result);
+                Assert.IsNotNull(result);
+                Assert.IsInstanceOf<PooledWorker>(result);
+            }
         }
 
         [Test]
@@ -54,8 +69,10 @@ namespace AutomationFoundation.Runtime.Tests.Threading
             var cache = new Mock<IWorkerCache>();
             var cacheMonitor = new Mock<IWorkerCacheMonitor>();
 
-            var target = new WorkerPool(cache.Object, cacheMonitor.Object);
-            Assert.Throws<ArgumentNullException>(() => target.Get(null, OnCompleted));
+            using (var target = new WorkerPool(cache.Object, cacheMonitor.Object))
+            {
+                Assert.Throws<ArgumentNullException>(() => target.Get(null, OnCompleted));
+            }
         }
 
         [Test]
@@ -64,8 +81,10 @@ namespace AutomationFoundation.Runtime.Tests.Threading
             var cache = new Mock<IWorkerCache>();
             var cacheMonitor = new Mock<IWorkerCacheMonitor>();
 
-            var target = new WorkerPool(cache.Object, cacheMonitor.Object);
-            Assert.DoesNotThrow(() => target.Get(OnRun, null));
+            using (var target = new WorkerPool(cache.Object, cacheMonitor.Object))
+            {
+                Assert.DoesNotThrow(() => target.Get(OnRun, null));
+            }
         }
 
         [Test]
@@ -77,13 +96,13 @@ namespace AutomationFoundation.Runtime.Tests.Threading
             var cache = new Mock<IWorkerCache>();
             cache.Setup(o => o.Get()).Returns(worker.Object);
 
-            var target = new TestableWorkerPool(cache.Object, cacheMonitor.Object)
+            using (var target = new TestableWorkerPool(cache.Object, cacheMonitor.Object))
             {
-                OnCreatePooledWorkerCallback = o => throw new ApplicationException("Test exception")
-            };
+                target.OnCreatePooledWorkerCallback = o => throw new ApplicationException("Test exception");
 
-            Assert.Throws<ApplicationException>(() => target.Get(OnRun, OnCompleted));
-            cache.Verify(o => o.Release(worker.Object), Times.Once);
+                Assert.Throws<ApplicationException>(() => target.Get(OnRun, OnCompleted));
+                cache.Verify(o => o.Release(worker.Object), Times.Once);
+            }
         }
 
         [Test]
@@ -95,21 +114,23 @@ namespace AutomationFoundation.Runtime.Tests.Threading
             var cache = new Mock<IWorkerCache>();
             cache.Setup(o => o.Get()).Returns(worker.Object);
 
-            var target = new TestableWorkerPool(cache.Object, cacheMonitor.Object)
+            using (var target = new TestableWorkerPool(cache.Object, cacheMonitor.Object))
             {
-                OnBaseCreatePooledWorkerCallback = o => null
-            };
+                target.OnBaseCreatePooledWorkerCallback = o => null;
 
-            Assert.Throws<ArgumentNullException>(() => target.Get(OnRun, OnCompleted));
-            cache.Verify(o => o.Release(worker.Object), Times.Once);
+                Assert.Throws<ArgumentNullException>(() => target.Get(OnRun, OnCompleted));
+                cache.Verify(o => o.Release(worker.Object), Times.Once);
+            }
         }
 
         private static void OnRun()
         {
+            // This method intentionally left blank.
         }
 
         private static void OnCompleted()
         {
+            // This method intentionally left blank.
         }
     }
 }
