@@ -21,7 +21,6 @@ install:
   - ps: set-alias opencover "${env:LocalAppData}\Apps\OpenCover\OpenCover.Console.exe"
   - cmd: choco install sonarscanner-msbuild-net46
   - ps: iex ((New-Object Net.WebClient).DownloadString('https://raw.githubusercontent.com/appveyor/secure-file/master/install.ps1'))
-  - ps: set-alias securefile ".\appveyor-tools\secure-file.exe"
 
 dotnet_csproj:
   patch: true
@@ -36,7 +35,7 @@ nuget:
   disable_publish_on_pr: true
 
 before_build:
-  - ps: securefile -decrypt Winnster.snk.enc -secret $env:snk_passphrase -salt $env:snk_salt
+  - cmd: .\appveyor-tools\secure-file.exe -decrypt Winnster.snk.enc -secret %snk_passphrase% -salt %snk_salt%
   - cmd: SonarScanner.MSBuild.exe begin /k:"AutomationFoundation" /v:"%APPVEYOR_BUILD_VERSION%-preview" /d:"sonar.host.url=https://sonarcloud.io" /o:"winnster" /d:"sonar.login=%sonarcloud_token%" /d:"sonar.cs.nunit.reportsPaths=**/TestResult.xml" /d:"sonar.cs.opencover.reportsPaths=**/opencover.xml" /d:"sonar.exclusions=**\tools\**"
   - cmd: nuget restore
 
