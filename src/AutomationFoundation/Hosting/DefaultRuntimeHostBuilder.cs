@@ -12,7 +12,7 @@ namespace AutomationFoundation.Hosting
     /// </summary>
     public class DefaultRuntimeHostBuilder : IRuntimeHostBuilder
     {
-        private readonly IList<Action<IServiceCollection>> configurationCallbacks = new List<Action<IServiceCollection>>();
+        private readonly IList<Action<IServiceCollection>> callbacks = new List<Action<IServiceCollection>>();
         private bool startupHasBeenConfigured;
 
         /// <inheritdoc />
@@ -23,14 +23,14 @@ namespace AutomationFoundation.Hosting
                 throw new ArgumentNullException(nameof(callback));
             }
 
-            configurationCallbacks.Add(callback);
+            callbacks.Add(callback);
             return this;
         }
 
         /// <inheritdoc />
         public IRuntimeHostBuilder UseStartup<TStartup>() where TStartup : IStartup
         {
-            configurationCallbacks.Add(services => services.AddScoped(typeof(IStartup), typeof(TStartup)));
+            callbacks.Add(services => services.AddScoped(typeof(IStartup), typeof(TStartup)));
             startupHasBeenConfigured = true;
 
             return this;
@@ -44,7 +44,7 @@ namespace AutomationFoundation.Hosting
                 throw new ArgumentNullException(nameof(startup));
             }
 
-            configurationCallbacks.Add(services => services.AddSingleton(typeof(IStartup), (sp) => startup));
+            callbacks.Add(services => services.AddSingleton(typeof(IStartup), (sp) => startup));
             startupHasBeenConfigured = true;
 
             return this;
@@ -55,21 +55,22 @@ namespace AutomationFoundation.Hosting
         {
             GuardStartupMustBeConfigured();
 
-            var serviceCollection = new ServiceCollection();
-            foreach (var configurationCallback in configurationCallbacks)
-            {
-                configurationCallback(serviceCollection);
-            }
+            var services = CreateServiceCollection();
+            ConfigureServiceCollection(services);
 
-            using (var sp = serviceCollection.BuildServiceProvider())
+            IServiceProvider sp = null;
+
+            try
             {
+                sp = BuildServiceProvider(services);
+
                 var startup = ResolveStartupInstance(sp);
                 if (startup == null)
                 {
                     throw new BuildException("The startup instance was not resolved.");
                 }
 
-                var applicationServices = ConfigureApplicationServices(startup, serviceCollection);
+                var applicationServices = ConfigureApplicationServices(startup, services);
                 if (applicationServices == null)
                 {
                     throw new BuildException("The services were not configured.");
@@ -87,6 +88,51 @@ namespace AutomationFoundation.Hosting
                 return new RuntimeHost(
                     runtime,
                     applicationServices);
+            }
+            finally
+            {
+                (sp as IDisposable)?.Dispose();
+            }
+        }
+
+        /// <summary>
+        /// Creates the service collection.
+        /// </summary>
+        /// <returns>The new service collection instance.</returns>
+        protected virtual IServiceCollection CreateServiceCollection()
+        {
+            return new ServiceCollection();
+        }
+
+        /// <summary>
+        /// Builds a service provider from a collection of services.
+        /// </summary>
+        /// <param name="services">The service collection from which to build the provider.</param>
+        /// <returns>The service provider.</returns>
+        protected virtual IServiceProvider BuildServiceProvider(IServiceCollection services)
+        {
+            if (services == null)
+            {
+                throw new ArgumentNullException(nameof(services));
+            }
+
+            return services.BuildServiceProvider();
+        }
+
+        /// <summary>
+        /// Configures the service collection used for dependency injection.
+        /// </summary>
+        /// <param name="serviceCollection">The service collection to configure.</param>
+        protected virtual void ConfigureServiceCollection(IServiceCollection serviceCollection)
+        {
+            if (serviceCollection == null)
+            {
+                throw new ArgumentNullException(nameof(serviceCollection));
+            }
+
+            foreach (var callback in callbacks)
+            {
+                callback(serviceCollection);
             }
         }
 

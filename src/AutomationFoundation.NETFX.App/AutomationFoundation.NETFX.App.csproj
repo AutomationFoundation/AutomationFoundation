@@ -1,7 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFramework>net472</TargetFramework>
+    <RootNamespace>AutomationFoundation</RootNamespace>
     <Authors>Winnster.io</Authors>
     <Version>0.0.0</Version>
     <PackageVersion>$(Version)</PackageVersion>
@@ -11,17 +12,11 @@
     <RepositoryUrl>https://github.com/winnster/AutomationFoundation</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageTags>automation,automationfoundation</PackageTags>
-    <Description>Contains a metapackage for consuming the Automation Foundation framework.</Description>
+    <Description>Contains a metapackage for consuming the Automation Foundation framework from a .NET Framework application.</Description>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="2.2.0" />
-    <PackageReference Include="Microsoft.Extensions.Logging" Version="2.2.0" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\AutomationFoundation.Hosting\AutomationFoundation.Hosting.csproj" />
-    <ProjectReference Include="..\AutomationFoundation.Runtime\AutomationFoundation.Runtime.csproj" />
+    <ProjectReference Include="..\AutomationFoundation\AutomationFoundation.csproj" />
   </ItemGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

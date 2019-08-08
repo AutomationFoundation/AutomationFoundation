@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net471</TargetFramework>
+    <TargetFramework>netcoreapp3.0</TargetFramework>
     <OutputType>Exe</OutputType>
   </PropertyGroup>
 
@@ -12,7 +12,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\AutomationFoundation.Features.ProducerConsumer\AutomationFoundation.Features.ProducerConsumer.csproj" />
-    <ProjectReference Include="..\..\src\AutomationFoundation\AutomationFoundation.csproj" />
+    <ProjectReference Include="..\..\src\AutomationFoundation.NETCore.App\AutomationFoundation.NETCore.App.csproj" />
+    <ProjectReference Include="..\..\src\AutomationFoundation.NETFX.App\AutomationFoundation.NETFX.App.csproj" />
     <ProjectReference Include="..\ConsoleRunner.BizServices.Domain\ConsoleRunner.BizServices.Domain.csproj" />
   </ItemGroup>
 
