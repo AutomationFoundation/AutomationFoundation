@@ -28,7 +28,7 @@ namespace AutomationFoundation.Hosting
             }
 
             builder.ConfigureServices(services => 
-                ConfigurationBuilderRegistration.Build(services, callback));
+                ConfigurationBuilderRegistration.OnConfigureServices(services, callback));
 
             return builder;
         }
