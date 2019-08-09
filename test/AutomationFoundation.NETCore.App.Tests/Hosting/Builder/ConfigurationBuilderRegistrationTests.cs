@@ -14,13 +14,13 @@ namespace AutomationFoundation.NETCore.App.Tests.Hosting.Builder
         [Test]
         public void ThrowsExceptionWhenServicesIsNull()
         {
-            Assert.Throws<ArgumentNullException>(() => ConfigurationBuilderRegistration.OnConfigureServices(null, builder => { }));
+            Assert.Throws<ArgumentNullException>(() => ConfigurationBuilderRegistration.OnConfigureServicesCallback(null, builder => { }));
         }
 
         [Test]
         public void ThrowsExceptionWhenCallbackIsNull()
         {
-            Assert.Throws<ArgumentNullException>(() => ConfigurationBuilderRegistration.OnConfigureServices(new Mock<IServiceCollection>().Object, null));
+            Assert.Throws<ArgumentNullException>(() => ConfigurationBuilderRegistration.OnConfigureServicesCallback(new Mock<IServiceCollection>().Object, null));
         }
 
         [Test]
@@ -29,7 +29,7 @@ namespace AutomationFoundation.NETCore.App.Tests.Hosting.Builder
             var called = false;
             var services = new Mock<IServiceCollection>();
 
-            ConfigurationBuilderRegistration.OnConfigureServices(services.Object, builder => { called = true; });
+            ConfigurationBuilderRegistration.OnConfigureServicesCallback(services.Object, builder => { called = true; });
 
             Assert.True(called);
         }

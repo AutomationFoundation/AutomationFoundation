@@ -44,11 +44,11 @@ namespace AutomationFoundation.Hosting.Builder
         }
 
         /// <summary>
-        /// Builds the configuration and attaches it to the services.
+        /// Callback which is executed when the service collection is being built.
         /// </summary>
         /// <param name="services">The collection of services.</param>
         /// <param name="callback">The callback to execute which will contain the application specific logic to execute.</param>
-        public static void OnConfigureServices(IServiceCollection services, Action<IConfigurationBuilder> callback)
+        public static void OnConfigureServicesCallback(IServiceCollection services, Action<IConfigurationBuilder> callback)
         {
             if (services == null)
             {
