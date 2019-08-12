@@ -1,5 +1,4 @@
 ﻿using System;
-using AutomationFoundation.Hosting.Abstractions;
 using AutomationFoundation.Runtime.Abstractions;
 using Microsoft.Extensions.DependencyInjection;
 

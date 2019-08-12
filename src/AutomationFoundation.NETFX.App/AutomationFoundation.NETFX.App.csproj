@@ -1,25 +1,22 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
-    <RootNamespace>AutomationFoundation.Runtime</RootNamespace>
+    <TargetFramework>net472</TargetFramework>
+    <RootNamespace>AutomationFoundation</RootNamespace>
+    <Authors>Winnster.io</Authors>
     <Version>0.0.0</Version>
     <PackageVersion>$(Version)</PackageVersion>
     <InformationalVersion>$(Version)</InformationalVersion>
-    <Authors>Winnster.io</Authors>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <RepositoryUrl>https://github.com/winnster/AutomationFoundation</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
-    <PackageTags>automation,automationfoundation,runtime</PackageTags>
-    <RepositoryUrl>https://github.com/winnster/AutomationFoundation.Runtime.Abstractions</RepositoryUrl>
-    <Description>Contains the abstractions for the Automation Foundation runtime.</Description>
-  </PropertyGroup>
-
-  <PropertyGroup>
-    <DocumentationFile>obj\AutomationFoundation.Runtime.Abstractions.xml</DocumentationFile>
+    <PackageTags>automation,automationfoundation</PackageTags>
+    <Description>Contains a metapackage for consuming the Automation Foundation framework from a .NET Framework application.</Description>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="[2.2.0,3.0.0)" />
+    <ProjectReference Include="..\AutomationFoundation\AutomationFoundation.csproj" />
   </ItemGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

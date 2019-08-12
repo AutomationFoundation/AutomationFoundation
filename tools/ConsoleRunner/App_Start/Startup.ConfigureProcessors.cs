@@ -19,27 +19,25 @@ namespace ConsoleRunner
 
             using (var scope = runtimeBuilder.ApplicationServices.CreateScope())
             {
-                ConfigureProcessors(
-                    runtimeBuilder,
-                    scope.ServiceProvider);
+                ConfigureProcessors(runtimeBuilder, scope.ServiceProvider);
             }
         }
 
-        private void ConfigureProcessors(IRuntimeBuilder runtimeBuilder, IServiceProvider serviceProvider)
+        private static void ConfigureProcessors(IRuntimeBuilder runtimeBuilder, IServiceProvider serviceProvider)
         {
             var unitOfWork = serviceProvider.GetRequiredService<IUnitOfWork>();
-
+            
             var configs = unitOfWork.AppProcessors.GetProcessorsForMachine(Environment.MachineName);
 
             foreach (var config in configs)
             {
-                var configurator = GetBuilder(config.ProcessorType);
-                if (configurator == null)
+                var builder = GetBuilder(config.ProcessorType);
+                if (builder == null)
                 {
-                    throw new InvalidOperationException("The processor configurator was not created.");
+                    throw new InvalidOperationException("The processor builder was not created.");
                 }
 
-                var processor = configurator.Build(runtimeBuilder, config);
+                var processor = builder.Build(runtimeBuilder, config);
                 if (processor == null)
                 {
                     throw new InvalidOperationException("The processor was not built.");
@@ -49,16 +47,19 @@ namespace ConsoleRunner
             }
         }
 
-        private IProcessorBuilder GetBuilder(ProcessorTypeEnum processorType)
+        private static IProcessorBuilder GetBuilder(ProcessorTypeEnum processorType)
         {
             switch (processorType)
             {
                 case ProcessorTypeEnum.ProducerConsumer:
                     return new ProducerConsumerProcessorBuilder();
 
-                default:
+                case ProcessorTypeEnum.ScheduledJob:
+                case ProcessorTypeEnum.Task:
                     throw new NotSupportedException($"The processor type '{processorType}' is not supported.");
             }
+
+            return null;
         }
     }
 }
