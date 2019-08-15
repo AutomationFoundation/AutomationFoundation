@@ -3,6 +3,7 @@ using AutomationFoundation.Features.ProducerConsumer;
 using AutomationFoundation.Features.ProducerConsumer.Abstractions;
 using AutomationFoundation.Features.ProducerConsumer.Configuration;
 using AutomationFoundation.Features.ProducerConsumer.Engines;
+using AutomationFoundation.Features.ProducerConsumer.Strategies;
 using AutomationFoundation.Hosting.Abstractions.Builder;
 using AutomationFoundation.Runtime;
 using AutomationFoundation.Runtime.Abstractions.Synchronization;
@@ -51,14 +52,14 @@ namespace ConsoleRunner.Infrastructure.Builders
 
             return new SynchronousConsumerEngine<int>(
                 WorkerPool.Create(),
-                new ConsumerRunner<int>(
+                new DefaultConsumerExecutionStrategy<int>(
                     scope => new IntConsumer()));
         }
 
         private IProducerEngine<int> BuildProducerEngine(IRuntimeBuilder runtimeBuilder, ISynchronizationPolicy synchronizationPolicy)
         {
             return new ScheduledProducerEngine<int>(
-                new ProducerRunner<int>(
+                new DefaultProducerExecutionStrategy<int>(
                     runtimeBuilder.ApplicationServices.GetRequiredService<IServiceScopeFactory>(),
                     scope => new RandomIntProducer(),
                     synchronizationPolicy,

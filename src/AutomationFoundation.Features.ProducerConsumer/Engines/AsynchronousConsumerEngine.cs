@@ -19,7 +19,7 @@ namespace AutomationFoundation.Features.ProducerConsumer.Engines
         private readonly object syncRoot = new object();
 
         private readonly ISet<IWorker> workers = new HashSet<IWorker>();
-        private readonly IConsumerRunner<TItem> runner;
+        private readonly IConsumerExecutionStrategy<TItem> runner;
         private readonly IWorkerPool pool;
         private readonly IErrorHandler errorHandler;
 
@@ -29,7 +29,7 @@ namespace AutomationFoundation.Features.ProducerConsumer.Engines
         /// <param name="pool">The pool of workers available to consume the objects.</param>
         /// <param name="runner">The consumer runner which will consume the objects produced.</param>
         /// <param name="errorHandler">The error handler to use if errors within the engine.</param>
-        public AsynchronousConsumerEngine(IWorkerPool pool, IConsumerRunner<TItem> runner, IErrorHandler errorHandler)
+        public AsynchronousConsumerEngine(IWorkerPool pool, IConsumerExecutionStrategy<TItem> runner, IErrorHandler errorHandler)
         {
             this.runner = runner ?? throw new ArgumentNullException(nameof(runner));
             this.pool = pool ?? throw new ArgumentNullException(nameof(pool));
@@ -109,7 +109,7 @@ namespace AutomationFoundation.Features.ProducerConsumer.Engines
         /// <param name="context">The contextual information about what was produced.</param>
         protected virtual void OnConsume(ProducerConsumerContext<TItem> context)
         {
-            using (var task = runner.RunAsync(context))
+            using (var task = runner.ExecuteAsync(context))
             {
                 Task.WaitAll(task);
             }

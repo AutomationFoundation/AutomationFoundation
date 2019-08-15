@@ -15,7 +15,7 @@ namespace AutomationFoundation.Features.ProducerConsumer.Engines
     /// <typeparam name="TItem">The type of item being produced.</typeparam>
     public class ScheduledProducerEngine<TItem> : DisposableObject, IProducerEngine<TItem>
     {
-        private readonly IProducerRunner<TItem> runner;
+        private readonly IProducerExecutionStrategy<TItem> runner;
         private readonly IErrorHandler errorHandler;
         private readonly IScheduler scheduler;
         private readonly ScheduledEngineOptions options;
@@ -38,7 +38,7 @@ namespace AutomationFoundation.Features.ProducerConsumer.Engines
         /// <param name="errorHandler">The error handler to use if errors within the engine.</param>
         /// <param name="scheduler">The scheduler.</param>
         /// <param name="options">The engine configuration options.</param>
-        public ScheduledProducerEngine(IProducerRunner<TItem> runner, IErrorHandler errorHandler, IScheduler scheduler, ScheduledEngineOptions options)
+        public ScheduledProducerEngine(IProducerExecutionStrategy<TItem> runner, IErrorHandler errorHandler, IScheduler scheduler, ScheduledEngineOptions options)
         {
             this.runner = runner ?? throw new ArgumentNullException(nameof(runner));
             this.errorHandler = errorHandler ?? throw new ArgumentNullException(nameof(errorHandler));
@@ -104,7 +104,7 @@ namespace AutomationFoundation.Features.ProducerConsumer.Engines
                 {
                     try
                     {
-                        found = await runner.RunAsync(onProducedCallback, cancellationSource.CancellationToken);
+                        found = await runner.ExecuteAsync(onProducedCallback, cancellationSource.CancellationToken);
                     }
                     catch (Exception ex)
                     {

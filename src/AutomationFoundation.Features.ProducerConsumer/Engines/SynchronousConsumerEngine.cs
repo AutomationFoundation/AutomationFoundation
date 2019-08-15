@@ -13,14 +13,14 @@ namespace AutomationFoundation.Features.ProducerConsumer.Engines
     public class SynchronousConsumerEngine<TItem> : IConsumerEngine<TItem>
     {
         private readonly IWorkerPool pool;
-        private readonly IConsumerRunner<TItem> runner;
+        private readonly IConsumerExecutionStrategy<TItem> runner;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SynchronousConsumerEngine{TItem}"/> class.
         /// </summary>
         /// <param name="pool">The pool of workers available to consume the objects.</param>
         /// <param name="runner">The consumer runner which will consume the objects produced.</param>
-        public SynchronousConsumerEngine(IWorkerPool pool, IConsumerRunner<TItem> runner)
+        public SynchronousConsumerEngine(IWorkerPool pool, IConsumerExecutionStrategy<TItem> runner)
         {
             this.pool = pool ?? throw new ArgumentNullException(nameof(pool));
             this.runner = runner ?? throw new ArgumentNullException(nameof(runner));
@@ -56,7 +56,7 @@ namespace AutomationFoundation.Features.ProducerConsumer.Engines
         /// <param name="context">The contextual information about what was produced.</param>
         protected virtual void OnConsume(ProducerConsumerContext<TItem> context)
         {
-            using (var task = runner.RunAsync(context))
+            using (var task = runner.ExecuteAsync(context))
             {
                 Task.WaitAll(task);
             }

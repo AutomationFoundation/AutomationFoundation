@@ -15,9 +15,9 @@ namespace AutomationFoundation.Runtime
         Guid Id { get; }
 
         /// <summary>
-        /// Gets the service scope.
+        /// Gets the lifetime scope.
         /// </summary>
-        IServiceScope ServiceScope { get; }
+        IServiceScope LifetimeScope { get; }
 
         /// <summary>
         /// Gets the cancellation token to monitor for cancellation requests.

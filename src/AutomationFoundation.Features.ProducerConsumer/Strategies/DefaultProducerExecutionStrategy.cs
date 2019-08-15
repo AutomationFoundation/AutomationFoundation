@@ -6,13 +6,13 @@ using AutomationFoundation.Runtime;
 using AutomationFoundation.Runtime.Abstractions.Synchronization;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace AutomationFoundation.Features.ProducerConsumer
+namespace AutomationFoundation.Features.ProducerConsumer.Strategies
 {
     /// <summary>
-    /// Provides a runner for producing objects.
+    /// Provides the default execution strategy for <see cref="IProducer{TItem}"/> instances.
     /// </summary>
     /// <typeparam name="TItem">The type of item being produced.</typeparam>
-    public class ProducerRunner<TItem> : IProducerRunner<TItem>
+    public class DefaultProducerExecutionStrategy<TItem> : IProducerExecutionStrategy<TItem>
     {
         private readonly IServiceScopeFactory scopeFactory;
         private readonly ISynchronizationPolicy synchronizationPolicy;
@@ -20,13 +20,13 @@ namespace AutomationFoundation.Features.ProducerConsumer
         private readonly bool alwaysExecuteOnDefaultValue;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ProducerRunner{T}"/> class.
+        /// Initializes a new instance of the <see cref="DefaultProducerExecutionStrategy{TItem}"/> class.
         /// </summary>
         /// <param name="scopeFactory">The factory for creating service scopes.</param>
         /// <param name="producerFactory">The factory for creating producers.</param>
         /// <param name="synchronizationPolicy">The policy used to synchronize the producer and consumer engines to prevent over producing work.</param>
         /// <param name="alwaysExecuteOnDefaultValue">true to always execute the callback, even if the value produced is the default; otherwise false.</param>
-        public ProducerRunner(IServiceScopeFactory scopeFactory, Func<IServiceScope, IProducer<TItem>> producerFactory, ISynchronizationPolicy synchronizationPolicy, bool alwaysExecuteOnDefaultValue)
+        public DefaultProducerExecutionStrategy(IServiceScopeFactory scopeFactory, Func<IServiceScope, IProducer<TItem>> producerFactory, ISynchronizationPolicy synchronizationPolicy, bool alwaysExecuteOnDefaultValue)
         {
             this.scopeFactory = scopeFactory ?? throw new ArgumentNullException(nameof(scopeFactory));
             this.producerFactory = producerFactory ?? throw new ArgumentNullException(nameof(producerFactory));
@@ -35,7 +35,7 @@ namespace AutomationFoundation.Features.ProducerConsumer
         }
 
         /// <inheritdoc />
-        public Task<bool> RunAsync(Action<ProducerConsumerContext<TItem>> onProducedCallback, CancellationToken cancellationToken)
+        public Task<bool> ExecuteAsync(Action<ProducerConsumerContext<TItem>> onProducedCallback, CancellationToken cancellationToken)
         {
             if (onProducedCallback == null)
             {
@@ -62,7 +62,8 @@ namespace AutomationFoundation.Features.ProducerConsumer
 
                     context = new ProducerConsumerContext<TItem>(id, scope)
                     {
-                        CancellationToken = cancellationToken
+                        CancellationToken = cancellationToken,
+                        ProductionStrategy = this
                     };
 
                     await AcquireSynchronizationLockAsync(context);
@@ -99,6 +100,11 @@ namespace AutomationFoundation.Features.ProducerConsumer
         /// <returns>The synchronization lock.</returns>
         protected virtual Task AcquireSynchronizationLockAsync(ProducerConsumerContext<TItem> context)
         {
+            if (context == null)
+            {
+                throw new ArgumentNullException(nameof(context));
+            }
+
             if (synchronizationPolicy != null)
             {
                context.SynchronizationLock = synchronizationPolicy.AcquireLock(context.CancellationToken);
@@ -113,10 +119,15 @@ namespace AutomationFoundation.Features.ProducerConsumer
         /// <param name="context">The contextual information for the item which was produced.</param>
         protected virtual Task CreateProducerAsync(ProducerConsumerContext<TItem> context)
         {
-            var producer = producerFactory(context.ServiceScope);
+            if (context == null)
+            {
+                throw new ArgumentNullException(nameof(context));
+            }
+
+            var producer = producerFactory(context.LifetimeScope);
             if (producer == null)
             {
-                throw new InvalidOperationException("The producer was not created.");
+                throw new RuntimeException("The producer was not created.");
             }
 
             context.Producer = producer;
@@ -127,10 +138,21 @@ namespace AutomationFoundation.Features.ProducerConsumer
         /// <summary>
         /// Produces an item.
         /// </summary>
+        /// <param name="context">The contextual information for the item which was produced.</param>
         /// <returns>The task to await.</returns>
-        protected virtual async Task ProduceAsync(ProducerConsumerContext<TItem> context)
+        protected virtual Task ProduceAsync(ProducerConsumerContext<TItem> context)
         {
-            context.Producer = producerFactory(context.ServiceScope);
+            if (context == null)
+            {
+                throw new ArgumentNullException(nameof(context));
+            }
+
+            return ProduceAsyncImpl(context);
+        }
+
+        private async Task ProduceAsyncImpl(ProducerConsumerContext<TItem> context)
+        {
+            context.Producer = producerFactory(context.LifetimeScope);
             context.Item = await context.Producer.ProduceAsync(context.CancellationToken);
         }
 
@@ -166,6 +188,11 @@ namespace AutomationFoundation.Features.ProducerConsumer
         /// <returns>true if the callback should be executed, otherwise false.</returns>
         protected virtual bool ShouldExecuteCallback(ProducerConsumerContext<TItem> context)
         {
+            if (context == null)
+            {
+                throw new ArgumentNullException(nameof(context));
+            }
+
             return alwaysExecuteOnDefaultValue || !Equals(context.Item, default(TItem));
         }
     }

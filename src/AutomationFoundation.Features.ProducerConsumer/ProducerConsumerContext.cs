@@ -38,6 +38,16 @@ namespace AutomationFoundation.Features.ProducerConsumer
         public IConsumer<TItem> Consumer { get; set; }
 
         /// <summary>
+        /// Gets or sets the production strategy for producing the item.
+        /// </summary>
+        public IProducerExecutionStrategy<TItem> ProductionStrategy { get; set; }
+
+        /// <summary>
+        /// Gets or sets the consumption strategy for consuming the item.
+        /// </summary>
+        public IConsumerExecutionStrategy<TItem> ConsumptionStrategy { get; set; }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="ProducerConsumerContext{TItem}"/> class.
         /// </summary>
         /// <param name="id">The unique identifier of the context.</param>

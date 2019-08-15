@@ -3,15 +3,15 @@
 namespace AutomationFoundation.Features.ProducerConsumer.Abstractions
 {
     /// <summary>
-    /// Identifies an adapter which runs a consumer.
+    /// Identifies an execution strategy for an <see cref="IConsumer{TItem}"/>.
     /// </summary>
     /// <typeparam name="TItem">The type of item being consumed.</typeparam>
-    public interface IConsumerRunner<TItem>
+    public interface IConsumerExecutionStrategy<TItem>
     {
         /// <summary>
-        /// Runs the consumer.
+        /// Executes the strategy.
         /// </summary>
         /// <param name="context">The contextual information about the item produced.</param>
-        Task RunAsync(ProducerConsumerContext<TItem> context);
+        Task ExecuteAsync(ProducerConsumerContext<TItem> context);
     }
 }

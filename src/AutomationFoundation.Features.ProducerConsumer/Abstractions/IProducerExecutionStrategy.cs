@@ -5,17 +5,17 @@ using System.Threading.Tasks;
 namespace AutomationFoundation.Features.ProducerConsumer.Abstractions
 {
     /// <summary>
-    /// Identifies an adapter which runs a producer.
+    /// Identifies an execution strategy for an <see cref="IProducer{TItem}"/>.
     /// </summary>
     /// <typeparam name="TItem">The type of item being produced.</typeparam>
-    public interface IProducerRunner<TItem>
+    public interface IProducerExecutionStrategy<TItem>
     {
         /// <summary>
-        /// Runs the producer.
+        /// Executes the strategy.
         /// </summary>
         /// <param name="onProducedCallback">The callback to execute if an object is produced.</param>
         /// <param name="cancellationToken">The cancellation token to monitor for cancellation requests.</param>
         /// <returns>true if an item was produced, otherwise false.</returns>
-        Task<bool> RunAsync(Action<ProducerConsumerContext<TItem>> onProducedCallback, CancellationToken cancellationToken);
+        Task<bool> ExecuteAsync(Action<ProducerConsumerContext<TItem>> onProducedCallback, CancellationToken cancellationToken);
     }
 }

@@ -61,7 +61,7 @@ namespace AutomationFoundation.Runtime
         /// <summary>
         /// Gets the service scope.
         /// </summary>
-        public IServiceScope ServiceScope { get; }
+        public IServiceScope LifetimeScope { get; }
 
         /// <summary>
         /// Gets or sets the cancellation token to monitor for cancellation requests.
@@ -76,7 +76,7 @@ namespace AutomationFoundation.Runtime
         protected ProcessingContext(Guid id, IServiceScope serviceScope)
         {
             Id = id;
-            ServiceScope = serviceScope;
+            LifetimeScope = serviceScope;
         }
     }
 }
