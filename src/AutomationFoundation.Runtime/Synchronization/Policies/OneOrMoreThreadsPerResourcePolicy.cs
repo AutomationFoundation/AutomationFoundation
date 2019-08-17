@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading;
+using System.Threading.Tasks;
 using AutomationFoundation.Runtime.Abstractions.Synchronization;
 using AutomationFoundation.Runtime.Synchronization.Primitives;
 
@@ -27,9 +28,9 @@ namespace AutomationFoundation.Runtime.Synchronization.Policies
         }
 
         /// <inheritdoc />
-        public ISynchronizationLock AcquireLock(CancellationToken cancellationToken)
+        public async Task<ISynchronizationLock> AcquireLockAsync(CancellationToken cancellationToken)
         {
-            semaphore.Wait(cancellationToken);
+            await semaphore.WaitAsync(cancellationToken);
 
             return new SemaphoreLock(semaphore);
         }

@@ -31,7 +31,7 @@ namespace AutomationFoundation.Features.ProducerConsumer.Tests.Strategies
 
             synchronizationLock = new Mock<ISynchronizationLock>();
             synchronizationPolicy = new Mock<ISynchronizationPolicy>();
-            synchronizationPolicy.Setup(o => o.AcquireLock(It.IsAny<CancellationToken>())).Returns(synchronizationLock.Object);
+            synchronizationPolicy.Setup(o => o.AcquireLockAsync(It.IsAny<CancellationToken>())).ReturnsAsync(synchronizationLock.Object);
         }
 
         [Test]
