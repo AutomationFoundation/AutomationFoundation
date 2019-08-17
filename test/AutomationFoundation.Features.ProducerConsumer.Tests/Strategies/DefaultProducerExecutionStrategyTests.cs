@@ -17,17 +17,20 @@ namespace AutomationFoundation.Features.ProducerConsumer.Tests.Strategies
         private Mock<IServiceScopeFactory> scopeFactory;
         private Mock<ISynchronizationPolicy> synchronizationPolicy;
         private Mock<IProducer<object>> producer;
+        private Mock<IProducerFactory<object>> producerFactory;
         private Mock<IServiceScope> scope;
         private Mock<ISynchronizationLock> synchronizationLock;
 
         [SetUp]
         public void Setup()
         {
-            producer = new Mock<IProducer<object>>();
-
             scope = new Mock<IServiceScope>();
             scopeFactory = new Mock<IServiceScopeFactory>();
             scopeFactory.Setup(o => o.CreateScope()).Returns(scope.Object);
+
+            producer = new Mock<IProducer<object>>();
+            producerFactory = new Mock<IProducerFactory<object>>();
+            producerFactory.Setup(o => o.Create(scope.Object)).Returns(producer.Object);
 
             synchronizationLock = new Mock<ISynchronizationLock>();
             synchronizationPolicy = new Mock<ISynchronizationPolicy>();
@@ -37,14 +40,16 @@ namespace AutomationFoundation.Features.ProducerConsumer.Tests.Strategies
         [Test]
         public void ThrowsAnExceptionWhenTheCallbackIsNull()
         {
-            var target = new DefaultProducerExecutionStrategy<object>(scopeFactory.Object, (scope) => producer.Object, synchronizationPolicy.Object, true);
+            var target = new DefaultProducerExecutionStrategy<object>(scopeFactory.Object, producerFactory.Object, synchronizationPolicy.Object, true);
             Assert.ThrowsAsync<ArgumentNullException>(() => target.ExecuteAsync(null, CancellationToken.None));
         }
 
         [Test]
         public void ThrowsAnExceptionWhenTheProducerIsNull()
         {
-            var target = new DefaultProducerExecutionStrategy<object>(scopeFactory.Object, (scope) => null, synchronizationPolicy.Object, true);
+            producerFactory.Setup(o => o.Create(scope.Object)).Returns((IProducer<object>)null);
+
+            var target = new DefaultProducerExecutionStrategy<object>(scopeFactory.Object, producerFactory.Object, synchronizationPolicy.Object, true);
             Assert.ThrowsAsync<RuntimeException>(() => target.ExecuteAsync(context => { }, CancellationToken.None));
         }
 
@@ -53,7 +58,7 @@ namespace AutomationFoundation.Features.ProducerConsumer.Tests.Strategies
         {
             scopeFactory.Setup(o => o.CreateScope()).Returns((IServiceScope)null).Verifiable();
 
-            var target = new DefaultProducerExecutionStrategy<object>(scopeFactory.Object, (scope) => producer.Object, synchronizationPolicy.Object, true);
+            var target = new DefaultProducerExecutionStrategy<object>(scopeFactory.Object, producerFactory.Object, synchronizationPolicy.Object, true);
             Assert.ThrowsAsync<RuntimeException>(() => target.ExecuteAsync(context => { }, CancellationToken.None));
 
             scopeFactory.Verify();
@@ -67,7 +72,7 @@ namespace AutomationFoundation.Features.ProducerConsumer.Tests.Strategies
             var item = new object();
             producer.Setup(o => o.ProduceAsync(It.IsAny<CancellationToken>())).ReturnsAsync(item);
 
-            var target = new DefaultProducerExecutionStrategy<object>(scopeFactory.Object, (scope) => producer.Object, synchronizationPolicy.Object, true);
+            var target = new DefaultProducerExecutionStrategy<object>(scopeFactory.Object, producerFactory.Object, synchronizationPolicy.Object, true);
             await target.ExecuteAsync(context =>
             {
                 AssertContext(item, target, context);
@@ -84,7 +89,7 @@ namespace AutomationFoundation.Features.ProducerConsumer.Tests.Strategies
 
             producer.Setup(o => o.ProduceAsync(It.IsAny<CancellationToken>())).ReturnsAsync((object)null);
 
-            var target = new DefaultProducerExecutionStrategy<object>(scopeFactory.Object, (scope) => producer.Object, synchronizationPolicy.Object, true);
+            var target = new DefaultProducerExecutionStrategy<object>(scopeFactory.Object, producerFactory.Object, synchronizationPolicy.Object, true);
             await target.ExecuteAsync(context =>
             {
                 AssertContext(null, target, context);
@@ -101,7 +106,7 @@ namespace AutomationFoundation.Features.ProducerConsumer.Tests.Strategies
 
             producer.Setup(o => o.ProduceAsync(It.IsAny<CancellationToken>())).ReturnsAsync((object)null);
 
-            var target = new DefaultProducerExecutionStrategy<object>(scopeFactory.Object, (scope) => producer.Object, synchronizationPolicy.Object, false);
+            var target = new DefaultProducerExecutionStrategy<object>(scopeFactory.Object, producerFactory.Object, synchronizationPolicy.Object, false);
             await target.ExecuteAsync(context =>
             {
                 called = true;

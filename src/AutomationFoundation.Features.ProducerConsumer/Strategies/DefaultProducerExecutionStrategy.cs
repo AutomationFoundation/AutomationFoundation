@@ -16,7 +16,7 @@ namespace AutomationFoundation.Features.ProducerConsumer.Strategies
     {
         private readonly IServiceScopeFactory scopeFactory;
         private readonly ISynchronizationPolicy synchronizationPolicy;
-        private readonly Func<IServiceScope, IProducer<TItem>> producerFactory;
+        private readonly IProducerFactory<TItem> producerFactory;
         private readonly bool alwaysExecuteOnDefaultValue;
 
         /// <summary>
@@ -26,7 +26,7 @@ namespace AutomationFoundation.Features.ProducerConsumer.Strategies
         /// <param name="producerFactory">The factory for creating producers.</param>
         /// <param name="synchronizationPolicy">The policy used to synchronize the producer and consumer engines to prevent over producing work.</param>
         /// <param name="alwaysExecuteOnDefaultValue">true to always execute the callback, even if the value produced is the default; otherwise false.</param>
-        public DefaultProducerExecutionStrategy(IServiceScopeFactory scopeFactory, Func<IServiceScope, IProducer<TItem>> producerFactory, ISynchronizationPolicy synchronizationPolicy, bool alwaysExecuteOnDefaultValue)
+        public DefaultProducerExecutionStrategy(IServiceScopeFactory scopeFactory, IProducerFactory<TItem> producerFactory, ISynchronizationPolicy synchronizationPolicy, bool alwaysExecuteOnDefaultValue)
         {
             this.scopeFactory = scopeFactory ?? throw new ArgumentNullException(nameof(scopeFactory));
             this.producerFactory = producerFactory ?? throw new ArgumentNullException(nameof(producerFactory));
@@ -129,7 +129,7 @@ namespace AutomationFoundation.Features.ProducerConsumer.Strategies
                 throw new ArgumentNullException(nameof(context));
             }
 
-            var producer = producerFactory(context.LifetimeScope);
+            var producer = producerFactory.Create(context.LifetimeScope);
             if (producer == null)
             {
                 throw new RuntimeException("The producer was not created.");
@@ -157,7 +157,6 @@ namespace AutomationFoundation.Features.ProducerConsumer.Strategies
 
         private async Task ProduceAsyncImpl(ProducerConsumerContext<TItem> context)
         {
-            context.Producer = producerFactory(context.LifetimeScope);
             context.Item = await context.Producer.ProduceAsync(context.CancellationToken);
         }
 

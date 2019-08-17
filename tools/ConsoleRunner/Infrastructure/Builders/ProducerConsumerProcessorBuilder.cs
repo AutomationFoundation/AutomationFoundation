@@ -53,7 +53,7 @@ namespace ConsoleRunner.Infrastructure.Builders
             return new SynchronousConsumerEngine<int>(
                 WorkerPool.Create(),
                 new DefaultConsumerExecutionStrategy<int>(
-                    scope => new IntConsumer()));
+                    new SingletonConsumerFactory<int>(new IntConsumer())));
         }
 
         private IProducerEngine<int> BuildProducerEngine(IRuntimeBuilder runtimeBuilder, ISynchronizationPolicy synchronizationPolicy)
@@ -61,7 +61,7 @@ namespace ConsoleRunner.Infrastructure.Builders
             return new ScheduledProducerEngine<int>(
                 new DefaultProducerExecutionStrategy<int>(
                     runtimeBuilder.ApplicationServices.GetRequiredService<IServiceScopeFactory>(),
-                    scope => new RandomIntProducer(),
+                    new SingletonProducerFactory<int>(new RandomIntProducer()),
                     synchronizationPolicy,
                     false),
                 new StrategyErrorHandler(

@@ -2,7 +2,6 @@
 using System.Threading.Tasks;
 using AutomationFoundation.Features.ProducerConsumer.Abstractions;
 using AutomationFoundation.Features.ProducerConsumer.Strategies;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace AutomationFoundation.Features.ProducerConsumer.Tests.Strategies.Stubs
 {
@@ -16,7 +15,7 @@ namespace AutomationFoundation.Features.ProducerConsumer.Tests.Strategies.Stubs
         private ProducerConsumerContext<TItem> overrideContext;
         private bool isContextOverridden;
 
-        public StubDefaultConsumerExecutionStrategy(Func<IServiceScope, IConsumer<TItem>> consumerFactory, Action<StubDefaultConsumerExecutionStrategy<TItem>, ProducerConsumerContext<TItem>> onStartedCallback = null, Action<StubDefaultConsumerExecutionStrategy<TItem>, ProducerConsumerContext<TItem>> onConsumeCallback = null,
+        public StubDefaultConsumerExecutionStrategy(IConsumerFactory<TItem> consumerFactory, Action<StubDefaultConsumerExecutionStrategy<TItem>, ProducerConsumerContext<TItem>> onStartedCallback = null, Action<StubDefaultConsumerExecutionStrategy<TItem>, ProducerConsumerContext<TItem>> onConsumeCallback = null,
             Action<StubDefaultConsumerExecutionStrategy<TItem>, ProducerConsumerContext<TItem>> onCompletedCallback = null,
             Action<StubDefaultConsumerExecutionStrategy<TItem>, ProducerConsumerContext<TItem>> onExitCallback = null)
             : base(consumerFactory)

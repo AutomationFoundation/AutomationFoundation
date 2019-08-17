@@ -2,7 +2,6 @@
 using System.Threading.Tasks;
 using AutomationFoundation.Features.ProducerConsumer.Abstractions;
 using AutomationFoundation.Runtime;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace AutomationFoundation.Features.ProducerConsumer.Strategies
 {
@@ -12,13 +11,13 @@ namespace AutomationFoundation.Features.ProducerConsumer.Strategies
     /// <typeparam name="TItem">The type of object being consumed.</typeparam>
     public class DefaultConsumerExecutionStrategy<TItem> : IConsumerExecutionStrategy<TItem>
     {
-        private readonly Func<IServiceScope, IConsumer<TItem>> consumerFactory;
+        private readonly IConsumerFactory<TItem> consumerFactory;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="DefaultConsumerExecutionStrategy{TItem}"/> class.
         /// </summary>
-        /// <param name="consumerFactory">The consumer being wrapped by this adapter instance.</param>
-        public DefaultConsumerExecutionStrategy(Func<IServiceScope, IConsumer<TItem>> consumerFactory)
+        /// <param name="consumerFactory">The factory for creating consumers.</param>
+        public DefaultConsumerExecutionStrategy(IConsumerFactory<TItem> consumerFactory)
         {
             this.consumerFactory = consumerFactory ?? throw new ArgumentNullException(nameof(consumerFactory));
         }
@@ -105,7 +104,7 @@ namespace AutomationFoundation.Features.ProducerConsumer.Strategies
                 throw new ArgumentNullException(nameof(context));
             }
 
-            var consumer = consumerFactory(context.LifetimeScope);
+            var consumer = consumerFactory.Create(context.LifetimeScope);
             if (consumer == null)
             {
                 throw new InvalidOperationException("The consumer was not created.");
