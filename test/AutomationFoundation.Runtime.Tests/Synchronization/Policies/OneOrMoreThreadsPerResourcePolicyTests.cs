@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading;
+using System.Threading.Tasks;
 using AutomationFoundation.Runtime.Synchronization.Policies;
 using NUnit.Framework;
 
@@ -8,19 +9,45 @@ namespace AutomationFoundation.Runtime.Tests.Synchronization.Policies
     [TestFixture]
     public class OneOrMoreThreadsPerResourcePolicyTests
     {
+        private OneOrMoreThreadsPerResourcePolicy target;
+        private CancellationTokenSource cancellationSource;
+
+        [SetUp]
+        public void Setup()
+        {
+            cancellationSource = new CancellationTokenSource();
+        }
+
+        [TearDown]
+        public void Finish()
+        {
+            target?.Dispose();
+            cancellationSource?.Dispose();
+        }
+
+        [Test]
+        public void ThrowsAnExceptionWhenMaximumIsLessThanZero()
+        {
+            Assert.Throws<ArgumentException>(() => new OneOrMoreThreadsPerResourcePolicy(-1));
+        }
+
+        [Test]
+        public void ThrowsAnExceptionWhenMaximumIsEqualToZero()
+        {
+            Assert.Throws<ArgumentException>(() => new OneOrMoreThreadsPerResourcePolicy(0));
+        }
+
         [Test]
         [Timeout(2000)]
-        public void PreventMultipleThreadsFromAccessingTheResource()
+        public async Task PreventMultipleThreadsFromAccessingTheResource()
         {
-            using (var target = new OneOrMoreThreadsPerResourcePolicy(1))
-            using (CancellationTokenSource cts1 = new CancellationTokenSource(), cts2 = new CancellationTokenSource())
-            {
-                target.AcquireLock(cts1.Token);
+            target = new OneOrMoreThreadsPerResourcePolicy(1);
 
-                cts2.CancelAfter(1000);
+            await target.AcquireLockAsync(CancellationToken.None);
 
-                Assert.Throws<OperationCanceledException>(() => target.AcquireLock(cts2.Token));
-            }
+            cancellationSource.CancelAfter(1000);
+
+            Assert.ThrowsAsync<TaskCanceledException>(async () => await target.AcquireLockAsync(cancellationSource.Token));
         }
     }
 }

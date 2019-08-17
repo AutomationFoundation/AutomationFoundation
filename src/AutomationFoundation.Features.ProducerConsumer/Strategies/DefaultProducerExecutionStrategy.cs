@@ -105,12 +105,17 @@ namespace AutomationFoundation.Features.ProducerConsumer.Strategies
                 throw new ArgumentNullException(nameof(context));
             }
 
-            if (synchronizationPolicy != null)
+            return AcquireSynchronizationLockAsyncImpl(context);
+        }
+
+        private async Task AcquireSynchronizationLockAsyncImpl(ProducerConsumerContext<TItem> context)
+        {
+            if (synchronizationPolicy == null)
             {
-               context.SynchronizationLock = synchronizationPolicy.AcquireLock(context.CancellationToken);
+                return;
             }
 
-            return Task.CompletedTask;
+            context.SynchronizationLock = await synchronizationPolicy.AcquireLockAsync(context.CancellationToken);
         }
 
         /// <summary>

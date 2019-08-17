@@ -1,4 +1,5 @@
 ﻿using System.Threading;
+using System.Threading.Tasks;
 
 namespace AutomationFoundation.Runtime.Abstractions.Synchronization
 {
@@ -12,6 +13,6 @@ namespace AutomationFoundation.Runtime.Abstractions.Synchronization
         /// </summary>
         /// <param name="cancellationToken">The cancellation token to monitor while waiting for a lock on the resource.</param>
         /// <returns>The synchronization lock instance.</returns>
-        ISynchronizationLock AcquireLock(CancellationToken cancellationToken);
+        Task<ISynchronizationLock> AcquireLockAsync(CancellationToken cancellationToken);
     }
 }
