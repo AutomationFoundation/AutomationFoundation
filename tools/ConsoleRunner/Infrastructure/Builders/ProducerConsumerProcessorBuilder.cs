@@ -3,6 +3,7 @@ using AutomationFoundation.Features.ProducerConsumer;
 using AutomationFoundation.Features.ProducerConsumer.Abstractions;
 using AutomationFoundation.Features.ProducerConsumer.Configuration;
 using AutomationFoundation.Features.ProducerConsumer.Engines;
+using AutomationFoundation.Features.ProducerConsumer.Factories;
 using AutomationFoundation.Features.ProducerConsumer.Strategies;
 using AutomationFoundation.Hosting.Abstractions.Builder;
 using AutomationFoundation.Runtime;

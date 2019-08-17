@@ -2,7 +2,7 @@
 using AutomationFoundation.Features.ProducerConsumer.Abstractions;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace AutomationFoundation.Features.ProducerConsumer
+namespace AutomationFoundation.Features.ProducerConsumer.Factories
 {
     /// <summary>
     /// Provides a factory which always returns the same instance of the consumer.
