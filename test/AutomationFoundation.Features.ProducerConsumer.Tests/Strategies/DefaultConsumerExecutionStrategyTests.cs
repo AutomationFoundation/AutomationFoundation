@@ -16,13 +16,17 @@ namespace AutomationFoundation.Features.ProducerConsumer.Tests.Strategies
         private Mock<IServiceScope> lifetimeScope;
         private ProducerConsumerContext<object> context;
         private Mock<IConsumer<object>> consumer;
+        private Mock<IConsumerFactory<object>> consumerFactory;
 
         [SetUp]
         public void Setup()
         {
             lifetimeScope = new Mock<IServiceScope>();
             context = new ProducerConsumerContext<object>(Guid.NewGuid(), lifetimeScope.Object);
+
             consumer = new Mock<IConsumer<object>>();
+            consumerFactory = new Mock<IConsumerFactory<object>>();
+            consumerFactory.Setup(o => o.Create(lifetimeScope.Object)).Returns(consumer.Object);
         }
 
         [Test]
@@ -34,7 +38,7 @@ namespace AutomationFoundation.Features.ProducerConsumer.Tests.Strategies
         [Test]
         public void ThrowsExceptionWhenContextIsNull()
         {
-            var target = new StubDefaultConsumerExecutionStrategy<object>(sp => new StubConsumer<object>());
+            var target = new StubDefaultConsumerExecutionStrategy<object>(consumerFactory.Object);
             
             Assert.ThrowsAsync<ArgumentNullException>(async () => await target.ExecuteAsync(null));
         }
@@ -42,7 +46,7 @@ namespace AutomationFoundation.Features.ProducerConsumer.Tests.Strategies
         [Test]
         public void ThrowsExceptionWhenContextIsNull1()
         {
-            var target = new StubDefaultConsumerExecutionStrategy<object>(sp => new StubConsumer<object>());
+            var target = new StubDefaultConsumerExecutionStrategy<object>(consumerFactory.Object);
             target.SetOverrideContext(null);
 
             Assert.ThrowsAsync<ArgumentNullException>(async () => await target.ExecuteAsync(context));
@@ -51,7 +55,7 @@ namespace AutomationFoundation.Features.ProducerConsumer.Tests.Strategies
         [Test]
         public void ThrowsExceptionWhenContextIsNull2()
         {
-            var target = new StubDefaultConsumerExecutionStrategy<object>(sp => new StubConsumer<object>(), (strategy, context) =>
+            var target = new StubDefaultConsumerExecutionStrategy<object>(consumerFactory.Object, (strategy, context) =>
             {
                 strategy.SetOverrideContext(null);
             });
@@ -62,7 +66,9 @@ namespace AutomationFoundation.Features.ProducerConsumer.Tests.Strategies
         [Test]
         public void ThrowsAnExceptionWhenTheConsumerIsNull()
         {
-            var target = new StubDefaultConsumerExecutionStrategy<object>(sp => null);
+            consumerFactory.Setup(o => o.Create(lifetimeScope.Object)).Returns((IConsumer<object>)null);
+
+            var target = new StubDefaultConsumerExecutionStrategy<object>(consumerFactory.Object);
 
             Assert.ThrowsAsync<InvalidOperationException>(async () => await target.ExecuteAsync(context));
         }
@@ -70,7 +76,9 @@ namespace AutomationFoundation.Features.ProducerConsumer.Tests.Strategies
         [Test]
         public void ReleasesTheProcessingContextWhenFailsToCreateConsumer()
         {
-            var target = new StubDefaultConsumerExecutionStrategy<object>((scope) => throw new InvalidOperationException(), onExitCallback: (strategy, context) => {
+            consumerFactory.Setup(o => o.Create(lifetimeScope.Object)).Throws<InvalidOperationException>();
+
+            var target = new StubDefaultConsumerExecutionStrategy<object>(consumerFactory.Object, onExitCallback: (strategy, context) => {
                 Assert.IsNull(ProcessingContext.Current);
             });
 
@@ -82,7 +90,7 @@ namespace AutomationFoundation.Features.ProducerConsumer.Tests.Strategies
         {
             bool called1 = false, called2 = false, called3 = false, called4 = false;
 
-            var target = new StubDefaultConsumerExecutionStrategy<object>(_ => consumer.Object,
+            var target = new StubDefaultConsumerExecutionStrategy<object>(consumerFactory.Object,
                 (strategy, context) =>
                 {
                     called1 = true;
