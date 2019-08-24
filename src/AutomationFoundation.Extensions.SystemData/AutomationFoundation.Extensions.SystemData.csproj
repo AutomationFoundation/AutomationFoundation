@@ -10,11 +10,11 @@
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/winnster/AutomationFoundation</RepositoryUrl>
     <PackageTags>automation,automationfoundation,runtime</PackageTags>
-    <Description>Contains adapters for the System.Transactions namespace to use by the Automation Foundation framework.</Description>
+    <Description>Contains adapters for System.Data interoperability wit hthe Automation Foundation framework.</Description>
   </PropertyGroup>
 
   <PropertyGroup>
-    <DocumentationFile>obj\AutomationFoundation.Extensions.Transactions.xml</DocumentationFile>
+    <DocumentationFile>obj\AutomationFoundation.Extensions.SystemData.xml</DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>
@@ -22,7 +22,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Reference Include="System.Transactions" />
+    <Reference Include="System.Data" />
   </ItemGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

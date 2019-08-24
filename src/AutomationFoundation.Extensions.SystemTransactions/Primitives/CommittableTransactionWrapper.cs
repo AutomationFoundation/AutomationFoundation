@@ -1,22 +1,24 @@
 ﻿using System;
 using System.Transactions;
 
-namespace AutomationFoundation.Extensions.Transactions.Primitives
+namespace AutomationFoundation.Extensions.SystemTransactions.Primitives
 {
-    internal class InternalCommittableTransaction : IDisposable
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Major Code Smell", "S3881:\"IDisposable\" should be implemented correctly",
+        Justification = "False Positive")]
+    internal class CommittableTransactionWrapper : IDisposable
     {
         public virtual CommittableTransaction UnderlyingTransaction { get; }
 
-        public InternalCommittableTransaction()
+        public CommittableTransactionWrapper()
         {
         }
 
-        public InternalCommittableTransaction(CommittableTransaction transaction)
+        public CommittableTransactionWrapper(CommittableTransaction transaction)
         {
             UnderlyingTransaction = transaction ?? throw new ArgumentNullException(nameof(transaction));
         }
 
-        ~InternalCommittableTransaction()
+        ~CommittableTransactionWrapper()
         {
             Dispose(false);
         }

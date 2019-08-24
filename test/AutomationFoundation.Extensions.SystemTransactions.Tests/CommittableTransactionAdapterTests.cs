@@ -1,19 +1,19 @@
 using System;
 using System.Transactions;
-using AutomationFoundation.Extensions.Transactions.Primitives;
+using AutomationFoundation.Extensions.SystemTransactions.Primitives;
 using Moq;
 using NUnit.Framework;
 
-namespace AutomationFoundation.Extensions.Transactions
+namespace AutomationFoundation.Extensions.SystemTransactions
 {
     public class CommittableTransactionAdapterTests
     {
-        private Mock<InternalCommittableTransaction> transaction;
+        private Mock<CommittableTransactionWrapper> transaction;
 
         [SetUp]
         public void Setup()
         {
-            transaction = new Mock<InternalCommittableTransaction>();
+            transaction = new Mock<CommittableTransactionWrapper>();
         }
 
         [Test]
