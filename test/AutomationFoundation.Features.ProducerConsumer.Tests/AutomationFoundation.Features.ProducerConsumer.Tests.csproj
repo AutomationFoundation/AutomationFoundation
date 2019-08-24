@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net471</TargetFramework>
+    <TargetFramework>net472</TargetFramework>
     <RootNamespace>AutomationFoundation.Features.ProducerConsumer.Tests</RootNamespace>
     <AssemblyName>AutomationFoundation.Features.ProducerConsumer.Tests</AssemblyName>
     <SignAssembly>true</SignAssembly>
