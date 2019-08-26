@@ -8,7 +8,7 @@ namespace AutomationFoundation.Extensions.SystemTransactions
     /// <summary>
     /// Provides an adapter for a <see cref="CommittableTransaction"/> transaction.
     /// </summary>
-    public sealed class CommittableTransactionAdapter : TransactionAdapter<CommittableTransaction>
+    public sealed class CommittableTransactionAdapter : BaseTransactionAdapter<CommittableTransaction>
     {
         private readonly CommittableTransactionWrapper transaction;
 

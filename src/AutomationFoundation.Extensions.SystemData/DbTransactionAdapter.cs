@@ -8,7 +8,7 @@ namespace AutomationFoundation.Extensions.SystemData
     /// Provides an adapter for a <see cref="DbTransaction"/> transaction.
     /// </summary>
     /// <typeparam name="TTransaction">The type of transaction being adapted.</typeparam>
-    public sealed class DbTransactionAdapter<TTransaction> : TransactionAdapter<TTransaction>
+    public sealed class DbTransactionAdapter<TTransaction> : BaseTransactionAdapter<TTransaction>
         where TTransaction : DbTransaction
     {
         /// <summary>

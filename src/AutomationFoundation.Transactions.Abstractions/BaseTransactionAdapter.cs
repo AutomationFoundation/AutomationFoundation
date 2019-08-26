@@ -6,7 +6,7 @@ namespace AutomationFoundation.Transactions.Abstractions
     /// Provides a base implementation of a transaction adapter.
     /// </summary>
     /// <typeparam name="TTransaction">The type of the underlying transaction.</typeparam>
-    public abstract class TransactionAdapter<TTransaction> : ITransaction<TTransaction>, IDisposable
+    public abstract class BaseTransactionAdapter<TTransaction> : ITransaction<TTransaction>, IDisposable
     {
         /// <inheritdoc />
         public abstract TTransaction UnderlyingTransaction { get; }
@@ -28,18 +28,18 @@ namespace AutomationFoundation.Transactions.Abstractions
         protected bool IsDisposed { get; private set; }
 
         /// <summary>
-        /// Initializes an instance of the <see cref="TransactionAdapter{TTransaction}"/> class.
+        /// Initializes an instance of the <see cref="BaseBaseTransactionAdapter{TTransaction}"/> class.
         /// </summary>
         /// <param name="ownsTransaction">Optional. Identifies whether the adapter will take ownership of the transaction.</param>
-        protected TransactionAdapter(bool ownsTransaction)
+        protected BaseTransactionAdapter(bool ownsTransaction)
         {
             OwnsTransaction = ownsTransaction;
         }
 
         /// <summary>
-        /// Finalizes an instance of the <see cref="TransactionAdapter{TTransaction}"/> class.
+        /// Finalizes an instance of the <see cref="BaseBaseTransactionAdapter{TTransaction}"/> class.
         /// </summary>
-        ~TransactionAdapter()
+        ~BaseTransactionAdapter()
         {
             Dispose(false);
         }

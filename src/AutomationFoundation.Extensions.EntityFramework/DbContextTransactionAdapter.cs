@@ -8,7 +8,7 @@ namespace AutomationFoundation.Extensions.EntityFramework
     /// <summary>
     /// Provides an adapter for a <see cref="DbContextTransaction"/> transaction.
     /// </summary>
-    public sealed class DbContextTransactionAdapter : TransactionAdapter<DbContextTransaction>
+    public sealed class DbContextTransactionAdapter : BaseTransactionAdapter<DbContextTransaction>
     {
         private readonly DbContextTransactionWrapper transaction;
 
