@@ -28,7 +28,7 @@ namespace AutomationFoundation.Transactions.Abstractions
         protected bool IsDisposed { get; private set; }
 
         /// <summary>
-        /// Initializes an instance of the <see cref="BaseBaseTransactionAdapter{TTransaction}"/> class.
+        /// Initializes an instance of the <see cref="BaseTransactionAdapter{TTransaction}"/> class.
         /// </summary>
         /// <param name="ownsTransaction">Optional. Identifies whether the adapter will take ownership of the transaction.</param>
         protected BaseTransactionAdapter(bool ownsTransaction)
@@ -37,7 +37,7 @@ namespace AutomationFoundation.Transactions.Abstractions
         }
 
         /// <summary>
-        /// Finalizes an instance of the <see cref="BaseBaseTransactionAdapter{TTransaction}"/> class.
+        /// Finalizes an instance of the <see cref="BaseTransactionAdapter{TTransaction}"/> class.
         /// </summary>
         ~BaseTransactionAdapter()
         {
@@ -61,16 +61,16 @@ namespace AutomationFoundation.Transactions.Abstractions
         {
             if (disposing && OwnsTransaction)
             {
-                DisposeUnderlyingTransaction();
+                ReleaseUnderlyingTransaction();
             }
 
             IsDisposed = true;
         }
 
         /// <summary>
-        /// Disposes the underlying transaction.
+        /// Releases the underlying transaction.
         /// </summary>
-        protected abstract void DisposeUnderlyingTransaction();
+        protected abstract void ReleaseUnderlyingTransaction();
 
         /// <summary>
         /// Guards the object to ensure it has not been previously disposed.

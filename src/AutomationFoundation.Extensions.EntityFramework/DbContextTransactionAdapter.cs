@@ -54,7 +54,7 @@ namespace AutomationFoundation.Extensions.EntityFramework
         }
 
         /// <inheritdoc />
-        protected override void DisposeUnderlyingTransaction()
+        protected override void ReleaseUnderlyingTransaction()
         {
             transaction.Dispose();
         }

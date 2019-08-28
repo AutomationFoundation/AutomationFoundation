@@ -42,7 +42,7 @@ namespace AutomationFoundation.Extensions.SystemData
         }
 
         /// <inheritdoc />
-        protected override void DisposeUnderlyingTransaction()
+        protected override void ReleaseUnderlyingTransaction()
         {
             UnderlyingTransaction.Dispose();
         }

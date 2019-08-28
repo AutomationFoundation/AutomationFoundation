@@ -6,25 +6,25 @@ using NUnit.Framework;
 namespace AutomationFoundation.Extensions.SystemTransactions
 {
     [TestFixture]
-    public class CommittableTransactionAdapterTests
+    public class DependentTransactionAdapterTests
     {
-        private Mock<CommittableTransactionWrapper> transaction;
+        private Mock<DependentTransactionWrapper> transaction;
 
         [SetUp]
         public void Setup()
         {
-            transaction = new Mock<CommittableTransactionWrapper>();
+            transaction = new Mock<DependentTransactionWrapper>();
         }
 
         [Test]
-        public void MustCommitTheTransaction()
+        public void MustCompleteTheTransaction()
         {
-            using (var target = new TestableCommittableTransactionAdapter(transaction.Object, true))
+            using (var target = new TestableDependentTransactionAdapter(transaction.Object, true))
             {
                 target.Commit();
             }
 
-            transaction.Verify(o => o.Commit(), Times.Once);
+            transaction.Verify(o => o.Complete(), Times.Once);
         }
     }
 }

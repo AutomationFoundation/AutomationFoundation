@@ -1,50 +1,34 @@
-﻿using System;
-using System.Transactions;
+﻿using System.Transactions;
 
 namespace AutomationFoundation.Extensions.SystemTransactions.Primitives
 {
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Major Code Smell", "S3881:\"IDisposable\" should be implemented correctly",
-        Justification = "False Positive")]
-    internal class CommittableTransactionWrapper : IDisposable
+    /// <summary>
+    /// Provides a wrapper for a <see cref="CommittableTransaction"/> instance.
+    /// </summary>
+    public class CommittableTransactionWrapper : TransactionWrapper<CommittableTransaction>
     {
-        public virtual CommittableTransaction UnderlyingTransaction { get; }
-
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CommittableTransactionWrapper"/> class.
+        /// </summary>
         public CommittableTransactionWrapper()
         {
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CommittableTransactionWrapper"/> class.
+        /// </summary>
+        /// <param name="transaction">The transaction being wrapped.</param>
         public CommittableTransactionWrapper(CommittableTransaction transaction)
+            : base(transaction)
         {
-            UnderlyingTransaction = transaction ?? throw new ArgumentNullException(nameof(transaction));
         }
 
-        ~CommittableTransactionWrapper()
-        {
-            Dispose(false);
-        }
-
+        /// <summary>
+        /// Attempts to commit the transaction.
+        /// </summary>
         public virtual void Commit()
         {
             UnderlyingTransaction.Commit();
-        }
-
-        public virtual void Rollback()
-        {
-            UnderlyingTransaction.Rollback();
-        }
-
-        public virtual void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
-
-        protected virtual void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                UnderlyingTransaction.Dispose();
-            }
         }
     }
 }

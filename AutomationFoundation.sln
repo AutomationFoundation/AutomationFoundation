@@ -62,9 +62,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AutomationFoundation.Extens
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AutomationFoundation.Extensions.SystemTransactions.Tests", "test\AutomationFoundation.Extensions.SystemTransactions.Tests\AutomationFoundation.Extensions.SystemTransactions.Tests.csproj", "{36B3B648-F07D-4D7D-84E2-D2A8F696AFC3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutomationFoundation.Extensions.SystemData.Tests", "test\AutomationFoundation.Extensions.SystemData.Tests\AutomationFoundation.Extensions.SystemData.Tests.csproj", "{25B2819F-C0E5-4FD3-A8ED-87D04674254C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AutomationFoundation.Extensions.SystemData.Tests", "test\AutomationFoundation.Extensions.SystemData.Tests\AutomationFoundation.Extensions.SystemData.Tests.csproj", "{25B2819F-C0E5-4FD3-A8ED-87D04674254C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutomationFoundation.Extensions.EntityFramework.Tests", "test\AutomationFoundation.Extensions.EntityFramework.Tests\AutomationFoundation.Extensions.EntityFramework.Tests.csproj", "{F0EC8C50-509E-4A74-AAA8-81BEBE9A8709}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AutomationFoundation.Extensions.EntityFramework.Tests", "test\AutomationFoundation.Extensions.EntityFramework.Tests\AutomationFoundation.Extensions.EntityFramework.Tests.csproj", "{F0EC8C50-509E-4A74-AAA8-81BEBE9A8709}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
