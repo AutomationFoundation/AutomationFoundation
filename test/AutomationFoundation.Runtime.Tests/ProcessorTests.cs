@@ -1,8 +1,8 @@
 ﻿using System;
-using AutomationFoundation.Runtime.Tests.Stubs;
+using AutomationFoundation.Runtime.Stubs;
 using NUnit.Framework;
 
-namespace AutomationFoundation.Runtime.Tests
+namespace AutomationFoundation.Runtime
 {
     [TestFixture]
     public class ProcessorTests

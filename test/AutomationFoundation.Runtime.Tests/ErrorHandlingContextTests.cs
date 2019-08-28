@@ -1,7 +1,7 @@
 ﻿using System;
 using NUnit.Framework;
 
-namespace AutomationFoundation.Runtime.Tests
+namespace AutomationFoundation.Runtime
 {
     [TestFixture]
     public class ErrorHandlingContextTests

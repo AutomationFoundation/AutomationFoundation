@@ -1,15 +1,11 @@
 ﻿using System;
-using System.Linq.Expressions;
 using AutomationFoundation.Hosting;
 using AutomationFoundation.Hosting.Abstractions.Builder;
-using AutomationFoundation.NETCore.App.Tests.Stubs;
-using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Moq;
 using NUnit.Framework;
 
-namespace AutomationFoundation.NETCore.App.Tests.Hosting
+namespace AutomationFoundation.NETCore.App.Hosting
 {
     [TestFixture]
     public class RuntimeHostBuilderExtensionsTests

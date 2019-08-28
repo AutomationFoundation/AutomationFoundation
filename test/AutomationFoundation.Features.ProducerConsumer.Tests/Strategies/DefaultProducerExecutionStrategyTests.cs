@@ -2,14 +2,13 @@
 using System.Threading;
 using System.Threading.Tasks;
 using AutomationFoundation.Features.ProducerConsumer.Abstractions;
-using AutomationFoundation.Features.ProducerConsumer.Strategies;
 using AutomationFoundation.Runtime;
 using AutomationFoundation.Runtime.Abstractions.Synchronization;
 using Microsoft.Extensions.DependencyInjection;
 using Moq;
 using NUnit.Framework;
 
-namespace AutomationFoundation.Features.ProducerConsumer.Tests.Strategies
+namespace AutomationFoundation.Features.ProducerConsumer.Strategies
 {
     [TestFixture]
     public class DefaultProducerExecutionStrategyTests

@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Threading;
-using AutomationFoundation.Runtime.Threading.Internal;
 using AutomationFoundation.Runtime.Threading.Primitives;
 using Moq;
 using NUnit.Framework;
 
-namespace AutomationFoundation.Runtime.Tests.Threading.Internal
+namespace AutomationFoundation.Runtime.Threading.Internal
 {
     [TestFixture]
     public class WorkerCacheEntryTests

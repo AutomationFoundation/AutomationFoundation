@@ -2,7 +2,7 @@
 using AutomationFoundation.Runtime.Synchronization.Primitives;
 using NUnit.Framework;
 
-namespace AutomationFoundation.Runtime.Tests.Synchronization
+namespace AutomationFoundation.Runtime.Synchronization
 {
     [TestFixture]
     public class SemaphoreLockTests

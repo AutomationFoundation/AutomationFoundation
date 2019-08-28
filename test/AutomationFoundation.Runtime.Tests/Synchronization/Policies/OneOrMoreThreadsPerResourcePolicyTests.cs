@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
-using AutomationFoundation.Runtime.Synchronization.Policies;
 using NUnit.Framework;
 
-namespace AutomationFoundation.Runtime.Tests.Synchronization.Policies
+namespace AutomationFoundation.Runtime.Synchronization.Policies
 {
     [TestFixture]
     public class OneOrMoreThreadsPerResourcePolicyTests

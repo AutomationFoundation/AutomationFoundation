@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
 using AutomationFoundation.Features.ProducerConsumer.Abstractions;
 
-namespace AutomationFoundation.Features.ProducerConsumer.Tests.Strategies.Stubs
+namespace AutomationFoundation.Features.ProducerConsumer.Strategies.Stubs
 {
     public class StubConsumer<TItem> : IConsumer<TItem>
     {

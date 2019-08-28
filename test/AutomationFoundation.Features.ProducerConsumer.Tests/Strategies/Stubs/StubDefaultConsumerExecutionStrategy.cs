@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Threading.Tasks;
 using AutomationFoundation.Features.ProducerConsumer.Abstractions;
-using AutomationFoundation.Features.ProducerConsumer.Strategies;
 
-namespace AutomationFoundation.Features.ProducerConsumer.Tests.Strategies.Stubs
+namespace AutomationFoundation.Features.ProducerConsumer.Strategies.Stubs
 {
     public class StubDefaultConsumerExecutionStrategy<TItem> : DefaultConsumerExecutionStrategy<TItem>
     {

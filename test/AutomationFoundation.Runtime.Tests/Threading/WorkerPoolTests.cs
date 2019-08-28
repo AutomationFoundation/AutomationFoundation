@@ -1,13 +1,12 @@
 ﻿using System;
 using AutomationFoundation.Runtime.Abstractions.Threading.Internal;
 using AutomationFoundation.Runtime.Abstractions.Threading.Primitives;
-using AutomationFoundation.Runtime.Tests.Stubs;
-using AutomationFoundation.Runtime.Threading;
+using AutomationFoundation.Runtime.Stubs;
 using AutomationFoundation.Runtime.Threading.Internal;
 using Moq;
 using NUnit.Framework;
 
-namespace AutomationFoundation.Runtime.Tests.Threading
+namespace AutomationFoundation.Runtime.Threading
 {
     [TestFixture]
     public class WorkerPoolTests

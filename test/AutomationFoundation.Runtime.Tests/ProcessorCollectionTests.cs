@@ -1,10 +1,10 @@
 ﻿using System;
 using AutomationFoundation.Runtime.Abstractions;
-using AutomationFoundation.Runtime.Tests.Stubs;
+using AutomationFoundation.Runtime.Stubs;
 using Moq;
 using NUnit.Framework;
 
-namespace AutomationFoundation.Runtime.Tests
+namespace AutomationFoundation.Runtime
 {
     [TestFixture]
     public class ProcessorCollectionTests

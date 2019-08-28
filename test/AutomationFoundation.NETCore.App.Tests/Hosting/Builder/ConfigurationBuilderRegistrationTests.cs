@@ -6,7 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Moq;
 using NUnit.Framework;
 
-namespace AutomationFoundation.NETCore.App.Tests.Hosting.Builder
+namespace AutomationFoundation.NETCore.App.Hosting.Builder
 {
     [TestFixture]
     public class ConfigurationBuilderRegistrationTests

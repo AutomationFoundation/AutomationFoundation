@@ -1,12 +1,11 @@
 ﻿//using System;
 //using System.Collections.Generic;
 //using AutomationFoundation.Runtime.Tests.Stubs;
-//using AutomationFoundation.Runtime.Threading.Internal;
 //using AutomationFoundation.Runtime.Threading.Primitives;
 //using Moq;
 //using NUnit.Framework;
 
-//namespace AutomationFoundation.Runtime.Tests.Threading.Internal
+//namespace AutomationFoundation.Runtime.Threading.Internal
 //{
 //    [TestFixture]
 //    public class WorkerCacheTests

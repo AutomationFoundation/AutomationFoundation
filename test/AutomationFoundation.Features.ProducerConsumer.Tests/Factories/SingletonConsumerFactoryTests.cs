@@ -1,10 +1,9 @@
-﻿using AutomationFoundation.Features.ProducerConsumer.Factories;
-using AutomationFoundation.Features.ProducerConsumer.Tests.Factories.Stubs;
+﻿using AutomationFoundation.Features.ProducerConsumer.Factories.Stubs;
 using Microsoft.Extensions.DependencyInjection;
 using Moq;
 using NUnit.Framework;
 
-namespace AutomationFoundation.Features.ProducerConsumer.Tests.Factories
+namespace AutomationFoundation.Features.ProducerConsumer.Factories
 {
     [TestFixture]
     public class SingletonConsumerFactoryTests

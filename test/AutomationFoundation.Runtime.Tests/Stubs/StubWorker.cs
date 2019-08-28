@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using AutomationFoundation.Runtime.Threading.Primitives;
 
-namespace AutomationFoundation.Runtime.Tests.Stubs
+namespace AutomationFoundation.Runtime.Stubs
 {
     public class StubWorker : Worker
     {

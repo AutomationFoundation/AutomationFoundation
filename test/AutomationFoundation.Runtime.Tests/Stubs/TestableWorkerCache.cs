@@ -3,7 +3,7 @@
 //using AutomationFoundation.Runtime.Threading.Internal;
 //using AutomationFoundation.Runtime.Threading.Primitives;
 
-//namespace AutomationFoundation.Runtime.Tests.Stubs
+//namespace AutomationFoundation.Runtime.Stubs
 //{
 //    internal class TestableWorkerCache : WorkerCache
 //    {

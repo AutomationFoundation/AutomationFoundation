@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Moq;
 using NUnit.Framework;
 
-namespace AutomationFoundation.Runtime.Tests
+namespace AutomationFoundation.Runtime
 {
     [TestFixture]
     public class CompositeErrorHandlingStrategyTests

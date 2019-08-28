@@ -3,7 +3,7 @@ using AutomationFoundation.Hosting.Abstractions;
 using AutomationFoundation.Hosting.Abstractions.Builder;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace AutomationFoundation.NETCore.App.Tests.Stubs
+namespace AutomationFoundation.NETCore.App.Stubs
 {
     public class StubRuntimeHostBuilder : IRuntimeHostBuilder
     {

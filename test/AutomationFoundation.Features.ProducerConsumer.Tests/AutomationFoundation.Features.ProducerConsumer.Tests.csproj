@@ -2,8 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>net472</TargetFramework>
-    <RootNamespace>AutomationFoundation.Features.ProducerConsumer.Tests</RootNamespace>
-    <AssemblyName>AutomationFoundation.Features.ProducerConsumer.Tests</AssemblyName>
+    <RootNamespace>AutomationFoundation.Features.ProducerConsumer</RootNamespace>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>..\..\Public.snk</AssemblyOriginatorKeyFile>
     <DelaySign>false</DelaySign>

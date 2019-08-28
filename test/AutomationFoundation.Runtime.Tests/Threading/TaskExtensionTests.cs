@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
-using AutomationFoundation.Runtime.Threading;
 using NUnit.Framework;
-using TaskExtensions = AutomationFoundation.Runtime.Threading.TaskExtensions;
 
-namespace AutomationFoundation.Runtime.Tests.Threading
+namespace AutomationFoundation.Runtime.Threading
 {
     [TestFixture]
     public class TaskExtensionTests

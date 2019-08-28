@@ -1,9 +1,8 @@
 ﻿using System;
-using AutomationFoundation.Runtime.Threading.Primitives;
 using NUnit.Framework;
 using ManualResetEventSlim = System.Threading.ManualResetEventSlim;
 
-namespace AutomationFoundation.Runtime.Tests.Threading.Primitives
+namespace AutomationFoundation.Runtime.Threading.Primitives
 {
     [TestFixture]
     public class TimerTests

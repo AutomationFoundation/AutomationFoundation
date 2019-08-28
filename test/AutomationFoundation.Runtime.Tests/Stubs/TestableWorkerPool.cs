@@ -3,7 +3,7 @@ using AutomationFoundation.Runtime.Abstractions.Threading.Internal;
 using AutomationFoundation.Runtime.Abstractions.Threading.Primitives;
 using AutomationFoundation.Runtime.Threading;
 
-namespace AutomationFoundation.Runtime.Tests.Stubs
+namespace AutomationFoundation.Runtime.Stubs
 {
     internal class TestableWorkerPool : WorkerPool
     {
