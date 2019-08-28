@@ -5,6 +5,7 @@
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>..\..\Public.snk</AssemblyOriginatorKeyFile>
     <DelaySign>false</DelaySign>
+    <RootNamespace>AutomationFoundation.Extensions.SystemTransactions</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
@@ -13,15 +14,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Properties\" />
+    <ProjectReference Include="..\..\src\AutomationFoundation.Extensions.SystemTransactions\AutomationFoundation.Extensions.SystemTransactions.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\AutomationFoundation.Hosting\AutomationFoundation.Hosting.csproj" />
+    <Reference Include="System.Transactions" />
   </ItemGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DefineConstants>TRACE</DefineConstants>
-  </PropertyGroup>
 
 </Project>
