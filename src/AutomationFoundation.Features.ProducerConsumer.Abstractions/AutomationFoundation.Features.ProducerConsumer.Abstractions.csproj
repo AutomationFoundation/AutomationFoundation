@@ -9,16 +9,13 @@
     <InformationalVersion>$(Version)</InformationalVersion>
     <Authors>Winnster.io</Authors>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <PackageProjectUrl></PackageProjectUrl>
     <PackageLicenseUrl></PackageLicenseUrl>
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/winnster/AutomationFoundation.Features.ProducerConsumer.Abstractions</RepositoryUrl>
     <PackageTags>automation,automationfoundation,producer,consumer,producerconsumer</PackageTags>
     <Description>Contains the abstractions for the producer/consumer implementation for the Automation Foundation runtime.</Description>
-  </PropertyGroup>
-
-  <PropertyGroup>
-    <DocumentationFile>obj\AutomationFoundation.Features.ProducerConsumer.Abstractions.xml</DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>

@@ -8,14 +8,11 @@
     <InformationalVersion>$(Version)</InformationalVersion>
     <Authors>Winnster.io</Authors>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/winnster/AutomationFoundation.Transactions.Abstractions</RepositoryUrl>
     <PackageTags>automation,automationfoundation,transactions</PackageTags>
     <Description>Contains the abstractions for transactions used within the Automation Foundation runtime.</Description>
-  </PropertyGroup>
-
-  <PropertyGroup>
-    <DocumentationFile>obj\AutomationFoundation.Transactions.Abstractions.xml</DocumentationFile>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

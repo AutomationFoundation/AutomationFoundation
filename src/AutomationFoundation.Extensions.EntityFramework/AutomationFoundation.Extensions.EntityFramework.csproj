@@ -7,14 +7,11 @@
     <PackageVersion>$(Version)</PackageVersion>
     <InformationalVersion>$(Version)</InformationalVersion>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/winnster/AutomationFoundation</RepositoryUrl>
     <PackageTags>automation,automationfoundation,runtime</PackageTags>
     <Description>Contains adapters for Entity Framework interoperability with the Automation Foundation framework.</Description>
-  </PropertyGroup>
-
-  <PropertyGroup>
-    <DocumentationFile>obj\AutomationFoundation.Extensions.EntityFramework.xml</DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>

@@ -9,6 +9,7 @@
     <InformationalVersion>$(Version)</InformationalVersion>
     <Authors>Winnster.io</Authors>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <PackageProjectUrl></PackageProjectUrl>
     <PackageLicenseUrl></PackageLicenseUrl>
     <AssemblyName>AutomationFoundation.Features.ProducerConsumer</AssemblyName>
@@ -16,10 +17,6 @@
     <RepositoryUrl>https://github.com/winnster/AutomationFoundation.Features.ProducerConsumer</RepositoryUrl>
     <PackageTags>automation,automationfoundation,producer,consumer,producerconsumer</PackageTags>
     <Description>Contains the producer/consumer implementation for the Automation Foundation runtime.</Description>
-  </PropertyGroup>
-
-  <PropertyGroup>
-    <DocumentationFile>obj\AutomationFoundation.Features.ProducerConsumer.xml</DocumentationFile>    
   </PropertyGroup>
 
   <ItemGroup>
