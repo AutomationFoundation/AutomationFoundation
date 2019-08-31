@@ -9,6 +9,7 @@ using AutomationFoundation.Hosting.Abstractions.Builder;
 using AutomationFoundation.Runtime;
 using AutomationFoundation.Runtime.Abstractions.Synchronization;
 using AutomationFoundation.Runtime.Threading;
+using AutomationFoundation.Runtime.Threading.Primitives;
 using ConsoleRunner.Abstractions;
 using ConsoleRunner.Infrastructure.Diagnostics;
 using ConsoleRunner.Infrastructure.IO;
@@ -38,6 +39,7 @@ namespace ConsoleRunner.Infrastructure.Builders
 
             return new ProducerConsumerProcessor<int>(
                 config.Name,
+                new CancellationSourceFactory(),
                 new[] { producerEngine1, producerEngine2 },
                 consumerEngine);
         }
@@ -65,6 +67,7 @@ namespace ConsoleRunner.Infrastructure.Builders
                     new DefaultProducerFactory<RandomIntProducer, int>(),
                     synchronizationPolicy,
                     false),
+                new CancellationSourceFactory(),
                 new StrategyErrorHandler(
                     new LogToConsoleErrorStrategy(new ConsoleWriter(), LoggingLevel.All)),
                 new PollingScheduler(TimeSpan.FromSeconds(5)),

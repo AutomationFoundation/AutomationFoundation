@@ -28,7 +28,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\AutomationFoundation.Features.ProducerConsumer.Abstractions\AutomationFoundation.Features.ProducerConsumer.Abstractions.csproj" />
-    <ProjectReference Include="..\AutomationFoundation.Runtime\AutomationFoundation.Runtime.csproj" />
   </ItemGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

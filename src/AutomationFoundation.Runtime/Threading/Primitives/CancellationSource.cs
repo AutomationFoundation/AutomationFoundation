@@ -7,7 +7,7 @@ namespace AutomationFoundation.Runtime.Threading.Primitives
     /// <summary>
     /// Provides a source for cancellation of operations.
     /// </summary>
-    public sealed class CancellationSource : ICancellationSource, IDisposable
+    public sealed class CancellationSource : ICancellationSource
     {
         private readonly CancellationTokenSource cancellationSource;
         private bool disposed;
@@ -40,9 +40,7 @@ namespace AutomationFoundation.Runtime.Threading.Primitives
         /// <inheritdoc />
         public bool IsCancellationRequested => cancellationSource.IsCancellationRequested;
 
-        /// <summary>
-        /// Gets the cancellation token for the cancellation source.
-        /// </summary>
+        /// <inheritdoc />
         public CancellationToken CancellationToken => cancellationSource.Token;
 
         /// <inheritdoc />

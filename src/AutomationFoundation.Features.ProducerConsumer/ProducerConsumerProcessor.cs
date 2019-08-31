@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using AutomationFoundation.Features.ProducerConsumer.Abstractions;
 using AutomationFoundation.Runtime;
-using AutomationFoundation.Runtime.Threading.Primitives;
+using AutomationFoundation.Runtime.Abstractions.Threading.Primitives;
 
 namespace AutomationFoundation.Features.ProducerConsumer
 {
@@ -14,19 +15,22 @@ namespace AutomationFoundation.Features.ProducerConsumer
     public class ProducerConsumerProcessor<TItem> : Processor
     {
         private readonly IEnumerable<IProducerEngine<TItem>> producerEngines;
+        private readonly ICancellationSourceFactory cancellationSourceFactory;
         private readonly IConsumerEngine<TItem> consumerEngine;
 
-        private CancellationSource cancellationSource;
+        private ICancellationSource cancellationSource;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ProducerConsumerProcessor{TItem}"/> class.
         /// </summary>
         /// <param name="name">The name of the processor.</param>
+        /// <param name="cancellationSourceFactory">The factory for creating cancellation sources.</param>
         /// <param name="producerEngines">The engines which will produce objects to process.</param>
         /// <param name="consumerEngine">The consumer engine which will consume objects which were produced.</param>
-        public ProducerConsumerProcessor(string name, IEnumerable<IProducerEngine<TItem>> producerEngines, IConsumerEngine<TItem> consumerEngine)
+        public ProducerConsumerProcessor(string name, ICancellationSourceFactory cancellationSourceFactory, IEnumerable<IProducerEngine<TItem>> producerEngines, IConsumerEngine<TItem> consumerEngine)
             : base(name)
         {
+            this.cancellationSourceFactory = cancellationSourceFactory ?? throw new ArgumentNullException(nameof(cancellationSourceFactory));
             this.producerEngines = producerEngines ?? throw new ArgumentNullException(nameof(producerEngines));
             this.consumerEngine = consumerEngine ?? throw new ArgumentNullException(nameof(consumerEngine));
         }
@@ -47,7 +51,12 @@ namespace AutomationFoundation.Features.ProducerConsumer
         private void InitializeCancellationSource()
         {
             cancellationSource?.Dispose();
-            cancellationSource = new CancellationSource();
+
+            cancellationSource = cancellationSourceFactory.Create(CancellationToken.None);
+            if (cancellationSource == null)
+            {
+                throw new InvalidOperationException("The cancellation source factory did not produce a cancellation source.");
+            }
         }
 
         private void InitializeProducerEngines()
