@@ -167,7 +167,7 @@ namespace AutomationFoundation.Runtime
         {
             if (disposed)
             {
-                throw new ObjectDisposedException(nameof(AutomationRuntime));
+                throw new ObjectDisposedException(nameof(Processor));
             }
         }
     }
