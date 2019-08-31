@@ -13,7 +13,7 @@ namespace AutomationFoundation.Features.ProducerConsumer.Engines
     /// Provides a producer engine which uses a schedule to check the producer for work availability.
     /// </summary>
     /// <typeparam name="TItem">The type of item being produced.</typeparam>
-    public class ScheduledProducerEngine<TItem> : DisposableObject, IProducerEngine<TItem>
+    public class ScheduledProducerEngine<TItem> : Engine, IProducerEngine<TItem>
     {
         private readonly IProducerExecutionStrategy<TItem> runner;
         private readonly IErrorHandler errorHandler;

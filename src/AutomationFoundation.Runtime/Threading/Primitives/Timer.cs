@@ -7,7 +7,7 @@ namespace AutomationFoundation.Runtime.Threading.Primitives
     /// <summary>
     /// Represents a timer.
     /// </summary>
-    public class Timer : DisposableObject, ITimer
+    public class Timer : ITimer
     {
         private readonly object syncRoot = new object();
         private System.Threading.Timer timer;
@@ -15,6 +15,8 @@ namespace AutomationFoundation.Runtime.Threading.Primitives
         private Action onElapsedCallback;
         private Action<Exception> onErrorCallback;
         private TimeSpan interval;
+
+        private bool disposed;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Timer"/> class.
@@ -79,14 +81,35 @@ namespace AutomationFoundation.Runtime.Threading.Primitives
         }
 
         /// <inheritdoc />
-        protected override void Dispose(bool disposing)
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        /// <summary>
+        /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+        /// </summary>
+        /// <param name="disposing">true to release both managed and unmanaged resources, otherwise false to release unmanaged resources.</param>
+        protected virtual void Dispose(bool disposing)
         {
             if (disposing)
             {
                 timer?.Dispose();
             }
 
-            base.Dispose(disposing);
+            disposed = true;
+        }
+
+        /// <summary>
+        /// Guards against the timer having been disposed.
+        /// </summary>
+        protected void GuardMustNotBeDisposed()
+        {
+            if (disposed)
+            {
+                throw new ObjectDisposedException(nameof(Timer));
+            }
         }
     }
 }

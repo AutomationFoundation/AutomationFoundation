@@ -11,19 +11,25 @@ namespace AutomationFoundation.Runtime.Threading.Internal
     /// <summary>
     /// Provides a cache of workers.
     /// </summary>
-    internal class WorkerCache : DisposableObject, IWorkerCache, IWorkerCacheEntries
+    internal class WorkerCache : IWorkerCache, IWorkerCacheEntries, IDisposable
     {
         private readonly ConcurrentBag<WorkerCacheEntry> pendingCleanup = new ConcurrentBag<WorkerCacheEntry>();
         private readonly ConcurrentDictionary<IWorker, WorkerCacheEntry> busy = new ConcurrentDictionary<IWorker, WorkerCacheEntry>();
         private readonly ManualResetEventSlim waitHandle = new ManualResetEventSlim(true);
 
         private ConcurrentQueue<WorkerCacheEntry> available = new ConcurrentQueue<WorkerCacheEntry>();
+        private bool disposed;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="WorkerCache"/> class.
         /// </summary>
         public WorkerCache()
         {
+        }
+
+        ~WorkerCache()
+        {
+            Dispose(false);
         }
 
         /// <inheritdoc />
@@ -215,14 +221,31 @@ namespace AutomationFoundation.Runtime.Threading.Internal
             waitHandle.Wait();
         }
 
-        protected override void Dispose(bool disposing)
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
         {
             if (disposing)
             {
                 waitHandle.Dispose();
             }
 
-            base.Dispose(disposing);
+            disposed = true;
+        }
+
+        /// <summary>
+        /// Guards against the worker cache having been disposed.
+        /// </summary>
+        protected void GuardMustNotBeDisposed()
+        {
+            if (disposed)
+            {
+                throw new ObjectDisposedException(nameof(WorkerCache));
+            }
         }
     }
 }

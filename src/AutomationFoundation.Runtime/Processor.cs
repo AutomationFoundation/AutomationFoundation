@@ -6,21 +6,19 @@ namespace AutomationFoundation.Runtime
     /// <summary>
     /// Represents a processor. This class must be inherited.
     /// </summary>
-    public abstract class Processor : DisposableObject, IProcessor
+    public abstract class Processor : IProcessor
     {
+        private bool disposed;
+
         /// <summary>
         /// Gets the object used for thread synchronization.
         /// </summary>
         protected object SyncRoot { get; } = new object();
 
-        /// <summary>
-        /// Gets the name.
-        /// </summary>
+        /// <inheritdoc />
         public string Name { get; }
 
-        /// <summary>
-        /// Gets the processor state.
-        /// </summary>
+        /// <inheritdoc />
         public ProcessorState State { get; protected set; }
 
         /// <summary>
@@ -38,18 +36,24 @@ namespace AutomationFoundation.Runtime
         }
 
         /// <summary>
-        /// Starts the processor.
+        /// Finalizes an instance of the <see cref="Processor"/> class.
         /// </summary>
+        ~Processor()
+        {
+            Dispose(false);
+        }
+
+        /// <inheritdoc />
         public void Start()
         {
             GuardMustNotBeDisposed();
 
-            GuardMustNotHaveErrored();
+            GuardMustNotHaveEncounteredAnError();
             GuardMustNotAlreadyBeStarted();
 
             lock (SyncRoot)
             {
-                GuardMustNotHaveErrored();
+                GuardMustNotHaveEncounteredAnError();
                 GuardMustNotAlreadyBeStarted();
 
                 try
@@ -84,19 +88,17 @@ namespace AutomationFoundation.Runtime
         /// </summary>
         protected abstract void OnStart();
 
-        /// <summary>
-        /// Stops the processor.
-        /// </summary>
+        /// <inheritdoc />
         public void Stop()
         {
             GuardMustNotBeDisposed();
 
-            GuardMustNotHaveErrored();
+            GuardMustNotHaveEncounteredAnError();
             GuardMustNotAlreadyBeStopped();
 
             lock (SyncRoot)
             {
-                GuardMustNotHaveErrored();
+                GuardMustNotHaveEncounteredAnError();
                 GuardMustNotAlreadyBeStopped();
 
                 try
@@ -134,11 +136,38 @@ namespace AutomationFoundation.Runtime
         /// <summary>
         /// Ensures the processor has not encountered an error.
         /// </summary>
-        protected void GuardMustNotHaveErrored()
+        protected void GuardMustNotHaveEncounteredAnError()
         {
             if (State <= ProcessorState.Error)
             {
                 throw new RuntimeException("The processor has encountered an unrecoverable error and can no longer be started.");
+            }
+        }
+
+        /// <inheritdoc />
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        /// <summary>
+        /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+        /// </summary>
+        /// <param name="disposing">true to release both managed and unmanaged resources, otherwise false to release unmanaged resources.</param>
+        protected virtual void Dispose(bool disposing)
+        {
+            disposed = true;
+        }
+
+        /// <summary>
+        /// Guards against the processor being used after disposal.
+        /// </summary>
+        protected void GuardMustNotBeDisposed()
+        {
+            if (disposed)
+            {
+                throw new ObjectDisposedException(nameof(AutomationRuntime));
             }
         }
     }

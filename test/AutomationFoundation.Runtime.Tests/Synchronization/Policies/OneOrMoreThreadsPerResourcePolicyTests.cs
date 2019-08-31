@@ -48,5 +48,15 @@ namespace AutomationFoundation.Runtime.Synchronization.Policies
 
             Assert.ThrowsAsync<TaskCanceledException>(async () => await target.AcquireLockAsync(cancellationSource.Token));
         }
+
+        [Test]
+        public void ThrowsAnExceptionAfterBeingDisposed()
+        {
+            target = new OneOrMoreThreadsPerResourcePolicy(1);
+
+            target.Dispose();
+
+            Assert.ThrowsAsync<ObjectDisposedException>(async () => await target.AcquireLockAsync(CancellationToken.None));
+        }
     }
 }

@@ -7,17 +7,24 @@ namespace AutomationFoundation.Runtime.Threading.Internal
     /// <summary>
     /// Provides a mechanism which monitors a worker cache instance.
     /// </summary>
-    internal class WorkerCacheMonitor : DisposableObject, IWorkerCacheMonitor
+    internal class WorkerCacheMonitor : IWorkerCacheMonitor, IDisposable
     {
         private readonly ITimer timer;
         private readonly IWorkerCacheEntries cache;
         private readonly WorkerPoolOptions options;
+
+        private bool disposed;
 
         public WorkerCacheMonitor(ITimer timer, IWorkerCacheEntries cache, WorkerPoolOptions options)
         {
             this.timer = timer ?? throw new ArgumentNullException(nameof(timer));
             this.cache = cache ?? throw new ArgumentNullException(nameof(cache));
             this.options = options ?? throw new ArgumentNullException(nameof(options));
+        }
+
+        ~WorkerCacheMonitor()
+        {
+            Dispose(false);
         }
 
         /// <inheritdoc />
@@ -28,15 +35,31 @@ namespace AutomationFoundation.Runtime.Threading.Internal
             timer.Start(options.PollingInterval, ProcessCacheEntries, OnErrorOccurred);
         }
 
-        /// <inheritdoc />
-        protected override void Dispose(bool disposing)
+        /// <summary>
+        /// Guards against the monitor having been disposed.
+        /// </summary>
+        protected void GuardMustNotBeDisposed()
+        {
+            if (disposed)
+            {
+                throw new ObjectDisposedException(nameof(WorkerCacheMonitor));
+            }
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
         {
             if (disposing)
             {
                 timer.Dispose();
             }
 
-            base.Dispose(disposing);
+            disposed = true;
         }
 
         private void ProcessCacheEntries()
