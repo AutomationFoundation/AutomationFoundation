@@ -10,12 +10,22 @@ namespace AutomationFoundation.Runtime.Threading.Internal
     [TestFixture]
     public class PooledWorkerTests
     {
+        private Mock<IWorkerCache> cache;
+        private Mock<IRuntimeWorker> worker;
+
+        [SetUp]
+        public void Setup()
+        {
+            cache = new Mock<IWorkerCache>();
+            worker = new Mock<IRuntimeWorker>();
+        }
+
         [Test]
         public void ThrowsAnExceptionWhenTheCacheIsNull()
         {
             Assert.Throws<ArgumentNullException>(() =>
             {
-                using (new PooledWorker(null, new Mock<IRuntimeWorker>().Object))
+                using (new PooledWorker(null, worker.Object))
                 {
                     // This code block intentionally left blank.
                 }
@@ -27,7 +37,7 @@ namespace AutomationFoundation.Runtime.Threading.Internal
         {
             Assert.Throws<ArgumentNullException>(() =>
             {
-                using (new PooledWorker(new Mock<IWorkerCache>().Object, null))
+                using (new PooledWorker(cache.Object, null))
                 {
                     // This code block intentionally left blank.
                 }
@@ -37,9 +47,6 @@ namespace AutomationFoundation.Runtime.Threading.Internal
         [Test]
         public void RunTheWorkerAsynchronouslyAsExpected()
         {
-            var cache = new Mock<IWorkerCache>();
-            var worker = new Mock<IRuntimeWorker>();
-
             using (var target = new PooledWorker(cache.Object, worker.Object))
             {
                 target.RunAsync();
@@ -51,9 +58,6 @@ namespace AutomationFoundation.Runtime.Threading.Internal
         [Test]
         public void RunTheWorkerSynchronouslyAsExpected()
         {
-            var cache = new Mock<IWorkerCache>();
-            var worker = new Mock<IRuntimeWorker>();
-
             using (var target = new PooledWorker(cache.Object, worker.Object))
             {
                 target.Run();
@@ -65,9 +69,6 @@ namespace AutomationFoundation.Runtime.Threading.Internal
         [Test]
         public void ReleasesTheWorkerToThePoolOnDispose()
         {
-            var cache = new Mock<IWorkerCache>();
-            var worker = new Mock<IRuntimeWorker>();
-
             using (new PooledWorker(cache.Object, worker.Object))
             {
                 // This code block intentionally left blank.
@@ -79,9 +80,6 @@ namespace AutomationFoundation.Runtime.Threading.Internal
         [Test]
         public void WaitsForTheWorkerToComplete()
         {
-            var cache = new Mock<IWorkerCache>();
-            var worker = new Mock<IRuntimeWorker>();
-
             using (var target = new PooledWorker(cache.Object, worker.Object))
             {
                 target.WaitForCompletion();
@@ -93,9 +91,6 @@ namespace AutomationFoundation.Runtime.Threading.Internal
         [Test]
         public async Task WaitsForTheWorkerToCompleteAsynchronously()
         {
-            var cache = new Mock<IWorkerCache>();
-
-            var worker = new Mock<IRuntimeWorker>();
             worker.Setup(o => o.WaitForCompletionAsync()).Returns(Task.CompletedTask);
 
             using (var target = new PooledWorker(cache.Object, worker.Object))
@@ -104,6 +99,15 @@ namespace AutomationFoundation.Runtime.Threading.Internal
             }
 
             worker.Verify(o => o.WaitForCompletionAsync(), Times.Once);
+        }
+
+        [Test]
+        public void ThrowsAnExceptionWhenAfterDispose()
+        {
+            var target = new PooledWorker(cache.Object, worker.Object);
+            target.Dispose();
+
+            Assert.Throws<ObjectDisposedException>(() => target.Run());
         }
     }
 }
