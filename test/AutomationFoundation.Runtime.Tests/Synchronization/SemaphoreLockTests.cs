@@ -8,6 +8,7 @@ namespace AutomationFoundation.Runtime.Synchronization
     public class SemaphoreLockTests
     {
         [Test]
+        [Timeout(2000)]
         public void ShouldReleaseTheLockOnRelease()
         {
             using (var semaphore = new SemaphoreSlim(0, 1))

@@ -50,6 +50,7 @@ namespace AutomationFoundation.Runtime.Synchronization.Policies
         }
 
         [Test]
+        [Timeout(2000)]
         public void ThrowsAnExceptionAfterBeingDisposed()
         {
             target = new OneOrMoreThreadsPerResourcePolicy(1);
