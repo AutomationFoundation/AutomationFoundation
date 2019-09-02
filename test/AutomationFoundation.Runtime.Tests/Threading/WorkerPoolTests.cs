@@ -11,12 +11,24 @@ namespace AutomationFoundation.Runtime.Threading
     [TestFixture]
     public class WorkerPoolTests
     {
+        private Mock<IRuntimeWorker> worker;
+        private Mock<IWorkerCacheMonitor> cacheMonitor;
+        private Mock<IWorkerCache> cache;
+
+        [SetUp]
+        public void Setup()
+        {
+            worker = new Mock<IRuntimeWorker>();
+            cacheMonitor = new Mock<IWorkerCacheMonitor>();
+            cache = new Mock<IWorkerCache>();
+        }
+
         [Test]
         public void ThrowsAnExceptionWhenTheCacheIsNull()
         {
             Assert.Throws<ArgumentNullException>(() =>
             {
-                using (new WorkerPool(null, new Mock<IWorkerCacheMonitor>().Object))
+                using (new WorkerPool(null, cacheMonitor.Object))
                 {
                     // This code block intentionally left blank.
                 }
@@ -28,7 +40,7 @@ namespace AutomationFoundation.Runtime.Threading
         {
             Assert.Throws<ArgumentNullException>(() =>
             {
-                using (new WorkerPool(new Mock<IWorkerCache>().Object, null))
+                using (new WorkerPool(cache.Object, null))
                 {
                     // This code block intentionally left blank.
                 }
@@ -47,10 +59,6 @@ namespace AutomationFoundation.Runtime.Threading
         [Test]
         public void GetsTheWorkerAsExpected()
         {
-            var worker = new Mock<IRuntimeWorker>();
-            var cacheMonitor = new Mock<IWorkerCacheMonitor>();
-
-            var cache = new Mock<IWorkerCache>();
             cache.Setup(o => o.Get()).Returns(worker.Object);
 
             using (var target = new WorkerPool(cache.Object, cacheMonitor.Object))
@@ -65,9 +73,6 @@ namespace AutomationFoundation.Runtime.Threading
         [Test]
         public void ThrowsAnExceptionWhenTheOnRunCallbackIsNull()
         {
-            var cache = new Mock<IWorkerCache>();
-            var cacheMonitor = new Mock<IWorkerCacheMonitor>();
-
             using (var target = new WorkerPool(cache.Object, cacheMonitor.Object))
             {
                 Assert.Throws<ArgumentNullException>(() => target.Get(null, OnCompleted));
@@ -77,9 +82,6 @@ namespace AutomationFoundation.Runtime.Threading
         [Test]
         public void DoesNotThrowAnExceptionWhenThePostCompletedCallbackIsNull()
         {
-            var cache = new Mock<IWorkerCache>();
-            var cacheMonitor = new Mock<IWorkerCacheMonitor>();
-
             using (var target = new WorkerPool(cache.Object, cacheMonitor.Object))
             {
                 Assert.DoesNotThrow(() => target.Get(OnRun, null));
@@ -89,10 +91,6 @@ namespace AutomationFoundation.Runtime.Threading
         [Test]
         public void ReleasesTheWorkerAsExpectedIfAnErrorOccurs()
         {
-            var worker = new Mock<IRuntimeWorker>();
-            var cacheMonitor = new Mock<IWorkerCacheMonitor>();
-
-            var cache = new Mock<IWorkerCache>();
             cache.Setup(o => o.Get()).Returns(worker.Object);
 
             using (var target = new TestableWorkerPool(cache.Object, cacheMonitor.Object))
@@ -107,10 +105,6 @@ namespace AutomationFoundation.Runtime.Threading
         [Test]
         public void ThrowsAnExceptionWhenTheWorkerIsNull()
         {
-            var worker = new Mock<IRuntimeWorker>();
-            var cacheMonitor = new Mock<IWorkerCacheMonitor>();
-
-            var cache = new Mock<IWorkerCache>();
             cache.Setup(o => o.Get()).Returns(worker.Object);
 
             using (var target = new TestableWorkerPool(cache.Object, cacheMonitor.Object))
@@ -120,6 +114,15 @@ namespace AutomationFoundation.Runtime.Threading
                 Assert.Throws<ArgumentNullException>(() => target.Get(OnRun, OnCompleted));
                 cache.Verify(o => o.Release(worker.Object), Times.Once);
             }
+        }
+
+        [Test]
+        public void ThrowsAnExceptionWhenAfterDispose()
+        {
+            var target = new TestableWorkerPool(cache.Object, cacheMonitor.Object);
+            target.Dispose();
+
+            Assert.Throws<ObjectDisposedException>(() => target.Get(OnRun, OnCompleted));
         }
 
         private static void OnRun()
