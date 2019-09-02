@@ -1,9 +1,11 @@
-﻿namespace AutomationFoundation.Runtime.Abstractions
+﻿using System;
+
+namespace AutomationFoundation.Runtime.Abstractions
 {
     /// <summary>
     /// Identifies a runtime.
     /// </summary>
-    public interface IRuntime
+    public interface IRuntime : IDisposable
     {
         /// <summary>
         /// Gets a value indicating whether the runtime any processors which are started.

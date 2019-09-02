@@ -7,12 +7,13 @@ namespace AutomationFoundation.Runtime.Threading.Primitives
     /// <summary>
     /// Provides a mechanism to process a single unit of work.
     /// </summary>
-    public class Worker : DisposableObject, IRuntimeWorker
+    public class Worker : IRuntimeWorker
     {
         private readonly object syncRoot = new object();
 
         private Task runTask;
         private Task postCompletionTask;
+        private bool disposed;
 
         /// <summary>
         /// Gets a value indicating whether the worker has been initialized.
@@ -24,6 +25,14 @@ namespace AutomationFoundation.Runtime.Threading.Primitives
         /// </summary>
         public virtual bool IsRunning => (runTask != null && runTask.IsRunning()) || 
                                  (postCompletionTask != null && postCompletionTask.IsRunning());
+
+        /// <summary>
+        /// Finalizes an instance of the <see cref="Worker"/> class.
+        /// </summary>
+        ~Worker()
+        {
+            Dispose(false);
+        }
 
         /// <inheritdoc />
         public virtual void Initialize(WorkerExecutionContext context)
@@ -155,14 +164,24 @@ namespace AutomationFoundation.Runtime.Threading.Primitives
         }
 
         /// <inheritdoc />
-        protected override void Dispose(bool disposing)
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        /// <summary>
+        /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+        /// </summary>
+        /// <param name="disposing">true to release both managed and unmanaged resources, otherwise false to release unmanaged resources.</param>
+        protected virtual void Dispose(bool disposing)
         {
             if (disposing)
             {
                 Reset();
             }
 
-            base.Dispose(disposing);
+            disposed = true;
         }
 
         /// <inheritdoc />
@@ -180,6 +199,17 @@ namespace AutomationFoundation.Runtime.Threading.Primitives
 
                 Initialized = false;
             }
-        }        
+        }
+
+        /// <summary>
+        /// Guards against the worker cache having been disposed.
+        /// </summary>
+        protected void GuardMustNotBeDisposed()
+        {
+            if (disposed)
+            {
+                throw new ObjectDisposedException(nameof(Worker));
+            }
+        }
     }
 }

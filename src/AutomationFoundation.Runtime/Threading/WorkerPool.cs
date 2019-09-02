@@ -10,10 +10,12 @@ namespace AutomationFoundation.Runtime.Threading
     /// <summary>
     /// Provides a pool of workers.
     /// </summary>
-    public class WorkerPool : DisposableObject, IWorkerPool
+    public class WorkerPool : IWorkerPool, IDisposable
     {
         private readonly IWorkerCacheMonitor cacheMonitor;
         private readonly IWorkerCache cache;
+
+        private bool disposed;
 
         /// <summary>
         /// Creates a new worker pool.
@@ -92,6 +94,14 @@ namespace AutomationFoundation.Runtime.Threading
             this.cacheMonitor = cacheMonitor ?? throw new ArgumentNullException(nameof(cacheMonitor));
         }
 
+        /// <summary>
+        /// Finalizes an instance of the <see cref="WorkerPool"/> class.
+        /// </summary>
+        ~WorkerPool()
+        {
+            Dispose(false);
+        }
+
         /// <inheritdoc />
         public IWorker Get(Action onRunCallback, Action postCompletedCallback)
         {
@@ -99,6 +109,8 @@ namespace AutomationFoundation.Runtime.Threading
             {
                 throw new ArgumentNullException(nameof(onRunCallback));
             }
+
+            GuardMustNotBeDisposed();
 
             IRuntimeWorker worker = null;
 
@@ -153,7 +165,17 @@ namespace AutomationFoundation.Runtime.Threading
         }
 
         /// <inheritdoc />
-        protected override void Dispose(bool disposing)
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        /// <summary>
+        /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+        /// </summary>
+        /// <param name="disposing">true to release both managed and unmanaged resources, otherwise false to release unmanaged resources.</param>
+        protected virtual void Dispose(bool disposing)
         {
             if (disposing)
             {
@@ -161,7 +183,18 @@ namespace AutomationFoundation.Runtime.Threading
                 cacheMonitor.DisposeIfNecessary();
             }
 
-            base.Dispose(disposing);
+            disposed = true;
+        }
+
+        /// <summary>
+        /// Guards against the pool having been disposed.
+        /// </summary>
+        protected void GuardMustNotBeDisposed()
+        {
+            if (disposed)
+            {
+                throw new ObjectDisposedException(nameof(WorkerPool));
+            }
         }
     }
 }

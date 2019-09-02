@@ -10,7 +10,7 @@ namespace AutomationFoundation.Features.ProducerConsumer.Engines
     /// Provides a consumer engine which consumes objects synchronously.
     /// </summary>
     /// <typeparam name="TItem">The type of item being consumed.</typeparam>
-    public class SynchronousConsumerEngine<TItem> : IConsumerEngine<TItem>
+    public class SynchronousConsumerEngine<TItem> : Engine, IConsumerEngine<TItem>
     {
         private readonly IWorkerPool pool;
         private readonly IConsumerExecutionStrategy<TItem> runner;

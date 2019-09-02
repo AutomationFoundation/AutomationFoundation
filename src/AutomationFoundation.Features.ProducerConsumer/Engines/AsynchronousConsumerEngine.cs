@@ -14,7 +14,7 @@ namespace AutomationFoundation.Features.ProducerConsumer.Engines
     /// Provides a consumer engine which consumes objects asynchronously.
     /// </summary>
     /// <typeparam name="TItem">The type of item being consumed.</typeparam>
-    public class AsynchronousConsumerEngine<TItem> : DisposableObject, IConsumerEngine<TItem>, IStoppable
+    public class AsynchronousConsumerEngine<TItem> : Engine, IConsumerEngine<TItem>, IStoppable
     {
         private readonly object syncRoot = new object();
 

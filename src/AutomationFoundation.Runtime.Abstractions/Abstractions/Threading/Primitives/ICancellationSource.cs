@@ -1,12 +1,18 @@
 ﻿using System;
+using System.Threading;
 
 namespace AutomationFoundation.Runtime.Abstractions.Threading.Primitives
 {
     /// <summary>
     /// Identifies a source supporting cancellation of an operation.
     /// </summary>
-    public interface ICancellationSource
+    public interface ICancellationSource : IDisposable
     {
+        /// <summary>
+        /// Gets the cancellation token for the cancellation source.
+        /// </summary>
+        CancellationToken CancellationToken { get; }
+
         /// <summary>
         /// Gets a value indicating whether cancellation has been requested.
         /// </summary>

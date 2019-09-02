@@ -7,7 +7,7 @@ namespace AutomationFoundation.Runtime
     /// <summary>
     /// Provides contextual information of work being processed by the runtime.
     /// </summary>
-    public abstract class ProcessingContext : DisposableObject, IProcessingContext
+    public abstract class ProcessingContext : IProcessingContext
     {
         private static readonly AsyncLocal<ProcessingContext> Local = new AsyncLocal<ProcessingContext>();
 
@@ -77,6 +77,33 @@ namespace AutomationFoundation.Runtime
         {
             Id = id;
             LifetimeScope = serviceScope;
+        }
+
+        /// <summary>
+        /// Finalizes an instance of the <see cref="ProcessingContext"/> class.
+        /// </summary>
+        ~ProcessingContext()
+        {
+            Dispose(false);
+        }
+
+        /// <inheritdoc />
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        /// <summary>
+        /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+        /// </summary>
+        /// <param name="disposing">true to release both managed and unmanaged resources, otherwise false to release unmanaged resources.</param>
+        protected virtual void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                LifetimeScope.Dispose();
+            }
         }
     }
 }

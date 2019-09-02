@@ -1,9 +1,11 @@
-﻿namespace AutomationFoundation.Runtime.Abstractions
+﻿using System;
+
+namespace AutomationFoundation.Runtime.Abstractions
 {
     /// <summary>
     /// Identifies a processor.
     /// </summary>
-    public interface IProcessor
+    public interface IProcessor : IDisposable
     {
         /// <summary>
         /// Gets the name.

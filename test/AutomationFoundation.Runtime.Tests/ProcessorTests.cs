@@ -8,6 +8,24 @@ namespace AutomationFoundation.Runtime
     public class ProcessorTests
     {
         [Test]
+        public void ThrowsAnExceptionWhenStartedAfterDisposed()
+        {
+            var target = new StubProcessor();
+            target.Dispose();
+
+            Assert.Throws<ObjectDisposedException>(() => target.Start());
+        }
+
+        [Test]
+        public void ThrowsAnExceptionWhenStoppedAfterDisposed()
+        {
+            var target = new StubProcessor();
+            target.Dispose();
+
+            Assert.Throws<ObjectDisposedException>(() => target.Stop());
+        }
+
+        [Test]
         public void ThrowsAnExceptionWhenStartingWhileInTheErrorState()
         {
             using (var target = new StubProcessor())

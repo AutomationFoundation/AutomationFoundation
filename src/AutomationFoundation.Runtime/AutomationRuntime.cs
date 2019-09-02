@@ -8,40 +8,32 @@ namespace AutomationFoundation.Runtime
     /// <summary>
     /// Provides a runtime for the Automation Foundation framework.
     /// </summary>
-    public sealed class AutomationRuntime : DisposableObject, IRuntime
+    public sealed class AutomationRuntime : IRuntime
     {
-        private readonly ICollection<IProcessor> processors;
+        private bool disposed;
 
         /// <summary>
         /// Gets the collection of processors.
         /// </summary>
-        public ICollection<IProcessor> Processors
-        {
-            get
-            {
-                GuardMustNotBeDisposed();
-
-                return processors;
-            }
-        }
+        public ICollection<IProcessor> Processors { get; }
 
         /// <inheritdoc />
-        public bool IsActive
-        {
-            get
-            {
-                GuardMustNotBeDisposed();
-
-                return Processors.Any(o => o.State >= ProcessorState.Started);
-            }
-        }
+        public bool IsActive => Processors.Any(o => o.State >= ProcessorState.Started);
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AutomationRuntime"/> class.
         /// </summary>
         public AutomationRuntime()
         {
-            processors = new ProcessorCollection(this);
+            Processors = new ProcessorCollection(this);
+        }
+
+        /// <summary>
+        /// Finalizes an instance of the <see cref="AutomationRuntime"/> class.
+        /// </summary>
+        ~AutomationRuntime()
+        {
+            Dispose(false);
         }
 
         /// <inheritdoc />
@@ -67,17 +59,31 @@ namespace AutomationFoundation.Runtime
         }
 
         /// <inheritdoc />
-        protected override void Dispose(bool disposing)
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        private void Dispose(bool disposing)
         {
             if (disposing)
             {
                 foreach (var processor in Processors)
                 {
-                    (processor as IDisposable)?.Dispose();
+                    processor.Dispose();
                 }
             }
 
-            base.Dispose(disposing);
+            disposed = true;
+        }
+
+        private void GuardMustNotBeDisposed()
+        {
+            if (disposed)
+            {
+                throw new ObjectDisposedException(nameof(AutomationRuntime));
+            }
         }
     }
 }

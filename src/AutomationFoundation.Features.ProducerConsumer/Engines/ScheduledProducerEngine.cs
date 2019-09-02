@@ -5,7 +5,7 @@ using AutomationFoundation.Features.ProducerConsumer.Abstractions;
 using AutomationFoundation.Features.ProducerConsumer.Configuration;
 using AutomationFoundation.Runtime;
 using AutomationFoundation.Runtime.Abstractions;
-using AutomationFoundation.Runtime.Threading.Primitives;
+using AutomationFoundation.Runtime.Abstractions.Threading.Primitives;
 
 namespace AutomationFoundation.Features.ProducerConsumer.Engines
 {
@@ -13,14 +13,15 @@ namespace AutomationFoundation.Features.ProducerConsumer.Engines
     /// Provides a producer engine which uses a schedule to check the producer for work availability.
     /// </summary>
     /// <typeparam name="TItem">The type of item being produced.</typeparam>
-    public class ScheduledProducerEngine<TItem> : DisposableObject, IProducerEngine<TItem>
+    public class ScheduledProducerEngine<TItem> : Engine, IProducerEngine<TItem>
     {
         private readonly IProducerExecutionStrategy<TItem> runner;
+        private readonly ICancellationSourceFactory cancellationSourceFactory;
         private readonly IErrorHandler errorHandler;
         private readonly IScheduler scheduler;
         private readonly ScheduledEngineOptions options;
 
-        private CancellationSource cancellationSource;
+        private ICancellationSource cancellationSource;
         private Action<ProducerConsumerContext<TItem>> onProducedCallback;
 
         private bool initialized;
@@ -35,12 +36,14 @@ namespace AutomationFoundation.Features.ProducerConsumer.Engines
         /// Initializes a new instance of the <see cref="ScheduledProducerEngine{TItem}"/> class.
         /// </summary>
         /// <param name="runner">The runner to execute.</param>
+        /// <param name="cancellationSourceFactory">The factory for creating cancellation sources.</param>
         /// <param name="errorHandler">The error handler to use if errors within the engine.</param>
         /// <param name="scheduler">The scheduler.</param>
         /// <param name="options">The engine configuration options.</param>
-        public ScheduledProducerEngine(IProducerExecutionStrategy<TItem> runner, IErrorHandler errorHandler, IScheduler scheduler, ScheduledEngineOptions options)
+        public ScheduledProducerEngine(IProducerExecutionStrategy<TItem> runner, ICancellationSourceFactory cancellationSourceFactory, IErrorHandler errorHandler, IScheduler scheduler, ScheduledEngineOptions options)
         {
             this.runner = runner ?? throw new ArgumentNullException(nameof(runner));
+            this.cancellationSourceFactory = cancellationSourceFactory ?? throw new ArgumentNullException(nameof(cancellationSourceFactory));
             this.errorHandler = errorHandler ?? throw new ArgumentNullException(nameof(errorHandler));
             this.scheduler = scheduler ?? throw new ArgumentNullException(nameof(scheduler));
             this.options = options ?? throw new ArgumentNullException(nameof(options));
@@ -58,10 +61,14 @@ namespace AutomationFoundation.Features.ProducerConsumer.Engines
             GuardMustNotBeInitialized();
 
             cancellationSource?.Dispose();
-            cancellationSource = new CancellationSource(cancellationToken);
+
+            cancellationSource = cancellationSourceFactory.Create(cancellationToken);
+            if (cancellationSource == null)
+            {
+                throw new InvalidOperationException("The cancellation source factory did not create a cancellation source.");
+            }
 
             this.onProducedCallback = onProducedCallback;
-
             initialized = true;
         }
 

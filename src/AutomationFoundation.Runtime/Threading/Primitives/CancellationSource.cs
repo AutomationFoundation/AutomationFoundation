@@ -7,9 +7,10 @@ namespace AutomationFoundation.Runtime.Threading.Primitives
     /// <summary>
     /// Provides a source for cancellation of operations.
     /// </summary>
-    public sealed class CancellationSource : DisposableObject, ICancellationSource
+    public sealed class CancellationSource : ICancellationSource
     {
         private readonly CancellationTokenSource cancellationSource;
+        private bool disposed;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CancellationSource"/> class.
@@ -28,27 +29,19 @@ namespace AutomationFoundation.Runtime.Threading.Primitives
             cancellationSource = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
         }
 
-        /// <inheritdoc />
-        public bool IsCancellationRequested
+        /// <summary>
+        /// Finalizes an instance of the <see cref="cancellationSource"/> class.
+        /// </summary>
+        ~CancellationSource()
         {
-            get
-            {
-                GuardMustNotBeDisposed();
-                return cancellationSource.IsCancellationRequested;
-            }
+            Dispose(false);
         }
 
-        /// <summary>
-        /// Gets the cancellation token for the cancellation source.
-        /// </summary>
-        public CancellationToken CancellationToken
-        {
-            get
-            {
-                GuardMustNotBeDisposed();
-                return cancellationSource.Token;
-            }
-        }
+        /// <inheritdoc />
+        public bool IsCancellationRequested => cancellationSource.IsCancellationRequested;
+
+        /// <inheritdoc />
+        public CancellationToken CancellationToken => cancellationSource.Token;
 
         /// <inheritdoc />
         public void RequestImmediateCancellation()
@@ -72,14 +65,36 @@ namespace AutomationFoundation.Runtime.Threading.Primitives
         }
 
         /// <inheritdoc />
-        protected override void Dispose(bool disposing)
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        /// <summary>
+        /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+        /// </summary>
+        /// <param name="disposing">true to release both managed and unmanaged resources, otherwise false to release unmanaged resources.</param>
+        private void Dispose(bool disposing)
         {
             if (disposing)
             {
                 cancellationSource.Dispose();
             }
 
-            base.Dispose(disposing);
+            disposed = true;
+        }
+
+
+        /// <summary>
+        /// Guards against the policy having been disposed.
+        /// </summary>
+        private void GuardMustNotBeDisposed()
+        {
+            if (disposed)
+            {
+                throw new ObjectDisposedException(nameof(CancellationSource));
+            }
         }
     }
 }
