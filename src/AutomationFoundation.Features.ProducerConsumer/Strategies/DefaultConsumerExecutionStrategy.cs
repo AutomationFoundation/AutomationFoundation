@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Threading.Tasks;
 using AutomationFoundation.Features.ProducerConsumer.Abstractions;
 using AutomationFoundation.Runtime;
@@ -66,7 +67,7 @@ namespace AutomationFoundation.Features.ProducerConsumer.Strategies
                 throw new ArgumentNullException(nameof(context));
             }
 
-            context.ConsumptionStrategy = this;
+            context.ConsumerContext.ExecutionStrategy = this;
             ProcessingContext.SetCurrent(context);
         }
 
@@ -110,7 +111,7 @@ namespace AutomationFoundation.Features.ProducerConsumer.Strategies
                 throw new InvalidOperationException("The consumer was not created.");
             }
 
-            context.Consumer = consumer;
+            context.ConsumerContext.Consumer = consumer;
         }
 
         /// <summary>
@@ -119,7 +120,13 @@ namespace AutomationFoundation.Features.ProducerConsumer.Strategies
         /// <param name="context">The contextual information about the item being consumed.</param>
         protected virtual async Task ConsumeAsync(ProducerConsumerContext<TItem> context)
         {
-            await context.Consumer.ConsumeAsync(context);
+            context.ConsumerContext.ConsumedOn = DateTime.Now;
+
+            var stopwatch = Stopwatch.StartNew();
+            await context.ConsumerContext.Consumer.ConsumeAsync(context);
+            stopwatch.Stop();
+
+            context.ConsumerContext.Duration = stopwatch.Elapsed;
         }
     }
 }

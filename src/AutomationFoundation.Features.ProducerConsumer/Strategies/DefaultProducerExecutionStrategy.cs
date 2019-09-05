@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 using AutomationFoundation.Features.ProducerConsumer.Abstractions;
@@ -63,7 +64,10 @@ namespace AutomationFoundation.Features.ProducerConsumer.Strategies
                     context = new ProducerConsumerContext<TItem>(id, scope)
                     {
                         CancellationToken = cancellationToken,
-                        ProductionStrategy = this
+                        ProducerContext =
+                        {
+                            ExecutionStrategy = this
+                        }
                     };
 
                     await AcquireSynchronizationLockAsync(context);
@@ -135,7 +139,7 @@ namespace AutomationFoundation.Features.ProducerConsumer.Strategies
                 throw new RuntimeException("The producer was not created.");
             }
 
-            context.Producer = producer;
+            context.ProducerContext.Producer = producer;
 
             return Task.CompletedTask;
         }
@@ -157,7 +161,13 @@ namespace AutomationFoundation.Features.ProducerConsumer.Strategies
 
         private async Task ProduceAsyncImpl(ProducerConsumerContext<TItem> context)
         {
-            context.Item = await context.Producer.ProduceAsync(context.CancellationToken);
+            context.ProducerContext.ProducedOn = DateTime.Now;
+
+            var stopwatch = Stopwatch.StartNew();
+            context.Item = await context.ProducerContext.Producer.ProduceAsync(context.CancellationToken);
+            stopwatch.Stop();
+
+            context.ProducerContext.Duration = stopwatch.Elapsed;
         }
 
         /// <summary>
