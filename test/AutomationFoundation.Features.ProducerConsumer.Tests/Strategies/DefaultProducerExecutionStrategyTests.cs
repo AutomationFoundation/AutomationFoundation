@@ -117,9 +117,9 @@ namespace AutomationFoundation.Features.ProducerConsumer.Strategies
         private void AssertContext(object item, DefaultProducerExecutionStrategy<object> target, ProducerConsumerContext<object> context)
         {
             Assert.AreEqual(item, context.Item);
-            Assert.AreEqual(producer.Object, context.Producer);
+            Assert.AreEqual(producer.Object, context.ProducerContext.Producer);
             Assert.AreEqual(scope.Object, context.LifetimeScope);
-            Assert.AreEqual(target, context.ProductionStrategy);
+            Assert.AreEqual(target, context.ProducerContext.ExecutionStrategy);
             Assert.AreEqual(synchronizationLock.Object, context.SynchronizationLock);
         }
     }
