@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using AutomationFoundation.Features.ProducerConsumer.Abstractions;
 
-namespace AutomationFoundation.Features.ProducerConsumer.Factories.Stubs
+namespace AutomationFoundation.Features.ProducerConsumer.Resolvers.Stubs
 {
     public class StubProducer : IProducer<object>
     {

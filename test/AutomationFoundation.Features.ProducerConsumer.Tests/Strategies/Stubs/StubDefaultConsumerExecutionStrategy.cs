@@ -14,7 +14,7 @@ namespace AutomationFoundation.Features.ProducerConsumer.Strategies.Stubs
         private ProducerConsumerContext<TItem> overrideContext;
         private bool isContextOverridden;
 
-        public StubDefaultConsumerExecutionStrategy(IConsumerFactory<TItem> consumerFactory, Action<StubDefaultConsumerExecutionStrategy<TItem>, ProducerConsumerContext<TItem>> onStartedCallback = null, Action<StubDefaultConsumerExecutionStrategy<TItem>, ProducerConsumerContext<TItem>> onConsumeCallback = null,
+        public StubDefaultConsumerExecutionStrategy(IConsumerResolver<TItem> consumerFactory, Action<StubDefaultConsumerExecutionStrategy<TItem>, ProducerConsumerContext<TItem>> onStartedCallback = null, Action<StubDefaultConsumerExecutionStrategy<TItem>, ProducerConsumerContext<TItem>> onConsumeCallback = null,
             Action<StubDefaultConsumerExecutionStrategy<TItem>, ProducerConsumerContext<TItem>> onCompletedCallback = null,
             Action<StubDefaultConsumerExecutionStrategy<TItem>, ProducerConsumerContext<TItem>> onExitCallback = null)
             : base(consumerFactory)

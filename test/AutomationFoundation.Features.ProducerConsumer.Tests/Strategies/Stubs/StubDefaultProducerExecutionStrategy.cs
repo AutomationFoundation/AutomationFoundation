@@ -6,7 +6,7 @@ namespace AutomationFoundation.Features.ProducerConsumer.Strategies.Stubs
 {
     public class StubDefaultProducerExecutionStrategy<TItem> : DefaultProducerExecutionStrategy<TItem>
     {
-        public StubDefaultProducerExecutionStrategy(IServiceScopeFactory scopeFactory, IProducerFactory<TItem> producerFactory, ISynchronizationPolicy synchronizationPolicy, bool alwaysExecuteOnDefaultValue) : base(
+        public StubDefaultProducerExecutionStrategy(IServiceScopeFactory scopeFactory, IProducerResolver<TItem> producerFactory, ISynchronizationPolicy synchronizationPolicy, bool alwaysExecuteOnDefaultValue) : base(
             scopeFactory, producerFactory, synchronizationPolicy, alwaysExecuteOnDefaultValue)
         {
         }
