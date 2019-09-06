@@ -12,13 +12,13 @@ namespace AutomationFoundation.Features.ProducerConsumer.Strategies
     /// <typeparam name="TItem">The type of object being consumed.</typeparam>
     public class DefaultConsumerExecutionStrategy<TItem> : IConsumerExecutionStrategy<TItem>
     {
-        private readonly IConsumerFactory<TItem> consumerFactory;
+        private readonly IConsumerResolver<TItem> consumerFactory;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="DefaultConsumerExecutionStrategy{TItem}"/> class.
         /// </summary>
         /// <param name="consumerFactory">The factory for creating consumers.</param>
-        public DefaultConsumerExecutionStrategy(IConsumerFactory<TItem> consumerFactory)
+        public DefaultConsumerExecutionStrategy(IConsumerResolver<TItem> consumerFactory)
         {
             this.consumerFactory = consumerFactory ?? throw new ArgumentNullException(nameof(consumerFactory));
         }
@@ -105,7 +105,7 @@ namespace AutomationFoundation.Features.ProducerConsumer.Strategies
                 throw new ArgumentNullException(nameof(context));
             }
 
-            var consumer = consumerFactory.Create(context.LifetimeScope);
+            var consumer = consumerFactory.Resolve(context);
             if (consumer == null)
             {
                 throw new InvalidOperationException("The consumer was not created.");

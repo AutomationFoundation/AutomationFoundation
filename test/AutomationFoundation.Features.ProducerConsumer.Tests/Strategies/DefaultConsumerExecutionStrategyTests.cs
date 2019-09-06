@@ -15,7 +15,7 @@ namespace AutomationFoundation.Features.ProducerConsumer.Strategies
         private Mock<IServiceScope> lifetimeScope;
         private ProducerConsumerContext<object> context;
         private Mock<IConsumer<object>> consumer;
-        private Mock<IConsumerFactory<object>> consumerFactory;
+        private Mock<IConsumerResolver<object>> resolver;
 
         [SetUp]
         public void Setup()
@@ -24,8 +24,8 @@ namespace AutomationFoundation.Features.ProducerConsumer.Strategies
             context = new ProducerConsumerContext<object>(Guid.NewGuid(), lifetimeScope.Object);
 
             consumer = new Mock<IConsumer<object>>();
-            consumerFactory = new Mock<IConsumerFactory<object>>();
-            consumerFactory.Setup(o => o.Create(lifetimeScope.Object)).Returns(consumer.Object);
+            resolver = new Mock<IConsumerResolver<object>>();
+            resolver.Setup(o => o.Resolve(context)).Returns(consumer.Object);
         }
 
         [Test]
@@ -37,7 +37,7 @@ namespace AutomationFoundation.Features.ProducerConsumer.Strategies
         [Test]
         public void ThrowsExceptionWhenContextIsNull()
         {
-            var target = new StubDefaultConsumerExecutionStrategy<object>(consumerFactory.Object);
+            var target = new StubDefaultConsumerExecutionStrategy<object>(resolver.Object);
             
             Assert.ThrowsAsync<ArgumentNullException>(async () => await target.ExecuteAsync(null));
         }
@@ -45,7 +45,7 @@ namespace AutomationFoundation.Features.ProducerConsumer.Strategies
         [Test]
         public void ThrowsExceptionWhenContextIsNull1()
         {
-            var target = new StubDefaultConsumerExecutionStrategy<object>(consumerFactory.Object);
+            var target = new StubDefaultConsumerExecutionStrategy<object>(resolver.Object);
             target.SetOverrideContext(null);
 
             Assert.ThrowsAsync<ArgumentNullException>(async () => await target.ExecuteAsync(context));
@@ -54,7 +54,7 @@ namespace AutomationFoundation.Features.ProducerConsumer.Strategies
         [Test]
         public void ThrowsExceptionWhenContextIsNull2()
         {
-            var target = new StubDefaultConsumerExecutionStrategy<object>(consumerFactory.Object, (strategy, context) =>
+            var target = new StubDefaultConsumerExecutionStrategy<object>(resolver.Object, (strategy, context) =>
             {
                 strategy.SetOverrideContext(null);
             });
@@ -65,9 +65,9 @@ namespace AutomationFoundation.Features.ProducerConsumer.Strategies
         [Test]
         public void ThrowsAnExceptionWhenTheConsumerIsNull()
         {
-            consumerFactory.Setup(o => o.Create(lifetimeScope.Object)).Returns((IConsumer<object>)null);
+            resolver.Setup(o => o.Resolve(context)).Returns((IConsumer<object>)null);
 
-            var target = new StubDefaultConsumerExecutionStrategy<object>(consumerFactory.Object);
+            var target = new StubDefaultConsumerExecutionStrategy<object>(resolver.Object);
 
             Assert.ThrowsAsync<InvalidOperationException>(async () => await target.ExecuteAsync(context));
         }
@@ -75,9 +75,9 @@ namespace AutomationFoundation.Features.ProducerConsumer.Strategies
         [Test]
         public void ReleasesTheProcessingContextWhenFailsToCreateConsumer()
         {
-            consumerFactory.Setup(o => o.Create(lifetimeScope.Object)).Throws<InvalidOperationException>();
+            resolver.Setup(o => o.Resolve(context)).Throws<InvalidOperationException>();
 
-            var target = new StubDefaultConsumerExecutionStrategy<object>(consumerFactory.Object, onExitCallback: (strategy, context) => {
+            var target = new StubDefaultConsumerExecutionStrategy<object>(resolver.Object, onExitCallback: (strategy, context) => {
                 Assert.IsNull(ProcessingContext.Current);
             });
 
@@ -89,7 +89,7 @@ namespace AutomationFoundation.Features.ProducerConsumer.Strategies
         {
             bool called1 = false, called2 = false, called3 = false, called4 = false;
 
-            var target = new StubDefaultConsumerExecutionStrategy<object>(consumerFactory.Object,
+            var target = new StubDefaultConsumerExecutionStrategy<object>(resolver.Object,
                 (strategy, context) =>
                 {
                     called1 = true;
