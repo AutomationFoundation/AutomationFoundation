@@ -4,7 +4,7 @@
     /// Identifies an object which can create an <see cref="IConsumer{TItem}"/>
     /// </summary>
     /// <typeparam name="TItem">The type of item being consumed.</typeparam>
-    public interface IConsumerResolver<TItem>
+    public interface IConsumerResolver<in TItem>
     {
         /// <summary>
         /// Resolves the consumer.
