@@ -11,7 +11,7 @@
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <RepositoryType>git</RepositoryType>
     <PackageTags>automation,automationfoundation,runtime</PackageTags>
-    <RepositoryUrl>https://github.com/winnster/AutomationFoundation.Runtime.Abstractions</RepositoryUrl>
+    <RepositoryUrl>https://github.com/winnster/AutomationFoundation</RepositoryUrl>
     <Description>Contains the abstractions for the Automation Foundation runtime.</Description>
   </PropertyGroup>
 

@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
@@ -8,7 +8,7 @@
     <InformationalVersion>$(Version)</InformationalVersion>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <RepositoryUrl>https://github.com/winnster/AutomationFoundation.Hosting</RepositoryUrl>
+    <RepositoryUrl>https://github.com/winnster/AutomationFoundation</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageTags>automation,automationfoundation,hosting</PackageTags>
     <Description>Contains the implementation of Hosting components for the Automation Foundation runtime.</Description>

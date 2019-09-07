@@ -13,7 +13,7 @@
     <PackageProjectUrl></PackageProjectUrl>
     <PackageLicenseUrl></PackageLicenseUrl>
     <RepositoryType>git</RepositoryType>
-    <RepositoryUrl>https://github.com/winnster/AutomationFoundation.Features.ProducerConsumer.Abstractions</RepositoryUrl>
+    <RepositoryUrl>https://github.com/winnster/AutomationFoundation</RepositoryUrl>
     <PackageTags>automation,automationfoundation,producer,consumer,producerconsumer</PackageTags>
     <Description>Contains the abstractions for the producer/consumer implementation for the Automation Foundation runtime.</Description>
   </PropertyGroup>

@@ -14,7 +14,7 @@
     <PackageLicenseUrl></PackageLicenseUrl>
     <AssemblyName>AutomationFoundation.Features.ProducerConsumer</AssemblyName>
     <RepositoryType>git</RepositoryType>
-    <RepositoryUrl>https://github.com/winnster/AutomationFoundation.Features.ProducerConsumer</RepositoryUrl>
+    <RepositoryUrl>https://github.com/winnster/AutomationFoundation</RepositoryUrl>
     <PackageTags>automation,automationfoundation,producer,consumer,producerconsumer</PackageTags>
     <Description>Contains the producer/consumer implementation for the Automation Foundation runtime.</Description>
   </PropertyGroup>

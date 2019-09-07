@@ -9,7 +9,7 @@
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <RepositoryType>git</RepositoryType>
-    <RepositoryUrl>https://github.com/winnster/AutomationFoundation.Runtime</RepositoryUrl>
+    <RepositoryUrl>https://github.com/winnster/AutomationFoundation</RepositoryUrl>
     <PackageTags>automation,automationfoundation,runtime</PackageTags>
     <Description>Contains the runtime for the Automation Foundation framework.</Description>
   </PropertyGroup>
