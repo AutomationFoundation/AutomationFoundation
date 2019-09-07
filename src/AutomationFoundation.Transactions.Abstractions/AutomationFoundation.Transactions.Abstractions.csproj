@@ -10,7 +10,7 @@
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <RepositoryType>git</RepositoryType>
-    <RepositoryUrl>https://github.com/winnster/AutomationFoundation.Transactions.Abstractions</RepositoryUrl>
+    <RepositoryUrl>https://github.com/winnster/AutomationFoundation</RepositoryUrl>
     <PackageTags>automation,automationfoundation,transactions</PackageTags>
     <Description>Contains the abstractions for transactions used within the Automation Foundation runtime.</Description>
   </PropertyGroup>
