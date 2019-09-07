@@ -65,12 +65,12 @@ namespace AutomationFoundation.Hosting
                         throw new InvalidOperationException("The processor was not built.");
                     }
 
-                    runtime.Processors.Add(processor);
+                    runtime.Add(processor);
                 }
 
                 foreach (var processor in processors)
                 {
-                    runtime.Processors.Add(processor);
+                    runtime.Add(processor);
                 }
 
                 return runtime;

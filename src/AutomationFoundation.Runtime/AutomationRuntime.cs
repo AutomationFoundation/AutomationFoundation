@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using AutomationFoundation.Runtime.Abstractions;
 
@@ -10,22 +11,24 @@ namespace AutomationFoundation.Runtime
     /// </summary>
     public sealed class AutomationRuntime : IRuntime
     {
+        private readonly object syncRoot = new object();
+        private readonly IList<IProcessor> processors = new List<IProcessor>();
+
         private bool disposed;
 
         /// <summary>
         /// Gets the collection of processors.
         /// </summary>
-        public ICollection<IProcessor> Processors { get; }
+        public IEnumerable<IProcessor> Processors => new ReadOnlyCollection<IProcessor>(processors);
 
         /// <inheritdoc />
-        public bool IsActive => Processors.Any(o => o.State >= ProcessorState.Started);
+        public bool IsActive => processors.Any(o => o.State >= ProcessorState.Started);
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AutomationRuntime"/> class.
         /// </summary>
         public AutomationRuntime()
         {
-            Processors = new ProcessorCollection(this);
         }
 
         /// <summary>
@@ -37,13 +40,66 @@ namespace AutomationFoundation.Runtime
         }
 
         /// <inheritdoc />
+        public bool Add(IProcessor processor)
+        {
+            if (processor == null)
+            {
+                throw new ArgumentNullException(nameof(processor));
+            }
+            
+            GuardMustNotBeDisposed();
+
+            lock (syncRoot)
+            {
+                GuardMustNotBeDisposed();
+
+                if (!processors.Contains(processor))
+                {
+                    processors.Add(processor);
+                    return true;
+                }
+
+                return false;
+            }
+        }
+
+        /// <inheritdoc />
+        public bool Remove(IProcessor processor)
+        {
+            if (processor == null)
+            {
+                throw new ArgumentNullException(nameof(processor));
+            }
+
+            GuardMustNotBeDisposed();
+
+            lock (syncRoot)
+            {
+                GuardMustNotBeDisposed();
+
+                if (processors.Contains(processor))
+                {
+                    processors.Remove(processor);
+                    return true;
+                }
+
+                return false;
+            }
+        }
+
+        /// <inheritdoc />
         public void Start()
         {
             GuardMustNotBeDisposed();
-
-            foreach (var processor in Processors)
+            
+            lock (syncRoot)
             {
-                processor.Start();
+                GuardMustNotBeDisposed();
+
+                foreach (var processor in Processors)
+                {
+                    processor.Start();
+                }
             }
         }
 
@@ -52,9 +108,12 @@ namespace AutomationFoundation.Runtime
         {
             GuardMustNotBeDisposed();
 
-            foreach (var processor in Processors)
+            lock (syncRoot)
             {
-                processor.Stop();
+                foreach (var processor in Processors)
+                {
+                    processor.Stop();
+                }
             }
         }
 
@@ -69,20 +128,26 @@ namespace AutomationFoundation.Runtime
         {
             if (disposing)
             {
-                foreach (var processor in Processors)
+                lock (syncRoot)
                 {
-                    processor.Dispose();
+                    foreach (var processor in Processors)
+                    {
+                        processor.Dispose();
+                    }
+
+                    disposed = true;
                 }
             }
-
-            disposed = true;
         }
 
         private void GuardMustNotBeDisposed()
         {
-            if (disposed)
+            lock (syncRoot)
             {
-                throw new ObjectDisposedException(nameof(AutomationRuntime));
+                if (disposed)
+                {
+                    throw new ObjectDisposedException(nameof(AutomationRuntime));
+                }
             }
         }
     }
