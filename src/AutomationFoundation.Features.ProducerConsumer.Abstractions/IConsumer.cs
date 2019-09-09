@@ -1,5 +1,4 @@
-﻿using System.Threading;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 
 namespace AutomationFoundation.Features.ProducerConsumer.Abstractions
 {
@@ -7,7 +6,7 @@ namespace AutomationFoundation.Features.ProducerConsumer.Abstractions
     /// Identifies a consumer of objects.
     /// </summary>
     /// <typeparam name="TItem">The type of objects being consumed.</typeparam>
-    public interface IConsumer<in TItem>
+    public interface IConsumer<TItem>
     {
         /// <summary>
         /// Consumes the object.

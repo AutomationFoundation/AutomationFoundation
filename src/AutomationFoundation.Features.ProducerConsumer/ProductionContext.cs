@@ -7,26 +7,18 @@ namespace AutomationFoundation.Features.ProducerConsumer
     /// Contains contextual information regarding the production of work.
     /// </summary>
     /// <typeparam name="TItem">The type of item which was produced.</typeparam>
-    public class ProducerContext<TItem>
+    public class ProductionContext<TItem> : IProductionContext<TItem>
     {
-        /// <summary>
-        /// Gets or sets the producer instance which produced the item.
-        /// </summary>
+        /// <inheritdoc />
         public IProducer<TItem> Producer { get; set; }
 
-        /// <summary>
-        /// Gets or sets the production strategy for producing the item.
-        /// </summary>
+        /// <inheritdoc />
         public IProducerExecutionStrategy<TItem> ExecutionStrategy { get; set; }
 
-        /// <summary>
-        /// Gets or sets the date and time when the item was produced.
-        /// </summary>
+        /// <inheritdoc />
         public DateTime ProducedOn { get; set; }
 
-        /// <summary>
-        /// Gets or sets the duration of time taken to produce the item.
-        /// </summary>
+        /// <inheritdoc />
         public TimeSpan? Duration { get; set; }
     }
 }

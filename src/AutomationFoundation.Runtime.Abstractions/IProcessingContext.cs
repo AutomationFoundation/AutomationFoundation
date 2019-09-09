@@ -20,8 +20,13 @@ namespace AutomationFoundation.Runtime
         IServiceScope LifetimeScope { get; }
 
         /// <summary>
-        /// Gets the cancellation token to monitor for cancellation requests.
+        /// Gets or sets the cancellation token to monitor for cancellation requests.
         /// </summary>
-        CancellationToken CancellationToken { get; }
+        CancellationToken CancellationToken { get; set; }
+
+        /// <summary>
+        /// Gets or sets the processor which is processing the data.
+        /// </summary>
+        Processor Processor { get; set; }
     }
 }

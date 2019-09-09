@@ -9,12 +9,12 @@ namespace AutomationFoundation.Runtime
     /// </summary>
     public abstract class ProcessingContext : IProcessingContext
     {
-        private static readonly AsyncLocal<ProcessingContext> Local = new AsyncLocal<ProcessingContext>();
+        private static readonly AsyncLocal<IProcessingContext> Local = new AsyncLocal<IProcessingContext>();
 
         /// <summary>
         /// Gets the current processing context.
         /// </summary>
-        public static ProcessingContext Current
+        public static IProcessingContext Current
         {
             get
             {
@@ -40,7 +40,7 @@ namespace AutomationFoundation.Runtime
         /// Sets the current processing context.
         /// </summary>
         /// <param name="context">The context which is being processed.</param>
-        public static void SetCurrent(ProcessingContext context)
+        public static void SetCurrent(IProcessingContext context)
         {
             if (context == null)
             {
@@ -53,20 +53,17 @@ namespace AutomationFoundation.Runtime
             }
         }
 
-        /// <summary>
-        /// Gets the unique identifier.
-        /// </summary>
+        /// <inheritdoc />
         public Guid Id { get; }
 
-        /// <summary>
-        /// Gets the service scope.
-        /// </summary>
+        /// <inheritdoc />
         public IServiceScope LifetimeScope { get; }
 
-        /// <summary>
-        /// Gets or sets the cancellation token to monitor for cancellation requests.
-        /// </summary>
+        /// <inheritdoc />
         public CancellationToken CancellationToken { get; set; }
+
+        /// <inheritdoc />
+        public Processor Processor { get; set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ProcessingContext"/> class.

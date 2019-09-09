@@ -22,7 +22,7 @@ namespace AutomationFoundation.Features.ProducerConsumer.Engines
         private readonly ScheduledEngineOptions options;
 
         private ICancellationSource cancellationSource;
-        private Action<ProducerConsumerContext<TItem>> onProducedCallback;
+        private Action<IProducerConsumerContext<TItem>> onProducedCallback;
 
         private bool initialized;
         private Task task;
@@ -50,7 +50,7 @@ namespace AutomationFoundation.Features.ProducerConsumer.Engines
         }
 
         /// <inheritdoc />
-        public void Initialize(Action<ProducerConsumerContext<TItem>> onProducedCallback, CancellationToken cancellationToken)
+        public void Initialize(Action<IProducerConsumerContext<TItem>> onProducedCallback, CancellationToken cancellationToken)
         {
             if (onProducedCallback == null)
             {

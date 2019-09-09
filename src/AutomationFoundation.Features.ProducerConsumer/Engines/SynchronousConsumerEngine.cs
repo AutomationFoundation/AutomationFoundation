@@ -27,7 +27,7 @@ namespace AutomationFoundation.Features.ProducerConsumer.Engines
         }
 
         /// <inheritdoc />
-        public void Consume(ProducerConsumerContext<TItem> context)
+        public void Consume(IProducerConsumerContext<TItem> context)
         {
             if (context == null)
             {
@@ -45,7 +45,7 @@ namespace AutomationFoundation.Features.ProducerConsumer.Engines
         /// </summary>
         /// <param name="context">The contextual information about what was produced.</param>
         /// <returns>The worker used to work the produced item.</returns>
-        protected virtual IWorker CreateWorker(ProducerConsumerContext<TItem> context)
+        protected virtual IWorker CreateWorker(IProducerConsumerContext<TItem> context)
         {
             return pool.Get(() => OnConsume(context), null);
         }
@@ -54,7 +54,7 @@ namespace AutomationFoundation.Features.ProducerConsumer.Engines
         /// Occurs when an item is being consumed.
         /// </summary>
         /// <param name="context">The contextual information about what was produced.</param>
-        protected virtual void OnConsume(ProducerConsumerContext<TItem> context)
+        protected virtual void OnConsume(IProducerConsumerContext<TItem> context)
         {
             using (var task = runner.ExecuteAsync(context))
             {

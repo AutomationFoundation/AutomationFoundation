@@ -7,26 +7,18 @@ namespace AutomationFoundation.Features.ProducerConsumer
     /// Contains contextual information regarding the consumption of work.
     /// </summary>
     /// <typeparam name="TItem">The type of item which is being consumed.</typeparam>
-    public class ConsumerContext<TItem>
+    public class ConsumptionContext<TItem> : IConsumptionContext<TItem>
     {
-        /// <summary>
-        /// Gets or sets the consumer which will consume the item.
-        /// </summary>
+        /// <inheritdoc />
         public IConsumer<TItem> Consumer { get; set; }
 
-        /// <summary>
-        /// Gets or sets the consumption strategy for consuming the item.
-        /// </summary>
+        /// <inheritdoc />
         public IConsumerExecutionStrategy<TItem> ExecutionStrategy { get; set; }
 
-        /// <summary>
-        /// Gets or sets the date and time when the item was produced.
-        /// </summary>
+        /// <inheritdoc />
         public DateTime ConsumedOn { get; set; }
 
-        /// <summary>
-        /// Gets or sets the duration of time taken to produce the item.
-        /// </summary>
+        /// <inheritdoc />
         public TimeSpan? Duration { get; set; }
     }
 }

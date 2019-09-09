@@ -36,7 +36,7 @@ namespace AutomationFoundation.Features.ProducerConsumer.Strategies
         }
 
         /// <inheritdoc />
-        public Task<bool> ExecuteAsync(Action<ProducerConsumerContext<TItem>> onProducedCallback, CancellationToken cancellationToken)
+        public Task<bool> ExecuteAsync(Action<IProducerConsumerContext<TItem>> onProducedCallback, CancellationToken cancellationToken)
         {
             if (onProducedCallback == null)
             {
@@ -46,7 +46,7 @@ namespace AutomationFoundation.Features.ProducerConsumer.Strategies
             return RunAsyncImpl(onProducedCallback, cancellationToken);
         }
 
-        private async Task<bool> RunAsyncImpl(Action<ProducerConsumerContext<TItem>> onProducedCallback, CancellationToken cancellationToken)
+        private async Task<bool> RunAsyncImpl(Action<IProducerConsumerContext<TItem>> onProducedCallback, CancellationToken cancellationToken)
         {
             IServiceScope scope = null;
 
@@ -64,7 +64,7 @@ namespace AutomationFoundation.Features.ProducerConsumer.Strategies
                     context = new ProducerConsumerContext<TItem>(id, scope)
                     {
                         CancellationToken = cancellationToken,
-                        ProducerContext =
+                        ProductionContext =
                         {
                             ExecutionStrategy = this
                         }
@@ -102,7 +102,7 @@ namespace AutomationFoundation.Features.ProducerConsumer.Strategies
         /// </summary>
         /// <param name="context">The contextual information for the item which was produced.</param>
         /// <returns>The synchronization lock.</returns>
-        protected virtual Task AcquireSynchronizationLockAsync(ProducerConsumerContext<TItem> context)
+        protected virtual Task AcquireSynchronizationLockAsync(IProducerConsumerContext<TItem> context)
         {
             if (context == null)
             {
@@ -112,7 +112,7 @@ namespace AutomationFoundation.Features.ProducerConsumer.Strategies
             return AcquireSynchronizationLockAsyncImpl(context);
         }
 
-        private async Task AcquireSynchronizationLockAsyncImpl(ProducerConsumerContext<TItem> context)
+        private async Task AcquireSynchronizationLockAsyncImpl(IProducerConsumerContext<TItem> context)
         {
             if (synchronizationPolicy == null)
             {
@@ -126,7 +126,7 @@ namespace AutomationFoundation.Features.ProducerConsumer.Strategies
         /// Creates a producer.
         /// </summary>
         /// <param name="context">The contextual information for the item which was produced.</param>
-        protected virtual Task CreateProducerAsync(ProducerConsumerContext<TItem> context)
+        protected virtual Task CreateProducerAsync(IProducerConsumerContext<TItem> context)
         {
             if (context == null)
             {
@@ -139,7 +139,7 @@ namespace AutomationFoundation.Features.ProducerConsumer.Strategies
                 throw new RuntimeException("The producer was not created.");
             }
 
-            context.ProducerContext.Producer = producer;
+            context.ProductionContext.Producer = producer;
 
             return Task.CompletedTask;
         }
@@ -149,7 +149,7 @@ namespace AutomationFoundation.Features.ProducerConsumer.Strategies
         /// </summary>
         /// <param name="context">The contextual information for the item which was produced.</param>
         /// <returns>The task to await.</returns>
-        protected virtual Task ProduceAsync(ProducerConsumerContext<TItem> context)
+        protected virtual Task ProduceAsync(IProducerConsumerContext<TItem> context)
         {
             if (context == null)
             {
@@ -159,15 +159,15 @@ namespace AutomationFoundation.Features.ProducerConsumer.Strategies
             return ProduceAsyncImpl(context);
         }
 
-        private async Task ProduceAsyncImpl(ProducerConsumerContext<TItem> context)
+        private async Task ProduceAsyncImpl(IProducerConsumerContext<TItem> context)
         {
-            context.ProducerContext.ProducedOn = DateTime.Now;
+            context.ProductionContext.ProducedOn = DateTime.Now;
 
             var stopwatch = Stopwatch.StartNew();
-            context.Item = await context.ProducerContext.Producer.ProduceAsync(context.CancellationToken);
+            context.Item = await context.ProductionContext.Producer.ProduceAsync(context.CancellationToken);
             stopwatch.Stop();
 
-            context.ProducerContext.Duration = stopwatch.Elapsed;
+            context.ProductionContext.Duration = stopwatch.Elapsed;
         }
 
         /// <summary>
@@ -200,7 +200,7 @@ namespace AutomationFoundation.Features.ProducerConsumer.Strategies
         /// </summary>
         /// <param name="context">The contextual information for the item which was produced.</param>
         /// <returns>true if the callback should be executed, otherwise false.</returns>
-        protected virtual bool ShouldExecuteCallback(ProducerConsumerContext<TItem> context)
+        protected virtual bool ShouldExecuteCallback(IProducerConsumerContext<TItem> context)
         {
             if (context == null)
             {

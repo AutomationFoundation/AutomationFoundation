@@ -24,7 +24,7 @@ namespace AutomationFoundation.Features.ProducerConsumer.Strategies
         }
 
         /// <inheritdoc />
-        public Task ExecuteAsync(ProducerConsumerContext<TItem> context)
+        public Task ExecuteAsync(IProducerConsumerContext<TItem> context)
         {
             if (context == null)
             {
@@ -34,7 +34,7 @@ namespace AutomationFoundation.Features.ProducerConsumer.Strategies
             return ExecuteAsyncImpl(context);
         }
 
-        private async Task ExecuteAsyncImpl(ProducerConsumerContext<TItem> context)
+        private async Task ExecuteAsyncImpl(IProducerConsumerContext<TItem> context)
         {
             try
             {
@@ -60,14 +60,14 @@ namespace AutomationFoundation.Features.ProducerConsumer.Strategies
         /// Occurs when the strategy is starting to execute.
         /// </summary>
         /// <param name="context">The contextual information about the item produced.</param>
-        protected virtual void OnStarted(ProducerConsumerContext<TItem> context)
+        protected virtual void OnStarted(IProducerConsumerContext<TItem> context)
         {
             if (context == null)
             {
                 throw new ArgumentNullException(nameof(context));
             }
 
-            context.ConsumerContext.ExecutionStrategy = this;
+            context.ConsumptionContext.ExecutionStrategy = this;
             ProcessingContext.SetCurrent(context);
         }
 
@@ -75,7 +75,7 @@ namespace AutomationFoundation.Features.ProducerConsumer.Strategies
         /// Occurs when the strategy has completed execution.
         /// </summary>
         /// <param name="context">The contextual information about the item produced.</param>
-        protected virtual void OnCompleted(ProducerConsumerContext<TItem> context)
+        protected virtual void OnCompleted(IProducerConsumerContext<TItem> context)
         {
             ProcessingContext.Clear();
         }
@@ -84,7 +84,7 @@ namespace AutomationFoundation.Features.ProducerConsumer.Strategies
         /// Occurs when the strategy is exiting.
         /// </summary>
         /// <param name="context">The contextual information about the item produced.</param>
-        protected virtual void OnExit(ProducerConsumerContext<TItem> context)
+        protected virtual void OnExit(IProducerConsumerContext<TItem> context)
         {
             if (context == null)
             {
@@ -98,7 +98,7 @@ namespace AutomationFoundation.Features.ProducerConsumer.Strategies
         /// Creates the consumer which will consume the object.
         /// </summary>
         /// <param name="context">The contextual information about the item being consumed.</param>
-        protected virtual void CreateConsumer(ProducerConsumerContext<TItem> context)
+        protected virtual void CreateConsumer(IProducerConsumerContext<TItem> context)
         {
             if (context == null)
             {
@@ -111,22 +111,22 @@ namespace AutomationFoundation.Features.ProducerConsumer.Strategies
                 throw new InvalidOperationException("The consumer was not created.");
             }
 
-            context.ConsumerContext.Consumer = consumer;
+            context.ConsumptionContext.Consumer = consumer;
         }
 
         /// <summary>
         /// Consumes the item.
         /// </summary>
         /// <param name="context">The contextual information about the item being consumed.</param>
-        protected virtual async Task ConsumeAsync(ProducerConsumerContext<TItem> context)
+        protected virtual async Task ConsumeAsync(IProducerConsumerContext<TItem> context)
         {
-            context.ConsumerContext.ConsumedOn = DateTime.Now;
+            context.ConsumptionContext.ConsumedOn = DateTime.Now;
 
             var stopwatch = Stopwatch.StartNew();
-            await context.ConsumerContext.Consumer.ConsumeAsync(context);
+            await context.ConsumptionContext.Consumer.ConsumeAsync(context);
             stopwatch.Stop();
 
-            context.ConsumerContext.Duration = stopwatch.Elapsed;
+            context.ConsumptionContext.Duration = stopwatch.Elapsed;
         }
     }
 }
