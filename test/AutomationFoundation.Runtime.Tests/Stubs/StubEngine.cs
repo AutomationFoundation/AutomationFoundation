@@ -1,4 +1,4 @@
-﻿namespace AutomationFoundation.Features.ProducerConsumer.Engines
+﻿namespace AutomationFoundation.Runtime.Stubs
 {
     public class StubEngine : Engine
     {

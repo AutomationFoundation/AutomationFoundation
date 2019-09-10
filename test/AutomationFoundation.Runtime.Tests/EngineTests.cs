@@ -1,7 +1,8 @@
 ﻿using System;
+using AutomationFoundation.Runtime.Stubs;
 using NUnit.Framework;
 
-namespace AutomationFoundation.Features.ProducerConsumer.Engines
+namespace AutomationFoundation.Runtime
 {
     [TestFixture]
     public class EngineTests
