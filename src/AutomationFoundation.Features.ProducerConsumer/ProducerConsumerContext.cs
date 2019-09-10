@@ -20,22 +20,17 @@ namespace AutomationFoundation.Features.ProducerConsumer
         /// <summary>
         /// Gets or sets the synchronization lock for the produced item.
         /// </summary>
-        public ISynchronizationLock SynchronizationLock { get; internal set; }
-
-        /// <summary>
-        /// Gets or sets the processor.
-        /// </summary>
-        public ProducerConsumerProcessor<TItem> Processor { get; internal set; }
+        public ISynchronizationLock SynchronizationLock { get; set; }
 
         /// <summary>
         /// Gets the contextual information regarding the production of work.
         /// </summary>
-        public ProducerContext<TItem> ProducerContext { get; } = new ProducerContext<TItem>();
+        public IProductionContext<TItem> ProductionContext { get; } = new ProductionContext<TItem>();
 
         /// <summary>
         /// Gets the contextual information regarding the consumption of work.
         /// </summary>
-        public ConsumerContext<TItem> ConsumerContext { get; } = new ConsumerContext<TItem>();
+        public IConsumptionContext<TItem> ConsumptionContext { get; } = new ConsumptionContext<TItem>();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ProducerConsumerContext{TItem}"/> class.

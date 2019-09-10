@@ -6,17 +6,17 @@ namespace AutomationFoundation.Features.ProducerConsumer.Strategies.Stubs
 {
     public class StubDefaultConsumerExecutionStrategy<TItem> : DefaultConsumerExecutionStrategy<TItem>
     {
-        private readonly Action<StubDefaultConsumerExecutionStrategy<TItem>, ProducerConsumerContext<TItem>> onStartedCallback;
-        private readonly Action<StubDefaultConsumerExecutionStrategy<TItem>, ProducerConsumerContext<TItem>> onConsumeCallback;
-        private readonly Action<StubDefaultConsumerExecutionStrategy<TItem>, ProducerConsumerContext<TItem>> onCompletedCallback;
-        private readonly Action<StubDefaultConsumerExecutionStrategy<TItem>, ProducerConsumerContext<TItem>> onExitCallback;
+        private readonly Action<StubDefaultConsumerExecutionStrategy<TItem>, IProducerConsumerContext<TItem>> onStartedCallback;
+        private readonly Action<StubDefaultConsumerExecutionStrategy<TItem>, IProducerConsumerContext<TItem>> onConsumeCallback;
+        private readonly Action<StubDefaultConsumerExecutionStrategy<TItem>, IProducerConsumerContext<TItem>> onCompletedCallback;
+        private readonly Action<StubDefaultConsumerExecutionStrategy<TItem>, IProducerConsumerContext<TItem>> onExitCallback;
 
-        private ProducerConsumerContext<TItem> overrideContext;
+        private IProducerConsumerContext<TItem> overrideContext;
         private bool isContextOverridden;
 
-        public StubDefaultConsumerExecutionStrategy(IConsumerResolver<TItem> consumerFactory, Action<StubDefaultConsumerExecutionStrategy<TItem>, ProducerConsumerContext<TItem>> onStartedCallback = null, Action<StubDefaultConsumerExecutionStrategy<TItem>, ProducerConsumerContext<TItem>> onConsumeCallback = null,
-            Action<StubDefaultConsumerExecutionStrategy<TItem>, ProducerConsumerContext<TItem>> onCompletedCallback = null,
-            Action<StubDefaultConsumerExecutionStrategy<TItem>, ProducerConsumerContext<TItem>> onExitCallback = null)
+        public StubDefaultConsumerExecutionStrategy(IConsumerResolver<TItem> consumerFactory, Action<StubDefaultConsumerExecutionStrategy<TItem>, IProducerConsumerContext<TItem>> onStartedCallback = null, Action<StubDefaultConsumerExecutionStrategy<TItem>, IProducerConsumerContext<TItem>> onConsumeCallback = null,
+            Action<StubDefaultConsumerExecutionStrategy<TItem>, IProducerConsumerContext<TItem>> onCompletedCallback = null,
+            Action<StubDefaultConsumerExecutionStrategy<TItem>, IProducerConsumerContext<TItem>> onExitCallback = null)
             : base(consumerFactory)
         {
             this.onStartedCallback = onStartedCallback;
@@ -25,13 +25,13 @@ namespace AutomationFoundation.Features.ProducerConsumer.Strategies.Stubs
             this.onExitCallback = onExitCallback;
         }
 
-        public void SetOverrideContext(ProducerConsumerContext<TItem> context)
+        public void SetOverrideContext(IProducerConsumerContext<TItem> context)
         {
             overrideContext = context;
             isContextOverridden = true;
         }
 
-        private ProducerConsumerContext<TItem> GetContext(ProducerConsumerContext<TItem> context)
+        private IProducerConsumerContext<TItem> GetContext(IProducerConsumerContext<TItem> context)
         {
             if (isContextOverridden)
             {
@@ -41,7 +41,7 @@ namespace AutomationFoundation.Features.ProducerConsumer.Strategies.Stubs
             return context;
         }
 
-        protected override void OnStarted(ProducerConsumerContext<TItem> context)
+        protected override void OnStarted(IProducerConsumerContext<TItem> context)
         {
             var c = GetContext(context);
 
@@ -49,14 +49,14 @@ namespace AutomationFoundation.Features.ProducerConsumer.Strategies.Stubs
             onStartedCallback?.Invoke(this, c);
         }
 
-        protected override void CreateConsumer(ProducerConsumerContext<TItem> context)
+        protected override void CreateConsumer(IProducerConsumerContext<TItem> context)
         {
             var c = GetContext(context);
 
             base.CreateConsumer(c);
         }
 
-        protected override async Task ConsumeAsync(ProducerConsumerContext<TItem> context)
+        protected override async Task ConsumeAsync(IProducerConsumerContext<TItem> context)
         {
             var c = GetContext(context);
 
@@ -64,7 +64,7 @@ namespace AutomationFoundation.Features.ProducerConsumer.Strategies.Stubs
             onConsumeCallback?.Invoke(this, c);
         }
 
-        protected override void OnCompleted(ProducerConsumerContext<TItem> context)
+        protected override void OnCompleted(IProducerConsumerContext<TItem> context)
         {
             var c = GetContext(context);
 
@@ -72,7 +72,7 @@ namespace AutomationFoundation.Features.ProducerConsumer.Strategies.Stubs
             onCompletedCallback?.Invoke(this, c);
         }
 
-        protected override void OnExit(ProducerConsumerContext<TItem> context)
+        protected override void OnExit(IProducerConsumerContext<TItem> context)
         {
             var c = GetContext(context);
 

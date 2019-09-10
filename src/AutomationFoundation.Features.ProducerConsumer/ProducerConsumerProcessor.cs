@@ -92,7 +92,7 @@ namespace AutomationFoundation.Features.ProducerConsumer
             return Task.WhenAll(tasks);
         }
 
-        private void OnProducedCallback(ProducerConsumerContext<TItem> context)
+        private void OnProducedCallback(IProducerConsumerContext<TItem> context)
         {
             context.Processor = this;
             context.CancellationToken = cancellationSource.CancellationToken;

@@ -11,7 +11,7 @@
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/winnster/AutomationFoundation</RepositoryUrl>
     <PackageTags>automation,automationfoundation,runtime</PackageTags>
-    <Description>Contains adapters for System.Data interoperability wit hthe Automation Foundation framework.</Description>
+    <Description>Contains adapters for System.Data interoperability with the Automation Foundation framework.</Description>
   </PropertyGroup>
 
   <ItemGroup>
