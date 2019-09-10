@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading;
+using AutomationFoundation.Runtime.Abstractions;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace AutomationFoundation.Runtime
@@ -63,7 +64,7 @@ namespace AutomationFoundation.Runtime
         public CancellationToken CancellationToken { get; set; }
 
         /// <inheritdoc />
-        public Processor Processor { get; set; }
+        public IProcessor Processor { get; set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ProcessingContext"/> class.

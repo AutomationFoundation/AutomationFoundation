@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading;
+using AutomationFoundation.Runtime.Abstractions;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace AutomationFoundation.Runtime
@@ -27,6 +28,6 @@ namespace AutomationFoundation.Runtime
         /// <summary>
         /// Gets or sets the processor which is processing the data.
         /// </summary>
-        Processor Processor { get; set; }
+        IProcessor Processor { get; set; }
     }
 }
