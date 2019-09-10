@@ -15,7 +15,7 @@
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/winnster/AutomationFoundation</RepositoryUrl>
     <PackageTags>automation,automationfoundation,producer,consumer,producerconsumer</PackageTags>
-    <Description>Contains the abstractions for the producer/consumer implementation for the Automation Foundation runtime.</Description>
+    <Description>Contains the abstractions for the producer/consumer implementation for the Automation Foundation framework.</Description>
   </PropertyGroup>
 
   <ItemGroup>

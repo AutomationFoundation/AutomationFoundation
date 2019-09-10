@@ -12,7 +12,7 @@
     <RepositoryType>git</RepositoryType>
     <PackageTags>automation,automationfoundation,runtime</PackageTags>
     <RepositoryUrl>https://github.com/winnster/AutomationFoundation</RepositoryUrl>
-    <Description>Contains the abstractions for the Automation Foundation runtime.</Description>
+    <Description>Contains the runtime abstractions for the Automation Foundation framework.</Description>
   </PropertyGroup>
 
   <ItemGroup>
