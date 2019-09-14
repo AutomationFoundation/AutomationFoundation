@@ -14,7 +14,7 @@ namespace AutomationFoundation.Features.ProducerConsumer.Abstractions
         /// Initializes the engine.
         /// </summary>
         /// <param name="onProducedCallback">The callback to execute when an item is produced.</param>
-        /// <param name="cancellationToken">The cancellation token to monitor for cancellation requests.</param>
-        void Initialize(Action<IProducerConsumerContext<TItem>> onProducedCallback, CancellationToken cancellationToken);
+        /// <param name="parentToken">The parent cancellation token.</param>
+        void Initialize(Action<IProducerConsumerContext<TItem>> onProducedCallback, CancellationToken parentToken);
     }
 }

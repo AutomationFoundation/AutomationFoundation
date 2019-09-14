@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using AutomationFoundation.Features.ProducerConsumer.Abstractions;
 using AutomationFoundation.Runtime;
@@ -25,6 +26,12 @@ namespace AutomationFoundation.Features.ProducerConsumer.Engines
         {
             this.pool = pool ?? throw new ArgumentNullException(nameof(pool));
             this.runner = runner ?? throw new ArgumentNullException(nameof(runner));
+        }
+
+        /// <inheritdoc />
+        public void Initialize(CancellationToken cancellationToken)
+        {
+            // This method intentionally left blank.
         }
 
         /// <inheritdoc />

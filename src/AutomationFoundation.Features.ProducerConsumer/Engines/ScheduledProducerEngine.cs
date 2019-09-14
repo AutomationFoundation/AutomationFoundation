@@ -2,7 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using AutomationFoundation.Features.ProducerConsumer.Abstractions;
-using AutomationFoundation.Features.ProducerConsumer.Configuration;
+using AutomationFoundation.Features.ProducerConsumer.Engines.Configuration;
 using AutomationFoundation.Runtime;
 using AutomationFoundation.Runtime.Abstractions;
 using AutomationFoundation.Runtime.Abstractions.Threading.Primitives;
@@ -13,96 +13,34 @@ namespace AutomationFoundation.Features.ProducerConsumer.Engines
     /// Provides a producer engine which uses a schedule to check the producer for work availability.
     /// </summary>
     /// <typeparam name="TItem">The type of item being produced.</typeparam>
-    public class ScheduledProducerEngine<TItem> : Engine, IProducerEngine<TItem>
+    public class ScheduledProducerEngine<TItem> : ProducerEngine<TItem>
     {
-        private readonly IProducerExecutionStrategy<TItem> runner;
-        private readonly ICancellationSourceFactory cancellationSourceFactory;
+        private readonly IProducerExecutionStrategy<TItem> executionStrategy;
         private readonly IErrorHandler errorHandler;
         private readonly IScheduler scheduler;
         private readonly ScheduledEngineOptions options;
 
-        private ICancellationSource cancellationSource;
-        private Action<IProducerConsumerContext<TItem>> onProducedCallback;
-
-        private bool initialized;
-        private Task task;
-
-        /// <summary>
-        /// Gets a value indicating whether the engine is currently running.
-        /// </summary>
-        public bool IsRunning => task != null && !task.IsCanceled && !task.IsCompleted && !task.IsFaulted;
-
         /// <summary>
         /// Initializes a new instance of the <see cref="ScheduledProducerEngine{TItem}"/> class.
         /// </summary>
-        /// <param name="runner">The runner to execute.</param>
+        /// <param name="executionStrategy">The execution strategy to use when producing items.</param>
         /// <param name="cancellationSourceFactory">The factory for creating cancellation sources.</param>
         /// <param name="errorHandler">The error handler to use if errors within the engine.</param>
         /// <param name="scheduler">The scheduler.</param>
         /// <param name="options">The engine configuration options.</param>
-        public ScheduledProducerEngine(IProducerExecutionStrategy<TItem> runner, ICancellationSourceFactory cancellationSourceFactory, IErrorHandler errorHandler, IScheduler scheduler, ScheduledEngineOptions options)
+        public ScheduledProducerEngine(IProducerExecutionStrategy<TItem> executionStrategy, ICancellationSourceFactory cancellationSourceFactory, IErrorHandler errorHandler, IScheduler scheduler, ScheduledEngineOptions options)
+            : base(cancellationSourceFactory)
         {
-            this.runner = runner ?? throw new ArgumentNullException(nameof(runner));
-            this.cancellationSourceFactory = cancellationSourceFactory ?? throw new ArgumentNullException(nameof(cancellationSourceFactory));
+            this.executionStrategy = executionStrategy ?? throw new ArgumentNullException(nameof(executionStrategy));
             this.errorHandler = errorHandler ?? throw new ArgumentNullException(nameof(errorHandler));
             this.scheduler = scheduler ?? throw new ArgumentNullException(nameof(scheduler));
             this.options = options ?? throw new ArgumentNullException(nameof(options));
         }
 
         /// <inheritdoc />
-        public void Initialize(Action<IProducerConsumerContext<TItem>> onProducedCallback, CancellationToken cancellationToken)
+        protected override async Task RunAsync(Action<IProducerConsumerContext<TItem>> onProducedCallback, CancellationToken cancellationToken, CancellationToken parentToken)
         {
-            if (onProducedCallback == null)
-            {
-                throw new ArgumentNullException(nameof(onProducedCallback));
-            }
-
-            GuardMustNotBeDisposed();
-            GuardMustNotBeInitialized();
-
-            cancellationSource?.Dispose();
-
-            cancellationSource = cancellationSourceFactory.Create(cancellationToken);
-            if (cancellationSource == null)
-            {
-                throw new InvalidOperationException("The cancellation source factory did not create a cancellation source.");
-            }
-
-            this.onProducedCallback = onProducedCallback;
-            initialized = true;
-        }
-
-        private void GuardMustNotBeInitialized()
-        {
-            if (initialized)
-            {
-                throw new InvalidOperationException("The engine has already been initialized.");
-            }
-        }
-
-        /// <inheritdoc />
-        public Task StartAsync()
-        {
-            GuardMustNotBeDisposed();
-            GuardMustBeInitialized();
-
-            task = new Task(async() => await RunAsync(), TaskCreationOptions.LongRunning);
-            task.Start();
-
-            return Task.CompletedTask;
-        }
-
-        private void GuardMustBeInitialized()
-        {
-            if (!initialized)
-            {
-                throw new InvalidOperationException("The engine has not been initialized.");
-            }
-        }
-
-        private async Task RunAsync()
-        {
-            while (ShouldContinueExecution())
+            while (!cancellationToken.IsCancellationRequested)
             {
                 var started = DateTimeOffset.Now;
                 var found = false;
@@ -111,28 +49,23 @@ namespace AutomationFoundation.Features.ProducerConsumer.Engines
                 {
                     try
                     {
-                        found = await runner.ExecuteAsync(onProducedCallback, cancellationSource.CancellationToken);
+                        found = await executionStrategy.ExecuteAsync(onProducedCallback, parentToken);
                     }
                     catch (Exception ex)
                     {
                         errorHandler.Handle(ex, ErrorSeverityLevel.NonFatal);
                     }
                 } while (found && options.ContinueUntilEmpty
-                               && ShouldContinueExecution());
+                               && !cancellationToken.IsCancellationRequested);
 
-                if (ShouldContinueExecution())
+                if (!cancellationToken.IsCancellationRequested)
                 {
-                    WaitUntilNextExecution(started, DateTimeOffset.Now);
+                    await WaitUntilNextExecutionAsync(started, DateTimeOffset.Now, cancellationToken);
                 }
             }
         }
 
-        private bool ShouldContinueExecution()
-        {
-            return !cancellationSource.IsCancellationRequested;
-        }
-
-        private void WaitUntilNextExecution(DateTimeOffset started, DateTimeOffset lastCompleted)
+        private async Task WaitUntilNextExecutionAsync(DateTimeOffset started, DateTimeOffset lastCompleted, CancellationToken cancellationToken)
         {
             var delay = CalculateDelayUntilNextExecution(started, lastCompleted);
             if (delay == TimeSpan.Zero)
@@ -140,7 +73,25 @@ namespace AutomationFoundation.Features.ProducerConsumer.Engines
                 return;
             }
 
-            cancellationSource.CancellationToken.WaitHandle.WaitOne(delay);
+            await DelayAsync(delay, cancellationToken);
+        }
+
+        /// <summary>
+        /// Delays the producer.
+        /// </summary>
+        /// <param name="delay">The amount of time to delay the producer.</param>
+        /// <param name="cancellationToken">The cancellation token to monitor for cancellation requests.</param>
+        /// <returns>The task to await.</returns>
+        protected virtual async Task DelayAsync(TimeSpan delay, CancellationToken cancellationToken)
+        {
+            try
+            {
+                await Task.Delay(delay, cancellationToken);
+            }
+            catch (TaskCanceledException)
+            {
+                // Swallow any exceptions that indicate the task is being cancelled.
+            }
         }
 
         private TimeSpan CalculateDelayUntilNextExecution(DateTimeOffset started, DateTimeOffset lastCompleted)
@@ -152,29 +103,6 @@ namespace AutomationFoundation.Features.ProducerConsumer.Engines
             }
 
             return delay;
-        }
-
-        /// <inheritdoc />
-        public Task StopAsync()
-        {
-            GuardMustNotBeDisposed();
-            GuardMustBeInitialized();
-
-            cancellationSource.RequestImmediateCancellation();
-
-            return Task.WhenAll(task);
-        }
-
-        /// <inheritdoc />
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                cancellationSource?.Dispose();
-                task?.Dispose();
-            }
-
-            base.Dispose(disposing);
         }
     }
 }

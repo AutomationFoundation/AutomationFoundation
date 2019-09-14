@@ -1,4 +1,6 @@
-﻿namespace AutomationFoundation.Features.ProducerConsumer.Abstractions
+﻿using System.Threading;
+
+namespace AutomationFoundation.Features.ProducerConsumer.Abstractions
 {
     /// <summary>
     /// Identifies a consumer engine.
@@ -6,6 +8,12 @@
     /// <typeparam name="TItem">The type of item being consumed.</typeparam>
     public interface IConsumerEngine<TItem>
     {
+        /// <summary>
+        /// Initializes the engine.
+        /// </summary>
+        /// <param name="cancellationToken">The cancellation token to monitor for cancellation requests.</param>
+        void Initialize(CancellationToken cancellationToken);
+
         /// <summary>
         /// Consumes the item.
         /// </summary>

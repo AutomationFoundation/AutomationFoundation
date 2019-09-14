@@ -1,8 +1,8 @@
 ﻿using System;
 using AutomationFoundation.Features.ProducerConsumer;
 using AutomationFoundation.Features.ProducerConsumer.Abstractions;
-using AutomationFoundation.Features.ProducerConsumer.Configuration;
 using AutomationFoundation.Features.ProducerConsumer.Engines;
+using AutomationFoundation.Features.ProducerConsumer.Engines.Configuration;
 using AutomationFoundation.Features.ProducerConsumer.Resolvers;
 using AutomationFoundation.Features.ProducerConsumer.Strategies;
 using AutomationFoundation.Hosting.Abstractions.Builder;

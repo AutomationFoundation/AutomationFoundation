@@ -14,8 +14,8 @@ namespace AutomationFoundation.Features.ProducerConsumer.Abstractions
         /// Executes the strategy.
         /// </summary>
         /// <param name="onProducedCallback">The callback to execute if an object is produced.</param>
-        /// <param name="cancellationToken">The cancellation token to monitor for cancellation requests.</param>
+        /// <param name="parentToken">The parent cancellation token which should be monitored for cancellation requests while producing.</param>
         /// <returns>true if an item was produced, otherwise false.</returns>
-        Task<bool> ExecuteAsync(Action<IProducerConsumerContext<TItem>> onProducedCallback, CancellationToken cancellationToken);
+        Task<bool> ExecuteAsync(Action<IProducerConsumerContext<TItem>> onProducedCallback, CancellationToken parentToken);
     }
 }

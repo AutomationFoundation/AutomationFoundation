@@ -10,7 +10,13 @@ namespace AutomationFoundation.Runtime.Abstractions
         /// <summary>
         /// Stops the object asynchronously.
         /// </summary>
-        /// <returns>The asynchronous task.</returns>
+        /// <returns>The task to await.</returns>
         Task StopAsync();
+
+        /// <summary>
+        /// Waits for the engine to stop.
+        /// </summary>
+        /// <returns>The task to await.</returns>
+        Task WaitForCompletionAsync();
     }
 }

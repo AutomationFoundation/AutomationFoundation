@@ -39,7 +39,9 @@ namespace AutomationFoundation.Features.ProducerConsumer
         protected override void OnStart()
         {
             InitializeCancellationSource();
+
             InitializeProducerEngines();
+            InitializeConsumerEngine();
 
             using (var t1 = StartProducerEngines())
             using (var t2 = StartConsumerEngine())
@@ -69,6 +71,11 @@ namespace AutomationFoundation.Features.ProducerConsumer
             }
         }
 
+        private void InitializeConsumerEngine()
+        {
+            consumerEngine.Initialize(cancellationSource.CancellationToken);
+        }
+
         /// <inheritdoc />
         protected override void OnStop()
         {
@@ -95,7 +102,6 @@ namespace AutomationFoundation.Features.ProducerConsumer
         private void OnProducedCallback(IProducerConsumerContext<TItem> context)
         {
             context.Processor = this;
-            context.CancellationToken = cancellationSource.CancellationToken;
 
             consumerEngine.Consume(context);
         }

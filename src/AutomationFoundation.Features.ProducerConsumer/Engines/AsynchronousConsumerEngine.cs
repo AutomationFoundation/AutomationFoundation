@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using AutomationFoundation.Features.ProducerConsumer.Abstractions;
 using AutomationFoundation.Runtime;
@@ -14,7 +14,7 @@ namespace AutomationFoundation.Features.ProducerConsumer.Engines
     /// Provides a consumer engine which consumes objects asynchronously.
     /// </summary>
     /// <typeparam name="TItem">The type of item being consumed.</typeparam>
-    public class AsynchronousConsumerEngine<TItem> : Engine, IConsumerEngine<TItem>, IStoppable
+    public class AsynchronousConsumerEngine<TItem> : Engine, IConsumerEngine<TItem>
     {
         private readonly object syncRoot = new object();
 
@@ -34,6 +34,12 @@ namespace AutomationFoundation.Features.ProducerConsumer.Engines
             this.runner = runner ?? throw new ArgumentNullException(nameof(runner));
             this.pool = pool ?? throw new ArgumentNullException(nameof(pool));
             this.errorHandler = errorHandler ?? throw new ArgumentNullException(nameof(errorHandler));
+        }
+
+        /// <inheritdoc />
+        public void Initialize(CancellationToken cancellationToken)
+        {
+            // This method intentionally left blank.
         }
 
         /// <inheritdoc />
@@ -131,20 +137,6 @@ namespace AutomationFoundation.Features.ProducerConsumer.Engines
                 workers.Remove(worker);
                 worker.Dispose();
             }
-        }
-
-        /// <inheritdoc />
-        public Task StopAsync()
-        {
-            GuardMustNotBeDisposed();
-
-            Task[] tasks;
-            lock (syncRoot)
-            {
-                tasks = workers.Select(o => o.WaitForCompletionAsync()).ToArray();
-            }
-
-            return Task.WhenAll(tasks);
         }
     }
 }
