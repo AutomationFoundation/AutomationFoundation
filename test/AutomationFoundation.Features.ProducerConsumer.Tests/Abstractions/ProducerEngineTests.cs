@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Threading;
-using AutomationFoundation.Features.ProducerConsumer.Engines.Stubs;
+using AutomationFoundation.Features.ProducerConsumer.Abstractions.Stubs;
 using AutomationFoundation.Runtime.Abstractions.Threading.Primitives;
 using Moq;
 using NUnit.Framework;
 
-namespace AutomationFoundation.Features.ProducerConsumer.Engines
+namespace AutomationFoundation.Features.ProducerConsumer.Abstractions
 {
     [TestFixture]
     public class ProducerEngineTests

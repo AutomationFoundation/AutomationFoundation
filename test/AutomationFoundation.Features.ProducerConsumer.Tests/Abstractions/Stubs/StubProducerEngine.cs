@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
-using AutomationFoundation.Features.ProducerConsumer.Abstractions;
 using AutomationFoundation.Runtime.Abstractions.Threading.Primitives;
 
-namespace AutomationFoundation.Features.ProducerConsumer.Engines.Stubs
+namespace AutomationFoundation.Features.ProducerConsumer.Abstractions.Stubs
 {
     public class StubProducerEngine : ProducerEngine<object>
     {
