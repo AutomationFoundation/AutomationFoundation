@@ -36,17 +36,17 @@ namespace AutomationFoundation.Features.ProducerConsumer.Strategies
         }
 
         /// <inheritdoc />
-        public Task<bool> ExecuteAsync(Action<IProducerConsumerContext<TItem>> onProducedCallback, CancellationToken cancellationToken)
+        public Task<bool> ExecuteAsync(Action<IProducerConsumerContext<TItem>> onProducedCallback, CancellationToken parentToken)
         {
             if (onProducedCallback == null)
             {
                 throw new ArgumentNullException(nameof(onProducedCallback));
             }
 
-            return RunAsyncImpl(onProducedCallback, cancellationToken);
+            return RunAsyncImpl(onProducedCallback, parentToken);
         }
 
-        private async Task<bool> RunAsyncImpl(Action<IProducerConsumerContext<TItem>> onProducedCallback, CancellationToken cancellationToken)
+        private async Task<bool> RunAsyncImpl(Action<IProducerConsumerContext<TItem>> onProducedCallback, CancellationToken parentToken)
         {
             IServiceScope scope = null;
 
@@ -63,7 +63,7 @@ namespace AutomationFoundation.Features.ProducerConsumer.Strategies
 
                     context = new ProducerConsumerContext<TItem>(id, scope)
                     {
-                        CancellationToken = cancellationToken,
+                        CancellationToken = parentToken,
                         ProductionContext =
                         {
                             ExecutionStrategy = this
