@@ -1,4 +1,4 @@
-﻿namespace AutomationFoundation.Features.ProducerConsumer.Configuration
+﻿namespace AutomationFoundation.Features.ProducerConsumer.Engines.Configuration
 {
     /// <summary>
     /// Contains configuration options for the scheduled engine.

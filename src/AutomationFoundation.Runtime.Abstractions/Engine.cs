@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace AutomationFoundation.Features.ProducerConsumer.Engines
+namespace AutomationFoundation.Runtime
 {
     /// <summary>
     /// Provides a base implementation of an engine.
@@ -40,7 +40,7 @@ namespace AutomationFoundation.Features.ProducerConsumer.Engines
         {
             if (disposed)
             {
-                throw new ObjectDisposedException("The object has been disposed.");
+                throw new ObjectDisposedException(GetType().Name);
             }
         }
     }

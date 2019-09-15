@@ -4,7 +4,7 @@ using AutomationFoundation.Features.ProducerConsumer.Abstractions;
 namespace AutomationFoundation.Features.ProducerConsumer.Resolvers
 {
     /// <summary>
-    /// Provides a mechanism which resolves an <see cref="IProducer{TItem}"/> which uses a callback function.
+    /// Provides a mechanism which resolves an <see cref="IProducer{TItem}"/> using a callback function.
     /// </summary>
     /// <typeparam name="TItem">The type of item being produced.</typeparam>
     public class CallbackProducerResolver<TItem> : IProducerResolver<TItem>
