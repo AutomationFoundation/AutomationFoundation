@@ -5,9 +5,7 @@ VisualStudioVersion = 16.0.28803.156
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{55EF3A3F-C0FB-48E1-9420-C8E725BADD68}"
 	ProjectSection(SolutionItems) = preProject
-		.gitignore = .gitignore
 		appveyor.yml = appveyor.yml
-		README.md = README.md
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{FCA4596F-9EC1-4086-8CA1-6F70D0716F49}"
