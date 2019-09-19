@@ -19,7 +19,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace ConsoleRunner.Infrastructure.Builders
 {
-    public class ProducerConsumerProcessorBuilder : IProcessorBuilder
+    public class ProducerConsumerProcessorBuilder : IApplicationProcessorBuilder
     {
         public Processor Build(IRuntimeBuilder runtimeBuilder, AppProcessor config)
         {

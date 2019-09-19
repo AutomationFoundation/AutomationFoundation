@@ -1,5 +1,4 @@
 ﻿using System;
-using AutomationFoundation.Runtime.Abstractions;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace AutomationFoundation.Hosting.Abstractions.Builder
@@ -7,7 +6,7 @@ namespace AutomationFoundation.Hosting.Abstractions.Builder
     /// <summary>
     /// Identifies a builder for a runtime host.
     /// </summary>
-    public interface IRuntimeHostBuilder : IBuilder<IRuntimeHost>
+    public interface IRuntimeHostBuilder
     {
         /// <summary>
         /// Configures the services.
@@ -29,5 +28,11 @@ namespace AutomationFoundation.Hosting.Abstractions.Builder
         /// <param name="startup">The startup instance which should be used during runtime startup.</param>
         /// <returns>The current runtime host builder instance.</returns>
         IRuntimeHostBuilder UseStartup(IStartup startup);
+
+        /// <summary>
+        /// Builds the host.
+        /// </summary>
+        /// <returns>The new host which was built.</returns>
+        IRuntimeHost Build();
     }
 }

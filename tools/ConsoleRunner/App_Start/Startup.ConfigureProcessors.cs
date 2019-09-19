@@ -26,7 +26,7 @@ namespace ConsoleRunner
         private static void ConfigureProcessors(IRuntimeBuilder runtimeBuilder, IServiceProvider serviceProvider)
         {
             var unitOfWork = serviceProvider.GetRequiredService<IUnitOfWork>();
-            
+
             var configs = unitOfWork.AppProcessors.GetProcessorsForMachine(Environment.MachineName);
 
             foreach (var config in configs)
@@ -47,7 +47,7 @@ namespace ConsoleRunner
             }
         }
 
-        private static IProcessorBuilder GetBuilder(ProcessorTypeEnum processorType)
+        private static IApplicationProcessorBuilder GetBuilder(ProcessorTypeEnum processorType)
         {
             switch (processorType)
             {

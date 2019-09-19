@@ -6,7 +6,7 @@ namespace AutomationFoundation.Hosting.Abstractions.Builder
     /// <summary>
     /// Identifies a builder for a runtime.
     /// </summary>
-    public interface IRuntimeBuilder : IBuilder<IRuntime>
+    public interface IRuntimeBuilder
     {
         /// <summary>
         /// Gets the application services.
@@ -17,6 +17,12 @@ namespace AutomationFoundation.Hosting.Abstractions.Builder
         /// Registers a processor with the builder.
         /// </summary>
         /// <param name="processor">The processor to register.</param>
-        void RegisterProcessor(IProcessor processor);
+        IRuntimeBuilder RegisterProcessor(IProcessor processor);
+
+        /// <summary>
+        /// Builds the runtime.
+        /// </summary>
+        /// <returns>The new runtime which was built.</returns>
+        IRuntime Build();
     }
 }
