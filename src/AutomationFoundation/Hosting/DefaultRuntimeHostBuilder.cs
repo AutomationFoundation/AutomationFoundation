@@ -14,7 +14,32 @@ namespace AutomationFoundation.Hosting
     public class DefaultRuntimeHostBuilder : IRuntimeHostBuilder
     {
         private readonly IList<Action<IServiceCollection>> callbacks = new List<Action<IServiceCollection>>();
+
+        private bool hasEnvironmentCallbackBeenConfigured;
         private bool startupHasBeenConfigured;
+
+        /// <inheritdoc />
+        public IRuntimeHostBuilder ConfigureHostingEnvironment(Func<IHostingEnvironment> callback)
+        {
+            if (callback == null)
+            {
+                throw new ArgumentNullException(nameof(callback));
+            }
+
+            callbacks.Add(services =>
+            {
+                var environment = callback();
+                if (environment == null)
+                {
+                    throw new BuildException("The environment was not created.");
+                }
+
+                services.Add(new ServiceDescriptor(typeof(IHostingEnvironment), environment));
+            });
+
+            hasEnvironmentCallbackBeenConfigured = true;
+            return this;
+        }
 
         /// <inheritdoc />
         public IRuntimeHostBuilder ConfigureServices(Action<IServiceCollection> callback)
@@ -57,6 +82,8 @@ namespace AutomationFoundation.Hosting
             GuardStartupMustBeConfigured();
 
             var services = CreateServiceCollection();
+
+            ConfigureServiceEnvironment(services);
             ConfigureServiceCollection(services);
 
             IServiceProvider sp = null;
@@ -78,7 +105,7 @@ namespace AutomationFoundation.Hosting
                 }
 
                 var runtimeBuilder = CreateRuntimeBuilder(applicationServices);
-                startup.ConfigureProcessors(runtimeBuilder);
+                startup.ConfigureProcessors(runtimeBuilder, applicationServices.GetRequiredService<IHostingEnvironment>());
 
                 var runtime = runtimeBuilder.Build();
                 if (runtime == null)
@@ -118,6 +145,21 @@ namespace AutomationFoundation.Hosting
             }
 
             return services.BuildServiceProvider();
+        }
+
+        /// <summary>
+        /// Configures the environment.
+        /// </summary>
+        /// <param name="serviceCollection">The service collection to configure.</param>
+        protected virtual void ConfigureServiceEnvironment(IServiceCollection serviceCollection)
+        {
+            if (!ShouldDefaultTheHostingEnvironment())
+            {
+                // The hosting environment should not be defaulted, one must have been configured manually.
+                return;
+            }
+
+            serviceCollection.Add(new ServiceDescriptor(typeof(IHostingEnvironment), new DefaultHostingEnvironment()));
         }
 
         /// <summary>
@@ -197,6 +239,11 @@ namespace AutomationFoundation.Hosting
             {
                 throw new BuildException("The startup must be configured.");
             }
+        }
+
+        private bool ShouldDefaultTheHostingEnvironment()
+        {
+            return !hasEnvironmentCallbackBeenConfigured;
         }
     }
 }

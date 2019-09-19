@@ -13,7 +13,7 @@ namespace AutomationFoundation.Stubs
             this.onConfigureProcessorsCallback = onConfigureProcessorsCallback;
         }
 
-        public void ConfigureProcessors(IRuntimeBuilder runtimeBuilder)
+        public void ConfigureProcessors(IRuntimeBuilder runtimeBuilder, IHostingEnvironment environment)
         {
             onConfigureProcessorsCallback?.Invoke(runtimeBuilder);
         }

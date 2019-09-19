@@ -9,6 +9,13 @@ namespace AutomationFoundation.Hosting.Abstractions.Builders
     public interface IRuntimeHostBuilder
     {
         /// <summary>
+        /// Configures the environment.
+        /// </summary>
+        /// <param name="callback">The callback which will configure the environment.</param>
+        /// <returns>The current runtime host builder instance.</returns>
+        IRuntimeHostBuilder ConfigureHostingEnvironment(Func<IHostingEnvironment> callback);
+
+        /// <summary>
         /// Configures the services.
         /// </summary>
         /// <param name="callback">The callback which will configure the services.</param>

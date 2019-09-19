@@ -11,6 +11,13 @@ namespace AutomationFoundation.Hosting
     public class DefaultRuntimeHostBuilderTests
     {
         [Test]
+        public void ThrowsAnExceptionWhenTheCallbackIsNullWhileConfiguringThe0Environment()
+        {
+            var target = new DefaultRuntimeHostBuilder();
+            Assert.Throws<ArgumentNullException>(() => target.ConfigureHostingEnvironment(null));
+        }
+
+        [Test]
         public void ThrowAnExceptionWhenStartupHasNotBeenConfigured()
         {
             var target = new DefaultRuntimeHostBuilder();

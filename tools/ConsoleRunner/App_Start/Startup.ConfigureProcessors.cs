@@ -10,7 +10,7 @@ namespace ConsoleRunner
 {
     internal partial class Startup : IStartup
     {
-        public void ConfigureProcessors(IRuntimeBuilder runtimeBuilder)
+        public void ConfigureProcessors(IRuntimeBuilder runtimeBuilder, IHostingEnvironment environment)
         {
             if (runtimeBuilder == null)
             {
