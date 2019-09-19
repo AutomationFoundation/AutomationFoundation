@@ -1,5 +1,5 @@
-﻿using AutomationFoundation.Hosting.Abstractions.Builder;
-using AutomationFoundation.Runtime;
+﻿using AutomationFoundation.Runtime;
+using AutomationFoundation.Runtime.Abstractions.Builders;
 using ConsoleRunner.Model;
 
 namespace ConsoleRunner.Abstractions

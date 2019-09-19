@@ -1,12 +1,11 @@
 ﻿using System;
-using AutomationFoundation.Hosting;
-using AutomationFoundation.Hosting.Abstractions.Builder;
+using AutomationFoundation.Runtime.Abstractions.Builders;
 using AutomationFoundation.Runtime.Builder;
-using AutomationFoundation.Tests.Stubs;
+using AutomationFoundation.Stubs;
 using Moq;
 using NUnit.Framework;
 
-namespace AutomationFoundation.Tests.Hosting
+namespace AutomationFoundation.Hosting
 {
     [TestFixture]
     public class DefaultRuntimeHostBuilderTests

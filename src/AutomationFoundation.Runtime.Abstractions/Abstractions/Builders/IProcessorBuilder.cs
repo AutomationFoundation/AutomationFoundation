@@ -1,6 +1,4 @@
-﻿using AutomationFoundation.Runtime.Abstractions;
-
-namespace AutomationFoundation.Hosting.Abstractions.Builder
+﻿namespace AutomationFoundation.Runtime.Abstractions.Builders
 {
     /// <summary>
     /// Identifies a builder for processors.

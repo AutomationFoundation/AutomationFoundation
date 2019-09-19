@@ -1,8 +1,8 @@
 ﻿using System;
 using AutomationFoundation.Hosting.Abstractions;
-using AutomationFoundation.Hosting.Abstractions.Builder;
+using AutomationFoundation.Runtime.Abstractions.Builders;
 
-namespace AutomationFoundation.Tests.Stubs
+namespace AutomationFoundation.Stubs
 {
     public class StubStartup : IStartup
     {

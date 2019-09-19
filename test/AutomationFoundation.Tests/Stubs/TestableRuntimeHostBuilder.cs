@@ -1,10 +1,10 @@
 ﻿using System;
 using AutomationFoundation.Hosting;
 using AutomationFoundation.Hosting.Abstractions;
-using AutomationFoundation.Hosting.Abstractions.Builder;
+using AutomationFoundation.Runtime.Abstractions.Builders;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace AutomationFoundation.Tests.Stubs
+namespace AutomationFoundation.Stubs
 {
     public class TestableRuntimeHostBuilder : DefaultRuntimeHostBuilder
     {
