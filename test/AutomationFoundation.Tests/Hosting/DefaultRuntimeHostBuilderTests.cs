@@ -1,6 +1,6 @@
 ﻿using System;
 using AutomationFoundation.Runtime.Abstractions.Builders;
-using AutomationFoundation.Runtime.Builder;
+using AutomationFoundation.Runtime.Builders;
 using AutomationFoundation.Stubs;
 using Moq;
 using NUnit.Framework;

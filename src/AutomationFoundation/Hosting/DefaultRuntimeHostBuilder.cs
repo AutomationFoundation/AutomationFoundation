@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using AutomationFoundation.Hosting.Abstractions;
-using AutomationFoundation.Hosting.Abstractions.Builder;
+using AutomationFoundation.Hosting.Abstractions.Builders;
 using AutomationFoundation.Runtime.Abstractions.Builders;
-using AutomationFoundation.Runtime.Builder;
+using AutomationFoundation.Runtime.Builders;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace AutomationFoundation.Hosting
@@ -86,7 +86,7 @@ namespace AutomationFoundation.Hosting
                     throw new BuildException("The runtime could not be built.");
                 }
 
-                return new RuntimeHost(
+                return new DefaultRuntimeHost(
                     runtime,
                     applicationServices);
             }

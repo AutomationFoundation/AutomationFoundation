@@ -1,6 +1,6 @@
 ﻿using System;
 using AutomationFoundation.Hosting.Abstractions;
-using AutomationFoundation.Hosting.Abstractions.Builder;
+using AutomationFoundation.Hosting.Abstractions.Builders;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace AutomationFoundation.NETCore.App.Stubs
