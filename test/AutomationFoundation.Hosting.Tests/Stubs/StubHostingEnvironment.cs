@@ -1,4 +1,4 @@
-﻿namespace AutomationFoundation.Hosting.Abstractions.Stubs
+﻿namespace AutomationFoundation.Hosting.Stubs
 {
     public class StubHostingEnvironment : HostingEnvironment
     {

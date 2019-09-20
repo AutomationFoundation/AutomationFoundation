@@ -21,7 +21,7 @@ namespace ConsoleRunner
 
         private static IRuntimeHostBuilder CreateRuntimeHostBuilder()
         {
-            return DefaultRuntimeHost.CreateBuilder()
+            return RuntimeHost.CreateBuilder<DefaultRuntimeHostBuilder>()
                 .ConfigureServices(services => services.AddAutofac())
                 .UseStartup<Startup>();
         }

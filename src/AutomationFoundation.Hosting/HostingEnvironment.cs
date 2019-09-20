@@ -1,9 +1,10 @@
 ﻿using System;
+using AutomationFoundation.Hosting.Abstractions;
 
-namespace AutomationFoundation.Hosting.Abstractions
+namespace AutomationFoundation.Hosting
 {
     /// <summary>
-    /// Represents the hosting environment. This class must be inherited.
+    /// Represents a hosting environment. This class must be inherited.
     /// </summary>
     public abstract class HostingEnvironment : IHostingEnvironment
     {

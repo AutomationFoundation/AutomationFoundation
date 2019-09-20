@@ -1,4 +1,4 @@
-﻿using AutomationFoundation.Hosting.Abstractions.Stubs;
+﻿using AutomationFoundation.Hosting.Stubs;
 using NUnit.Framework;
 
 namespace AutomationFoundation.Hosting.Abstractions

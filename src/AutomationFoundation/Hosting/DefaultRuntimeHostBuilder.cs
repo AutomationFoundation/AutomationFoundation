@@ -115,7 +115,7 @@ namespace AutomationFoundation.Hosting
                     throw new BuildException("The runtime could not be built.");
                 }
 
-                return new DefaultRuntimeHost(
+                return new RuntimeHost(
                     runtime,
                     hostingEnvironment,
                     applicationServices);
