@@ -1,6 +1,6 @@
 ﻿using System;
 using AutomationFoundation.Hosting.Abstractions;
-using AutomationFoundation.Hosting.Abstractions.Builder;
+using AutomationFoundation.Hosting.Abstractions.Builders;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace AutomationFoundation.NETCore.App.Stubs
@@ -9,6 +9,11 @@ namespace AutomationFoundation.NETCore.App.Stubs
     {
 
         public IRuntimeHost Build()
+        {
+            throw new NotImplementedException();
+        }
+
+        public IRuntimeHostBuilder ConfigureHostingEnvironment(Func<IHostingEnvironment> callback)
         {
             throw new NotImplementedException();
         }

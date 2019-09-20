@@ -2,7 +2,7 @@
 using Autofac.Extensions.DependencyInjection;
 using AutomationFoundation.Hosting;
 using AutomationFoundation.Hosting.Abstractions;
-using AutomationFoundation.Hosting.Abstractions.Builder;
+using AutomationFoundation.Hosting.Abstractions.Builders;
 using ConsoleRunner.Abstractions;
 using ConsoleRunner.Infrastructure.IO;
 

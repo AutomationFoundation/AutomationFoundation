@@ -1,6 +1,6 @@
 ﻿using System;
 using AutomationFoundation.Hosting.Abstractions;
-using AutomationFoundation.Hosting.Abstractions.Builder;
+using AutomationFoundation.Runtime.Abstractions.Builders;
 using ConsoleRunner.Abstractions;
 using ConsoleRunner.Abstractions.DataAccess;
 using ConsoleRunner.Infrastructure.Builders;
@@ -10,7 +10,7 @@ namespace ConsoleRunner
 {
     internal partial class Startup : IStartup
     {
-        public void ConfigureProcessors(IRuntimeBuilder runtimeBuilder)
+        public void ConfigureProcessors(IRuntimeBuilder runtimeBuilder, IHostingEnvironment environment)
         {
             if (runtimeBuilder == null)
             {
@@ -26,7 +26,7 @@ namespace ConsoleRunner
         private static void ConfigureProcessors(IRuntimeBuilder runtimeBuilder, IServiceProvider serviceProvider)
         {
             var unitOfWork = serviceProvider.GetRequiredService<IUnitOfWork>();
-            
+
             var configs = unitOfWork.AppProcessors.GetProcessorsForMachine(Environment.MachineName);
 
             foreach (var config in configs)
@@ -47,7 +47,7 @@ namespace ConsoleRunner
             }
         }
 
-        private static IProcessorBuilder GetBuilder(ProcessorTypeEnum processorType)
+        private static IApplicationProcessorBuilder GetBuilder(ProcessorTypeEnum processorType)
         {
             switch (processorType)
             {

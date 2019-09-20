@@ -1,12 +1,12 @@
 ﻿using System;
-using AutomationFoundation.Hosting.Builder;
-using AutomationFoundation.Runtime.Builder;
+using AutomationFoundation.Hosting.Builders;
+using AutomationFoundation.Runtime.Builders;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Moq;
 using NUnit.Framework;
 
-namespace AutomationFoundation.NETCore.App.Hosting.Builder
+namespace AutomationFoundation.NETCore.App.Hosting.Builders
 {
     [TestFixture]
     public class ConfigurationBuilderRegistrationTests

@@ -1,22 +1,25 @@
 ﻿using System;
+using System.Data.Odbc;
 using AutomationFoundation.Hosting;
 using AutomationFoundation.Hosting.Abstractions;
-using AutomationFoundation.Hosting.Abstractions.Builder;
+using AutomationFoundation.Runtime.Abstractions.Builders;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace AutomationFoundation.Tests.Stubs
+namespace AutomationFoundation.Stubs
 {
     public class TestableRuntimeHostBuilder : DefaultRuntimeHostBuilder
     {
         private readonly Func<IServiceProvider, IStartup> startupResolver;
         private readonly Func<IStartup, IServiceCollection, IServiceProvider> applicationServicesResolver;
         private readonly Func<IServiceProvider, IRuntimeBuilder> runtimeBuilderResolver;
+        private readonly Func<IServiceCollection> serviceCollection;
 
-        public TestableRuntimeHostBuilder(Func<IServiceProvider, IStartup> startupResolver = null, Func<IStartup, IServiceCollection, IServiceProvider> applicationServicesResolver = null, Func<IServiceProvider, IRuntimeBuilder> runtimeBuilderResolver = null)
+        public TestableRuntimeHostBuilder(Func<IServiceProvider, IStartup> startupResolver = null, Func<IStartup, IServiceCollection, IServiceProvider> applicationServicesResolver = null, Func<IServiceProvider, IRuntimeBuilder> runtimeBuilderResolver = null, Func<IServiceCollection> serviceCollection = null)
         {
             this.startupResolver = startupResolver;
             this.applicationServicesResolver = applicationServicesResolver;
             this.runtimeBuilderResolver = runtimeBuilderResolver;
+            this.serviceCollection = serviceCollection;
         }
 
         protected override IStartup ResolveStartupInstance(IServiceProvider serviceProvider)
@@ -47,6 +50,16 @@ namespace AutomationFoundation.Tests.Stubs
             }
 
             return base.CreateRuntimeBuilder(applicationServices);
+        }
+
+        protected override IServiceCollection CreateServiceCollection()
+        {
+            if (serviceCollection != null)
+            {
+                return serviceCollection();
+            }
+
+            return base.CreateServiceCollection();
         }
     }
 }

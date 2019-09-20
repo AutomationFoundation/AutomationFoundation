@@ -1,46 +1,46 @@
 ﻿using System;
 using System.Runtime.Serialization;
 
-namespace AutomationFoundation.Runtime.Builder
+namespace AutomationFoundation.Runtime.Builders
 {
     /// <summary>
-    /// Thrown when an exception occurs while validating the configuration of a builder.
+    /// Thrown when an exception occurs while building an object.
     /// </summary>
     [Serializable]
-    public class BuilderConfigurationException : BuildException
+    public class BuildException : Exception
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="BuilderConfigurationException"/> class.
+        /// Initializes a new instance of the <see cref="BuildException"/> class.
         /// </summary>
-        public BuilderConfigurationException()
+        public BuildException()
         {
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="BuilderConfigurationException"/> class.
+        /// Initializes a new instance of the <see cref="BuildException"/> class.
         /// </summary>
         /// <param name="message">The message that describes the error.</param>
-        public BuilderConfigurationException(string message)
+        public BuildException(string message)
             : base(message)
         {
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="BuilderConfigurationException"/> class.
+        /// Initializes a new instance of the <see cref="BuildException"/> class.
         /// </summary>
         /// <param name="message">The message that describes the error.</param>
         /// <param name="innerException">The exception which is the cause of the current exception.</param>
-        public BuilderConfigurationException(string message, Exception innerException)
+        public BuildException(string message, Exception innerException)
             : base(message, innerException)
         {
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="BuilderConfigurationException"/> class.
+        /// Initializes a new instance of the <see cref="BuildException"/> class.
         /// </summary>
         /// <param name="info">The object which holds the serialization</param>
         /// <param name="context">The context which holds streaming information about the source or destination.</param>
-        protected BuilderConfigurationException(SerializationInfo info, StreamingContext context)
+        protected BuildException(SerializationInfo info, StreamingContext context)
             : base(info, context)
         {
         }

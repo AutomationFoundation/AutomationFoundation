@@ -5,8 +5,8 @@ using AutomationFoundation.Features.ProducerConsumer.Engines;
 using AutomationFoundation.Features.ProducerConsumer.Engines.Configuration;
 using AutomationFoundation.Features.ProducerConsumer.Resolvers;
 using AutomationFoundation.Features.ProducerConsumer.Strategies;
-using AutomationFoundation.Hosting.Abstractions.Builder;
 using AutomationFoundation.Runtime;
+using AutomationFoundation.Runtime.Abstractions.Builders;
 using AutomationFoundation.Runtime.Abstractions.Synchronization;
 using AutomationFoundation.Runtime.Threading;
 using AutomationFoundation.Runtime.Threading.Primitives;
@@ -19,7 +19,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace ConsoleRunner.Infrastructure.Builders
 {
-    public class ProducerConsumerProcessorBuilder : IProcessorBuilder
+    public class ProducerConsumerProcessorBuilder : IApplicationProcessorBuilder
     {
         public Processor Build(IRuntimeBuilder runtimeBuilder, AppProcessor config)
         {

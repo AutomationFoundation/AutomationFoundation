@@ -4,7 +4,7 @@ using AutomationFoundation.Runtime.Abstractions;
 namespace AutomationFoundation.Runtime
 {
     /// <summary>
-    /// Represents a scheduler for a pre-determined interval.
+    /// Provides a scheduler for a pre-determined interval.
     /// </summary>
     public class PollingScheduler : IScheduler
     {

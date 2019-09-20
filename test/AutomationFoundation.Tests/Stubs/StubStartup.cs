@@ -1,8 +1,8 @@
 ﻿using System;
 using AutomationFoundation.Hosting.Abstractions;
-using AutomationFoundation.Hosting.Abstractions.Builder;
+using AutomationFoundation.Runtime.Abstractions.Builders;
 
-namespace AutomationFoundation.Tests.Stubs
+namespace AutomationFoundation.Stubs
 {
     public class StubStartup : IStartup
     {
@@ -13,7 +13,7 @@ namespace AutomationFoundation.Tests.Stubs
             this.onConfigureProcessorsCallback = onConfigureProcessorsCallback;
         }
 
-        public void ConfigureProcessors(IRuntimeBuilder runtimeBuilder)
+        public void ConfigureProcessors(IRuntimeBuilder runtimeBuilder, IHostingEnvironment environment)
         {
             onConfigureProcessorsCallback?.Invoke(runtimeBuilder);
         }

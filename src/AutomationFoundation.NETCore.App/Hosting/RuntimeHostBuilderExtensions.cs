@@ -1,6 +1,6 @@
 ﻿using System;
-using AutomationFoundation.Hosting.Abstractions.Builder;
-using AutomationFoundation.Hosting.Builder;
+using AutomationFoundation.Hosting.Abstractions.Builders;
+using AutomationFoundation.Hosting.Builders;
 using Microsoft.Extensions.Configuration;
 
 namespace AutomationFoundation.Hosting

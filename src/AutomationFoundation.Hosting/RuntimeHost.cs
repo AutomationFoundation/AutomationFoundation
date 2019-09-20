@@ -1,6 +1,6 @@
 ﻿using System;
 using AutomationFoundation.Hosting.Abstractions;
-using AutomationFoundation.Hosting.Abstractions.Builder;
+using AutomationFoundation.Hosting.Abstractions.Builders;
 using AutomationFoundation.Runtime.Abstractions;
 
 namespace AutomationFoundation.Hosting
@@ -12,19 +12,22 @@ namespace AutomationFoundation.Hosting
     {
         private readonly IRuntime runtime;
 
-        /// <summary>
-        /// Gets the application services available.
-        /// </summary>
+        /// <inheritdoc />
         public IServiceProvider ApplicationServices { get; }
+
+        /// <inheritdoc />
+        public IHostingEnvironment Environment { get; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="RuntimeHost"/> class.
         /// </summary>
         /// <param name="runtime">The runtime to host.</param>
+        /// <param name="environment">The hosting environment.</param>
         /// <param name="applicationServices">The application services available.</param>
-        public RuntimeHost(IRuntime runtime, IServiceProvider applicationServices)
+        public RuntimeHost(IRuntime runtime, IHostingEnvironment environment, IServiceProvider applicationServices)
         {
             this.runtime = runtime ?? throw new ArgumentNullException(nameof(runtime));
+            Environment = environment ?? throw new ArgumentNullException(nameof(environment));
             ApplicationServices = applicationServices;
         }
 

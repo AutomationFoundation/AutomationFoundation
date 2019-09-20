@@ -1,4 +1,4 @@
-﻿using AutomationFoundation.Hosting.Abstractions.Builder;
+﻿using AutomationFoundation.Runtime.Abstractions.Builders;
 
 namespace AutomationFoundation.Hosting.Abstractions
 {
@@ -11,6 +11,7 @@ namespace AutomationFoundation.Hosting.Abstractions
         /// Configures the processors.
         /// </summary>
         /// <param name="runtimeBuilder">The builder being used to build the runtime.</param>
-        void ConfigureProcessors(IRuntimeBuilder runtimeBuilder);
+        /// <param name="environment">The environment in which the application is being hosted.</param>
+        void ConfigureProcessors(IRuntimeBuilder runtimeBuilder, IHostingEnvironment environment);
     }
 }
