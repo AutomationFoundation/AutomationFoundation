@@ -1,7 +1,9 @@
 ﻿using System;
+using AutomationFoundation.Hosting.Abstractions;
 using AutomationFoundation.Runtime.Abstractions.Builders;
 using AutomationFoundation.Runtime.Builders;
 using AutomationFoundation.Stubs;
+using Microsoft.Extensions.DependencyInjection;
 using Moq;
 using NUnit.Framework;
 
@@ -72,6 +74,30 @@ namespace AutomationFoundation.Hosting
             Assert.AreEqual("The runtime could not be built.", ex.Message);
 
             builder.Verify(o => o.Build(), Times.Once);
+        }
+
+        [Test]
+        public void ThrowsAnExceptionWhenTheEnvironmentIsNull()
+        {
+            var target = new TestableRuntimeHostBuilder();
+            target.ConfigureHostingEnvironment(() => null);
+            target.UseStartup(new StubStartup());
+
+            var ex = Assert.Throws<BuildException>(() => target.Build());
+            Assert.AreEqual("The environment was not created.", ex.Message);
+        }
+
+        [Test]
+        public void AddsTheServiceToTheCollection()
+        {
+            var environment = new Mock<IHostingEnvironment>();
+
+            var target = new DefaultRuntimeHostBuilder();
+            target.ConfigureHostingEnvironment(() => environment.Object);
+            target.UseStartup(new StubStartup());
+
+            var result = target.Build();
+            Assert.IsNotNull(result);
         }
 
         [Test]

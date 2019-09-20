@@ -104,8 +104,10 @@ namespace AutomationFoundation.Hosting
                     throw new BuildException("The services were not configured.");
                 }
 
+                var hostingEnvironment = applicationServices.GetRequiredService<IHostingEnvironment>();
+
                 var runtimeBuilder = CreateRuntimeBuilder(applicationServices);
-                startup.ConfigureProcessors(runtimeBuilder, applicationServices.GetRequiredService<IHostingEnvironment>());
+                startup.ConfigureProcessors(runtimeBuilder, hostingEnvironment);
 
                 var runtime = runtimeBuilder.Build();
                 if (runtime == null)
@@ -115,6 +117,7 @@ namespace AutomationFoundation.Hosting
 
                 return new DefaultRuntimeHost(
                     runtime,
+                    hostingEnvironment,
                     applicationServices);
             }
             finally
