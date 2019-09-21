@@ -7,7 +7,7 @@ namespace AutomationFoundation.Hosting.Abstractions
     public class HostingEnvironmentExtensionsTests
     {
         [Test]
-        public void ReturnTrueForProduction()
+        public void ReturnTrueForProduction1()
         {
             var target = new StubHostingEnvironment("Production");
             var result = target.IsProduction();
@@ -16,27 +16,91 @@ namespace AutomationFoundation.Hosting.Abstractions
         }
 
         [Test]
-        public void ReturnTrueForStaging()
+        public void ReturnTrueForProduction2()
         {
-            var target = new StubHostingEnvironment("Staging");
-            var result = target.IsStaging();
+            var target = new StubHostingEnvironment("Prod");
+            var result = target.IsProduction();
 
             Assert.True(result);
         }
 
         [Test]
-        public void ReturnTrueForStaging2()
+        public void ReturnTrueForProduction3()
         {
-            var target = new StubHostingEnvironment("Staging_2");
-            var result = target.IsStaging();
+            var target = new StubHostingEnvironment("Prod_2");
+            var result = target.IsProduction();
 
             Assert.True(result);
         }
 
         [Test]
-        public void ReturnTrueForDevelopment()
+        public void ReturnTrueForProduction4()
+        {
+            var target = new StubHostingEnvironment("PROD");
+            var result = target.IsProduction();
+
+            Assert.True(result);
+        }
+
+        [Test]
+        public void ReturnTrueForAnyValueOtherThanProd()
+        {
+            var target = new StubHostingEnvironment("AnyValueOtherThanProd");
+            var result = target.IsNonProduction();
+
+            Assert.True(result);
+        }
+
+        [Test]
+        public void ReturnFalseForProd()
+        {
+            var target = new StubHostingEnvironment("Prod");
+            var result = target.IsNonProduction();
+
+            Assert.False(result);
+        }
+
+        [Test]
+        public void ReturnTrueForDevelopmentAsNonProduction()
+        {
+            var target = new StubHostingEnvironment("Dev");
+            var result = target.IsNonProduction();
+
+            Assert.True(result);
+        }
+
+
+        [Test]
+        public void ReturnTrueForDevelopment1()
         {
             var target = new StubHostingEnvironment("Development");
+            var result = target.IsDevelopment();
+
+            Assert.True(result);
+        }
+
+        [Test]
+        public void ReturnTrueForDevelopment2()
+        {
+            var target = new StubHostingEnvironment("Dev");
+            var result = target.IsDevelopment();
+
+            Assert.True(result);
+        }
+
+        [Test]
+        public void ReturnTrueForDevelopment3()
+        {
+            var target = new StubHostingEnvironment("Dev_2");
+            var result = target.IsDevelopment();
+
+            Assert.True(result);
+        }
+
+        [Test]
+        public void ReturnTrueForDevelopment4()
+        {
+            var target = new StubHostingEnvironment("DEV");
             var result = target.IsDevelopment();
 
             Assert.True(result);
