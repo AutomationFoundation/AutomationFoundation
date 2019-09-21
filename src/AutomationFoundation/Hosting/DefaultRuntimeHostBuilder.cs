@@ -235,15 +235,5 @@ namespace AutomationFoundation.Hosting
                 throw new BuildException("The startup must be configured.");
             }
         }
-
-        private bool ShouldConfigureTheHostingEnvironment()
-        {
-            return hostingEnvironmentConfigurationCallback != null;
-        }
-
-        private void ConfigureTheHostingEnvironment(IHostingEnvironmentBuilder builder)
-        {
-            hostingEnvironmentConfigurationCallback(builder);
-        }
     }
 }
