@@ -12,7 +12,7 @@ namespace AutomationFoundation.Hosting
         /// <summary>
         /// Defines the name of the environment variable which holds the environment name.
         /// </summary>
-        private const string EnvironmentNameVariable = "ASPNETCORE_ENVIRONMENT";
+        public const string EnvironmentNameVariable = "ASPNETCORE_ENVIRONMENT";
 
         /// <summary>
         /// Defines the default environment name.
