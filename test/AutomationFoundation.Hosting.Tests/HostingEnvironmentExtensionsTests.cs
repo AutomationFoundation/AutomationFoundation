@@ -1,7 +1,7 @@
 ﻿using AutomationFoundation.Hosting.Stubs;
 using NUnit.Framework;
 
-namespace AutomationFoundation.Hosting.Abstractions
+namespace AutomationFoundation.Hosting
 {
     [TestFixture]
     public class HostingEnvironmentExtensionsTests
