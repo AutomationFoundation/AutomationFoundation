@@ -1,5 +1,4 @@
 ﻿using System;
-using AutomationFoundation.Hosting.Stubs;
 using NUnit.Framework;
 
 namespace AutomationFoundation.Hosting
@@ -10,14 +9,14 @@ namespace AutomationFoundation.Hosting
         [Test]
         public void ThrowsAnExceptionWhenEnvironmentNameIsNull()
         {
-            var target = new StubHostingEnvironment("Environment");
+            var target = new HostingEnvironment("Environment");
             Assert.Throws<ArgumentNullException>(() => target.IsEnvironment(null));
         }
 
         [Test]
         public void ReturnFalseWhenTheEnvironmentDoesNotMatch()
         {
-            var target = new StubHostingEnvironment("Match");
+            var target = new HostingEnvironment("Match");
             var match = target.IsEnvironment("ShouldNotMatch");
 
             Assert.False(match);
@@ -26,7 +25,7 @@ namespace AutomationFoundation.Hosting
         [Test]
         public void ReturnTrueWhenTheEnvironmentMatches()
         {
-            var target = new StubHostingEnvironment("Match");
+            var target = new HostingEnvironment("Match");
             var match = target.IsEnvironment("Match");
 
             Assert.True(match);
@@ -35,7 +34,7 @@ namespace AutomationFoundation.Hosting
         [Test]
         public void ReturnTrueWhenTheEnvironmentStartsTheSame()
         {
-            var target = new StubHostingEnvironment("MatchThisVeryLongEnvironment");
+            var target = new HostingEnvironment("MatchThisVeryLongEnvironment");
             var match = target.IsEnvironment("Match");
 
             Assert.True(match);

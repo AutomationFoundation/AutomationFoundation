@@ -4,12 +4,21 @@ using AutomationFoundation.Hosting.Abstractions;
 namespace AutomationFoundation.Hosting
 {
     /// <summary>
-    /// Represents a hosting environment. This class must be inherited.
+    /// Represents a hosting environment.
     /// </summary>
-    public abstract class HostingEnvironment : IHostingEnvironment
+    public class HostingEnvironment : IHostingEnvironment
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="HostingEnvironment"/> class.
+        /// </summary>
+        /// <param name="environmentName">The name of the environment.</param>
+        public HostingEnvironment(string environmentName)
+        {
+            EnvironmentName = environmentName ?? throw new ArgumentNullException(nameof(environmentName));
+        }
+
         /// <inheritdoc />
-        public abstract string EnvironmentName { get; }
+        public virtual string EnvironmentName { get; }
 
         /// <inheritdoc />
         public bool IsEnvironment(string environmentName)

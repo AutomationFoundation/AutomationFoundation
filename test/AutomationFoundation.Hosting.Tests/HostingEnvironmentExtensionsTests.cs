@@ -1,5 +1,4 @@
-﻿using AutomationFoundation.Hosting.Stubs;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 
 namespace AutomationFoundation.Hosting
 {
@@ -9,7 +8,7 @@ namespace AutomationFoundation.Hosting
         [Test]
         public void ReturnTrueForProduction1()
         {
-            var target = new StubHostingEnvironment("Production");
+            var target = new HostingEnvironment("Production");
             var result = target.IsProduction();
 
             Assert.True(result);
@@ -18,7 +17,7 @@ namespace AutomationFoundation.Hosting
         [Test]
         public void ReturnTrueForProduction2()
         {
-            var target = new StubHostingEnvironment("Prod");
+            var target = new HostingEnvironment("Prod");
             var result = target.IsProduction();
 
             Assert.True(result);
@@ -27,7 +26,7 @@ namespace AutomationFoundation.Hosting
         [Test]
         public void ReturnTrueForProduction3()
         {
-            var target = new StubHostingEnvironment("Prod_2");
+            var target = new HostingEnvironment("Prod_2");
             var result = target.IsProduction();
 
             Assert.True(result);
@@ -36,7 +35,7 @@ namespace AutomationFoundation.Hosting
         [Test]
         public void ReturnTrueForProduction4()
         {
-            var target = new StubHostingEnvironment("PROD");
+            var target = new HostingEnvironment("PROD");
             var result = target.IsProduction();
 
             Assert.True(result);
@@ -45,7 +44,7 @@ namespace AutomationFoundation.Hosting
         [Test]
         public void ReturnTrueForAnyValueOtherThanProd()
         {
-            var target = new StubHostingEnvironment("AnyValueOtherThanProd");
+            var target = new HostingEnvironment("AnyValueOtherThanProd");
             var result = target.IsNonProduction();
 
             Assert.True(result);
@@ -54,7 +53,7 @@ namespace AutomationFoundation.Hosting
         [Test]
         public void ReturnFalseForProd()
         {
-            var target = new StubHostingEnvironment("Prod");
+            var target = new HostingEnvironment("Prod");
             var result = target.IsNonProduction();
 
             Assert.False(result);
@@ -63,7 +62,7 @@ namespace AutomationFoundation.Hosting
         [Test]
         public void ReturnTrueForDevelopmentAsNonProduction()
         {
-            var target = new StubHostingEnvironment("Dev");
+            var target = new HostingEnvironment("Dev");
             var result = target.IsNonProduction();
 
             Assert.True(result);
@@ -73,7 +72,7 @@ namespace AutomationFoundation.Hosting
         [Test]
         public void ReturnTrueForDevelopment1()
         {
-            var target = new StubHostingEnvironment("Development");
+            var target = new HostingEnvironment("Development");
             var result = target.IsDevelopment();
 
             Assert.True(result);
@@ -82,7 +81,7 @@ namespace AutomationFoundation.Hosting
         [Test]
         public void ReturnTrueForDevelopment2()
         {
-            var target = new StubHostingEnvironment("Dev");
+            var target = new HostingEnvironment("Dev");
             var result = target.IsDevelopment();
 
             Assert.True(result);
@@ -91,7 +90,7 @@ namespace AutomationFoundation.Hosting
         [Test]
         public void ReturnTrueForDevelopment3()
         {
-            var target = new StubHostingEnvironment("Dev_2");
+            var target = new HostingEnvironment("Dev_2");
             var result = target.IsDevelopment();
 
             Assert.True(result);
@@ -100,7 +99,7 @@ namespace AutomationFoundation.Hosting
         [Test]
         public void ReturnTrueForDevelopment4()
         {
-            var target = new StubHostingEnvironment("DEV");
+            var target = new HostingEnvironment("DEV");
             var result = target.IsDevelopment();
 
             Assert.True(result);
