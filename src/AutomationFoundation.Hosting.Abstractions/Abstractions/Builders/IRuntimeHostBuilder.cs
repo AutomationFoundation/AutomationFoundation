@@ -13,7 +13,7 @@ namespace AutomationFoundation.Hosting.Abstractions.Builders
         /// </summary>
         /// <param name="callback">The callback which will configure the environment.</param>
         /// <returns>The current runtime host builder instance.</returns>
-        IRuntimeHostBuilder ConfigureHostingEnvironment(Func<IHostingEnvironment> callback);
+        IRuntimeHostBuilder ConfigureHostingEnvironment(Action<IHostingEnvironmentBuilder> callback);
 
         /// <summary>
         /// Configures the services.

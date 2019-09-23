@@ -77,30 +77,6 @@ namespace AutomationFoundation.Hosting
         }
 
         [Test]
-        public void ThrowsAnExceptionWhenTheEnvironmentIsNull()
-        {
-            var target = new TestableRuntimeHostBuilder();
-            target.ConfigureHostingEnvironment(() => null);
-            target.UseStartup(new StubStartup());
-
-            var ex = Assert.Throws<BuildException>(() => target.Build());
-            Assert.AreEqual("The environment was not created.", ex.Message);
-        }
-
-        [Test]
-        public void AddsTheServiceToTheCollection()
-        {
-            var environment = new Mock<IHostingEnvironment>();
-
-            var target = new DefaultRuntimeHostBuilder();
-            target.ConfigureHostingEnvironment(() => environment.Object);
-            target.UseStartup(new StubStartup());
-
-            var result = target.Build();
-            Assert.IsNotNull(result);
-        }
-
-        [Test]
         public void ShouldRunTheCallbackWhenBeingBuilt()
         {
             var called = false;

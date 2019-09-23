@@ -1,4 +1,6 @@
-﻿namespace AutomationFoundation.Hosting.Abstractions
+﻿using AutomationFoundation.Hosting.Abstractions;
+
+namespace AutomationFoundation.Hosting
 {
     /// <summary>
     /// Contains extension methods for the hosting environment.
@@ -12,17 +14,17 @@
         /// <returns>true if the environment is production, otherwise false.</returns>
         public static bool IsProduction(this IHostingEnvironment environment)
         {
-            return environment.IsEnvironment("Production");
+            return environment.IsEnvironment("Prod");
         }
 
         /// <summary>
-        /// Determines whether the application is being hosted in a pre-production environment.
+        /// Determines whether the application is being hosted in a non-production environment.
         /// </summary>
         /// <param name="environment">The environment to check.</param>
-        /// <returns>true if the environment is pre-production, otherwise false.</returns>
-        public static bool IsStaging(this IHostingEnvironment environment)
+        /// <returns>true if the environment is non-production, otherwise false.</returns>
+        public static bool IsNonProduction(this IHostingEnvironment environment)
         {
-            return environment.IsEnvironment("Staging");
+            return !environment.IsProduction();
         }
 
         /// <summary>
@@ -32,7 +34,7 @@
         /// <returns>true if the environment is development, otherwise false.</returns>
         public static bool IsDevelopment(this IHostingEnvironment environment)
         {
-            return environment.IsEnvironment("Development");
+            return environment.IsEnvironment("Dev");
         }
     }
 }
