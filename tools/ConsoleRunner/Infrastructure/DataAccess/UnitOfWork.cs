@@ -14,6 +14,7 @@ namespace ConsoleRunner.Infrastructure.DataAccess
 
         public void SaveChanges()
         {
+            // This method intentionally left blank.
         }
 
         public void Dispose()

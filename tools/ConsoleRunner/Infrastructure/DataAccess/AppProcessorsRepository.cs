@@ -15,7 +15,7 @@ namespace ConsoleRunner.Infrastructure.DataAccess
                     AppProcessorId = 1,
                     IsEnabled = true,
                     Name = "Test 1",
-                    ProcessorType = ProcessorTypeEnum.ProducerConsumer
+                    ProcessorType = ProcessorType.ProducerConsumer
                 }
             };
         }
