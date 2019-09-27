@@ -46,13 +46,6 @@ namespace ConsoleRunner.Infrastructure.Builders
 
         private IConsumerEngine<int> BuildConsumerEngine()
         {
-            //return new AsynchronousConsumerEngine(
-            //    WorkerPool.Create(),
-            //    new ConsumerRunner<int>(
-            //        new IntConsumer()),
-            //    new StrategyErrorHandler(
-            //        new LogToConsoleErrorStrategy(new ConsoleWriter(), LoggingLevel.All)));
-
             return new SynchronousConsumerEngine<int>(
                 WorkerPool.Create(),
                 new DefaultConsumerExecutionStrategy<int>(

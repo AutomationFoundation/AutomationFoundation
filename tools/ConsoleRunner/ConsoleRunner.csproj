@@ -12,9 +12,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\AutomationFoundation.Extensions.EntityFramework\AutomationFoundation.Extensions.EntityFramework.csproj" />
-    <ProjectReference Include="..\..\src\AutomationFoundation.Extensions.SystemData\AutomationFoundation.Extensions.SystemData.csproj" />
-    <ProjectReference Include="..\..\src\AutomationFoundation.Extensions.SystemTransactions\AutomationFoundation.Extensions.SystemTransactions.csproj" />
     <ProjectReference Include="..\..\src\AutomationFoundation.Features.ProducerConsumer\AutomationFoundation.Features.ProducerConsumer.csproj" />
     <ProjectReference Include="..\..\src\AutomationFoundation.NETCore.App\AutomationFoundation.NETCore.App.csproj" />
     <ProjectReference Include="..\ConsoleRunner.BizServices.Domain\ConsoleRunner.BizServices.Domain.csproj" />

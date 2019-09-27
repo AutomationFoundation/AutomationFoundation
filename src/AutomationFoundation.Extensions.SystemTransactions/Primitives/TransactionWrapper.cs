@@ -48,7 +48,7 @@ namespace AutomationFoundation.Extensions.SystemTransactions.Primitives
         }
 
         /// <inheritdoc />
-        public virtual void Dispose()
+        public void Dispose()
         {
             Dispose(true);
             GC.SuppressFinalize(this);
