@@ -36,10 +36,15 @@ namespace AutomationFoundation.Extensions.EntityFrameworkCore
         }
 
         /// <inheritdoc />
-        public override async Task RollbackAsync(CancellationToken cancellationToken)
+        public override Task RollbackAsync(CancellationToken cancellationToken)
         {
             GuardMustNotBeDisposed();
 
+            return RollbackAsyncImpl(cancellationToken);
+        }
+
+        private async Task RollbackAsyncImpl(CancellationToken cancellationToken)
+        {
             await transaction.RollbackAsync(cancellationToken);
         }
 
@@ -52,10 +57,15 @@ namespace AutomationFoundation.Extensions.EntityFrameworkCore
         }
 
         /// <inheritdoc />
-        public override async Task CommitAsync(CancellationToken cancellationToken)
+        public override Task CommitAsync(CancellationToken cancellationToken)
         {
             GuardMustNotBeDisposed();
 
+            return CommitAsyncImpl(cancellationToken);
+        }
+
+        private async Task CommitAsyncImpl(CancellationToken cancellationToken)
+        {
             await transaction.CommitAsync(cancellationToken);
         }
 

@@ -19,25 +19,46 @@ namespace AutomationFoundation.Extensions.EntityFrameworkCore
         }
 
         [Test]
-        public async Task MustCommitTheTransaction()
+        public void MustCommitTheTransaction()
+        {
+            using (var target = new DbContextTransactionAdapter(transaction.Object))
+            {
+                target.Commit();
+            }
+
+            transaction.Verify(o => o.Commit(), Times.Once);
+        }
+        [Test]
+        public async Task MustCommitTheTransactionAsync()
         {
             using (var target = new DbContextTransactionAdapter(transaction.Object))
             {
                 await target.CommitAsync(CancellationToken.None);
             }
 
-            transaction.Verify(o => o.Commit(), Times.Once);
+            transaction.Verify(o => o.CommitAsync(It.IsAny<CancellationToken>()), Times.Once);
         }
 
         [Test]
-        public async Task MustRollbackTheTransaction()
+        public void MustRollbackTheTransaction()
+        {
+            using (var target = new DbContextTransactionAdapter(transaction.Object))
+            {
+                target.Rollback();
+            }
+
+            transaction.Verify(o => o.Rollback(), Times.Once);
+        }
+
+        [Test]
+        public async Task MustRollbackTheTransactionAsync()
         {
             using (var target = new DbContextTransactionAdapter(transaction.Object))
             {
                 await target.RollbackAsync(CancellationToken.None);
             }
 
-            transaction.Verify(o => o.Rollback(), Times.Once);
+            transaction.Verify(o => o.RollbackAsync(It.IsAny<CancellationToken>()), Times.Once);
         }
 
         [Test]
@@ -68,7 +89,7 @@ namespace AutomationFoundation.Extensions.EntityFrameworkCore
             var target = new DbContextTransactionAdapter(transaction.Object);
             target.Dispose();
 
-            Assert.Throws<ObjectDisposedException>(async () => await target.CommitAsync(CancellationToken.None));
+            Assert.ThrowsAsync<ObjectDisposedException>(async () => await target.CommitAsync(CancellationToken.None));
         }
 
         [Test]
@@ -77,7 +98,7 @@ namespace AutomationFoundation.Extensions.EntityFrameworkCore
             var target = new DbContextTransactionAdapter(transaction.Object);
             target.Dispose();
 
-            Assert.Throws<ObjectDisposedException>(async () => await target.RollbackAsync(CancellationToken.None));
+            Assert.ThrowsAsync<ObjectDisposedException>(async () => await target.RollbackAsync(CancellationToken.None));
         }
 
         [Test]
