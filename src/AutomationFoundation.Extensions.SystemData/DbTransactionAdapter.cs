@@ -28,21 +28,33 @@ namespace AutomationFoundation.Extensions.SystemData
         public override TTransaction UnderlyingTransaction { get; }
 
         /// <inheritdoc />
-        public override Task RollbackAsync(CancellationToken cancellationToken)
+        public override void Rollback()
         {
             GuardMustNotBeDisposed();
 
             UnderlyingTransaction.Rollback();
+        }
+
+        /// <inheritdoc />
+        public override Task RollbackAsync(CancellationToken cancellationToken)
+        {
+            Rollback();
 
             return Task.CompletedTask;
         }
 
         /// <inheritdoc />
-        public override Task CommitAsync(CancellationToken cancellationToken)
+        public override void Commit()
         {
             GuardMustNotBeDisposed();
 
             UnderlyingTransaction.Commit();
+        }
+
+        /// <inheritdoc />
+        public override Task CommitAsync(CancellationToken cancellationToken)
+        {
+            Commit();
 
             return Task.CompletedTask;
         }

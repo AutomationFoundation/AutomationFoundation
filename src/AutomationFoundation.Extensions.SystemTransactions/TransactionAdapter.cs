@@ -36,11 +36,17 @@ namespace AutomationFoundation.Extensions.SystemTransactions
         }
 
         /// <inheritdoc />
-        public override Task RollbackAsync(CancellationToken cancellationToken)
+        public override void Rollback()
         {
             GuardMustNotBeDisposed();
 
             Transaction.Rollback();
+        }
+
+        /// <inheritdoc />
+        public override Task RollbackAsync(CancellationToken cancellationToken)
+        {
+            Rollback();
 
             return Task.CompletedTask;
         }

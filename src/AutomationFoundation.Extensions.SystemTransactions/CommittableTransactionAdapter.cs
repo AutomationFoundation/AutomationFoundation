@@ -31,12 +31,18 @@ namespace AutomationFoundation.Extensions.SystemTransactions
         }
 
         /// <inheritdoc />
-        public override Task CommitAsync(CancellationToken cancellationToken)
+        public override void Commit()
         {
             GuardMustNotBeDisposed();
 
             Transaction.Commit();
-            
+        }
+
+        /// <inheritdoc />
+        public override Task CommitAsync(CancellationToken cancellationToken)
+        {
+            Commit();
+
             return Task.CompletedTask;
         }
     }

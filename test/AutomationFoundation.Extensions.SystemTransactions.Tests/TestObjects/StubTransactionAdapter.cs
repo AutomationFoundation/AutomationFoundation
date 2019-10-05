@@ -12,6 +12,10 @@ namespace AutomationFoundation.Extensions.SystemTransactions.TestObjects
         {
         }
 
+        public override void Commit()
+        {
+        }
+
         public override Task CommitAsync(CancellationToken cancellationToken)
         {
             return Task.CompletedTask;

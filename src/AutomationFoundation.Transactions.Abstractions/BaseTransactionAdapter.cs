@@ -14,7 +14,13 @@ namespace AutomationFoundation.Transactions.Abstractions
         public abstract TTransaction UnderlyingTransaction { get; }
 
         /// <inheritdoc />
+        public abstract void Rollback();
+
+        /// <inheritdoc />
         public abstract Task RollbackAsync(CancellationToken cancellationToken);
+
+        /// <inheritdoc />
+        public abstract void Commit();
 
         /// <inheritdoc />
         public abstract Task CommitAsync(CancellationToken cancellationToken);

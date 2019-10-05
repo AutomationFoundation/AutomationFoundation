@@ -40,21 +40,33 @@ namespace AutomationFoundation.Extensions.EntityFramework
         public override DbContextTransaction UnderlyingTransaction => transaction.UnderlyingTransaction;
 
         /// <inheritdoc />
-        public override Task RollbackAsync(CancellationToken cancellationToken)
+        public override void Rollback()
         {
             GuardMustNotBeDisposed();
 
             transaction.Rollback();
+        }
+
+        /// <inheritdoc />
+        public override Task RollbackAsync(CancellationToken cancellationToken)
+        {
+            Rollback();
 
             return Task.CompletedTask;
         }
 
         /// <inheritdoc />
-        public override Task CommitAsync(CancellationToken cancellationToken)
+        public override void Commit()
         {
             GuardMustNotBeDisposed();
 
             transaction.Commit();
+        }
+
+        /// <inheritdoc />
+        public override Task CommitAsync(CancellationToken cancellationToken)
+        {
+            Commit();
 
             return Task.CompletedTask;
         }
