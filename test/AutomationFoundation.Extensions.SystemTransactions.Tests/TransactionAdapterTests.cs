@@ -8,6 +8,7 @@ using NUnit.Framework;
 
 namespace AutomationFoundation.Extensions.SystemTransactions
 {
+    [TestFixture]
     public class TransactionAdapterTests
     {
         private Mock<CommittableTransactionWrapper> transaction;

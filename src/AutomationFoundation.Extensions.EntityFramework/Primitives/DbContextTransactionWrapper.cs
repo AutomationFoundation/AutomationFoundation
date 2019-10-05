@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Data.Entity;
 
+#pragma warning disable S3881
+
 namespace AutomationFoundation.Extensions.EntityFramework.Primitives
 {
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Major Code Smell", "S3881:\"IDisposable\" should be implemented correctly", 
-        Justification = "False Positive")]
     internal class DbContextTransactionWrapper : IDisposable
     {
         private readonly DbContextTransaction transaction;

@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Transactions;
 
+#pragma warning disable S3881
+
 namespace AutomationFoundation.Extensions.SystemTransactions.Primitives
 {
     /// <summary>
@@ -48,7 +50,7 @@ namespace AutomationFoundation.Extensions.SystemTransactions.Primitives
         }
 
         /// <inheritdoc />
-        public void Dispose()
+        public virtual void Dispose()
         {
             Dispose(true);
             GC.SuppressFinalize(this);
@@ -62,16 +64,8 @@ namespace AutomationFoundation.Extensions.SystemTransactions.Primitives
         {
             if (disposing)
             {
-                ReleaseUnderlyingTransaction();
+                UnderlyingTransaction.Dispose();
             }
-        }
-
-        /// <summary>
-        /// Releases the underlying transaction.
-        /// </summary>
-        protected virtual void ReleaseUnderlyingTransaction()
-        {
-            UnderlyingTransaction.Dispose();
         }
     }
 }
