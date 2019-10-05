@@ -1,4 +1,6 @@
-﻿using System.Transactions;
+﻿using System.Threading;
+using System.Threading.Tasks;
+using System.Transactions;
 using AutomationFoundation.Extensions.SystemTransactions.Primitives;
 
 namespace AutomationFoundation.Extensions.SystemTransactions
@@ -29,9 +31,11 @@ namespace AutomationFoundation.Extensions.SystemTransactions
         }
 
         /// <inheritdoc />
-        public override void Commit()
+        public override Task CommitAsync(CancellationToken cancellationToken)
         {
             Transaction.Complete();
+            
+            return Task.CompletedTask;
         }
     }
 }

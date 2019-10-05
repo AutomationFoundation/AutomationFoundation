@@ -1,4 +1,6 @@
 using System;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Transactions;
 using AutomationFoundation.Extensions.SystemTransactions.Primitives;
 using AutomationFoundation.Extensions.SystemTransactions.TestObjects;
@@ -18,11 +20,11 @@ namespace AutomationFoundation.Extensions.SystemTransactions
         }
 
         [Test]
-        public void MustRollbackTheTransaction()
+        public async Task MustRollbackTheTransaction()
         {
             using (var target = new StubTransactionAdapter(transaction.Object))
             {
-                target.Rollback();
+                await target.RollbackAsync(CancellationToken.None);
             }
 
             transaction.Verify(o => o.Rollback(), Times.Once);
@@ -56,7 +58,7 @@ namespace AutomationFoundation.Extensions.SystemTransactions
             var target = new StubTransactionAdapter(transaction.Object);
             target.Dispose();
 
-            Assert.Throws<ObjectDisposedException>(() => target.Rollback());
+            Assert.Throws<ObjectDisposedException>(async () => await target.RollbackAsync(CancellationToken.None));
         }
 
         [Test]

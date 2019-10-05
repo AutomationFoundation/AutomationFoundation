@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Data.Entity;
+using System.Threading;
+using System.Threading.Tasks;
 using AutomationFoundation.Extensions.EntityFramework.Primitives;
 using Moq;
 using NUnit.Framework;
@@ -18,22 +20,22 @@ namespace AutomationFoundation.Extensions.EntityFramework
         }
 
         [Test]
-        public void MustCommitTheTransaction()
+        public async Task MustCommitTheTransaction()
         {
             using (var target = new DbContextTransactionAdapter(transaction.Object))
             {
-                target.Commit();
+                await target.CommitAsync(CancellationToken.None);
             }
 
             transaction.Verify(o => o.Commit(), Times.Once);
         }
 
         [Test]
-        public void MustRollbackTheTransaction()
+        public async Task MustRollbackTheTransaction()
         {
             using (var target = new DbContextTransactionAdapter(transaction.Object))
             {
-                target.Rollback();
+                await target.RollbackAsync(CancellationToken.None);
             }
 
             transaction.Verify(o => o.Rollback(), Times.Once);
@@ -67,7 +69,7 @@ namespace AutomationFoundation.Extensions.EntityFramework
             var target = new DbContextTransactionAdapter(transaction.Object);
             target.Dispose();
 
-            Assert.Throws<ObjectDisposedException>(() => target.Commit());
+            Assert.Throws<ObjectDisposedException>(async () => await target.CommitAsync(CancellationToken.None));
         }
 
         [Test]
@@ -76,7 +78,7 @@ namespace AutomationFoundation.Extensions.EntityFramework
             var target = new DbContextTransactionAdapter(transaction.Object);
             target.Dispose();
 
-            Assert.Throws<ObjectDisposedException>(() => target.Rollback());
+            Assert.Throws<ObjectDisposedException>(async () => await target.RollbackAsync(CancellationToken.None));
         }
 
         [Test]

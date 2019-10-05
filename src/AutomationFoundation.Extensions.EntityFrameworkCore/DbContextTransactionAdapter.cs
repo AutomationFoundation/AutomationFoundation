@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Threading;
+using System.Threading.Tasks;
 using AutomationFoundation.Transactions.Abstractions;
 using Microsoft.EntityFrameworkCore.Storage;
 
@@ -26,19 +28,19 @@ namespace AutomationFoundation.Extensions.EntityFrameworkCore
         public override IDbContextTransaction UnderlyingTransaction => transaction;
 
         /// <inheritdoc />
-        public override void Rollback()
+        public override async Task RollbackAsync(CancellationToken cancellationToken)
         {
             GuardMustNotBeDisposed();
 
-            transaction.Rollback();
+            await UnderlyingTransaction.RollbackAsync(cancellationToken);
         }
 
         /// <inheritdoc />
-        public override void Commit()
+        public override async Task CommitAsync(CancellationToken cancellationToken)
         {
             GuardMustNotBeDisposed();
-            
-            transaction.Commit();
+
+            await UnderlyingTransaction.CommitAsync(cancellationToken);
         }
 
         /// <inheritdoc />

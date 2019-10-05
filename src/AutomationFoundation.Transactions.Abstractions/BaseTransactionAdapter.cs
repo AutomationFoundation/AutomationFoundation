@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace AutomationFoundation.Transactions.Abstractions
 {
@@ -12,10 +14,10 @@ namespace AutomationFoundation.Transactions.Abstractions
         public abstract TTransaction UnderlyingTransaction { get; }
 
         /// <inheritdoc />
-        public abstract void Rollback();
+        public abstract Task RollbackAsync(CancellationToken cancellationToken);
 
         /// <inheritdoc />
-        public abstract void Commit();
+        public abstract Task CommitAsync(CancellationToken cancellationToken);
 
         /// <summary>
         /// Gets a value indicating whether the adapter owns the transaction.

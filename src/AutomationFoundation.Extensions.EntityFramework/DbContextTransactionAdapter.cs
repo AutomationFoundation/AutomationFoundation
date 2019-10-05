@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Data.Entity;
+using System.Threading;
+using System.Threading.Tasks;
 using AutomationFoundation.Extensions.EntityFramework.Primitives;
 using AutomationFoundation.Transactions.Abstractions;
 
@@ -38,19 +40,23 @@ namespace AutomationFoundation.Extensions.EntityFramework
         public override DbContextTransaction UnderlyingTransaction => transaction.UnderlyingTransaction;
 
         /// <inheritdoc />
-        public override void Rollback()
+        public override Task RollbackAsync(CancellationToken cancellationToken)
         {
             GuardMustNotBeDisposed();
 
             transaction.Rollback();
+
+            return Task.CompletedTask;
         }
 
         /// <inheritdoc />
-        public override void Commit()
+        public override Task CommitAsync(CancellationToken cancellationToken)
         {
             GuardMustNotBeDisposed();
 
             transaction.Commit();
+
+            return Task.CompletedTask;
         }
 
         /// <inheritdoc />

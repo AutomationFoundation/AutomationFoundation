@@ -1,4 +1,7 @@
-﻿namespace AutomationFoundation.Transactions.Abstractions
+﻿using System.Threading;
+using System.Threading.Tasks;
+
+namespace AutomationFoundation.Transactions.Abstractions
 {
     /// <summary>
     /// Identifies a transaction.
@@ -8,11 +11,15 @@
         /// <summary>
         /// Commits the transaction.
         /// </summary>
-        void Commit();
+        /// <param name="cancellationToken">The cancellation token to monitor for cancellation requests.</param>
+        /// <returns>The task to await.</returns>
+        Task CommitAsync(CancellationToken cancellationToken);
 
         /// <summary>
         /// Rolls the transaction back to the original state.
         /// </summary>
-        void Rollback();
+        /// <param name="cancellationToken">The cancellation token to monitor for cancellation requests.</param>
+        /// <returns>The task to await.</returns>
+        Task RollbackAsync(CancellationToken cancellationToken);
     }
 }

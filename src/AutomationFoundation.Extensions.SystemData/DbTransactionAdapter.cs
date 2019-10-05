@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Data.Common;
+using System.Threading;
+using System.Threading.Tasks;
 using AutomationFoundation.Transactions.Abstractions;
 
 namespace AutomationFoundation.Extensions.SystemData
@@ -26,19 +28,23 @@ namespace AutomationFoundation.Extensions.SystemData
         public override TTransaction UnderlyingTransaction { get; }
 
         /// <inheritdoc />
-        public override void Rollback()
+        public override Task RollbackAsync(CancellationToken cancellationToken)
         {
             GuardMustNotBeDisposed();
 
             UnderlyingTransaction.Rollback();
+
+            return Task.CompletedTask;
         }
 
         /// <inheritdoc />
-        public override void Commit()
+        public override Task CommitAsync(CancellationToken cancellationToken)
         {
             GuardMustNotBeDisposed();
 
             UnderlyingTransaction.Commit();
+
+            return Task.CompletedTask;
         }
 
         /// <inheritdoc />
