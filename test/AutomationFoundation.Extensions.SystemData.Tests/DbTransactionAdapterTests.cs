@@ -46,7 +46,7 @@ namespace AutomationFoundation.Extensions.SystemData
             var target = new DbTransactionAdapter<DbTransaction>(transaction.Object);
             target.Dispose();
 
-            Assert.Throws<ObjectDisposedException>(async () => await target.CommitAsync(CancellationToken.None));
+            Assert.ThrowsAsync<ObjectDisposedException>(async () => await target.CommitAsync(CancellationToken.None));
         }
 
         [Test]
@@ -55,7 +55,7 @@ namespace AutomationFoundation.Extensions.SystemData
             var target = new DbTransactionAdapter<DbTransaction>(transaction.Object);
             target.Dispose();
 
-            Assert.Throws<ObjectDisposedException>(async () => await target.RollbackAsync(CancellationToken.None));
+            Assert.ThrowsAsync<ObjectDisposedException>(async () => await target.RollbackAsync(CancellationToken.None));
         }
 
         [Test]

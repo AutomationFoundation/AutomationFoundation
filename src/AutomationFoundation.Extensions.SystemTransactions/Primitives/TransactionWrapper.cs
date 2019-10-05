@@ -62,8 +62,16 @@ namespace AutomationFoundation.Extensions.SystemTransactions.Primitives
         {
             if (disposing)
             {
-                UnderlyingTransaction.Dispose();
+                ReleaseUnderlyingTransaction();
             }
+        }
+
+        /// <summary>
+        /// Releases the underlying transaction.
+        /// </summary>
+        protected virtual void ReleaseUnderlyingTransaction()
+        {
+            UnderlyingTransaction.Dispose();
         }
     }
 }

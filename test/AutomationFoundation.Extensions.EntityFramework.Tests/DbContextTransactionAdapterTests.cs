@@ -69,7 +69,7 @@ namespace AutomationFoundation.Extensions.EntityFramework
             var target = new DbContextTransactionAdapter(transaction.Object);
             target.Dispose();
 
-            Assert.Throws<ObjectDisposedException>(async () => await target.CommitAsync(CancellationToken.None));
+            Assert.ThrowsAsync<ObjectDisposedException>(async () => await target.CommitAsync(CancellationToken.None));
         }
 
         [Test]
@@ -78,7 +78,7 @@ namespace AutomationFoundation.Extensions.EntityFramework
             var target = new DbContextTransactionAdapter(transaction.Object);
             target.Dispose();
 
-            Assert.Throws<ObjectDisposedException>(async () => await target.RollbackAsync(CancellationToken.None));
+            Assert.ThrowsAsync<ObjectDisposedException>(async () => await target.RollbackAsync(CancellationToken.None));
         }
 
         [Test]

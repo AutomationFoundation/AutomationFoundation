@@ -1,7 +1,6 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Transactions;
 using AutomationFoundation.Extensions.SystemTransactions.Primitives;
 using AutomationFoundation.Extensions.SystemTransactions.TestObjects;
 using Moq;
@@ -58,7 +57,7 @@ namespace AutomationFoundation.Extensions.SystemTransactions
             var target = new StubTransactionAdapter(transaction.Object);
             target.Dispose();
 
-            Assert.Throws<ObjectDisposedException>(async () => await target.RollbackAsync(CancellationToken.None));
+            Assert.ThrowsAsync<ObjectDisposedException>(async () => await target.RollbackAsync(CancellationToken.None));
         }
 
         [Test]
