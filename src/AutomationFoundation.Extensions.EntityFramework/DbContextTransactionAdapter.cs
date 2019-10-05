@@ -19,17 +19,16 @@ namespace AutomationFoundation.Extensions.EntityFramework
         /// </summary>
         /// <param name="transaction">The transaction which is being adapted.</param>
         /// <param name="ownsTransaction">Optional. Identifies whether the adapter will take ownership of the transaction.</param>
-        public DbContextTransactionAdapter(DbContextTransaction transaction, bool ownsTransaction = true) 
-            : base(ownsTransaction)
+        public DbContextTransactionAdapter(DbContextTransaction transaction, bool ownsTransaction = true)
+            : this(new DbContextTransactionWrapper(transaction), ownsTransaction)
         {
-            if (transaction == null)
-            {
-                throw new ArgumentNullException(nameof(transaction));
-            }
-
-            this.transaction = new DbContextTransactionWrapper(transaction);
         }
 
+        /// <summary>
+        /// Initializes an instance of the <see cref="DbContextTransactionAdapter"/> class.
+        /// </summary>
+        /// <param name="transaction">The transaction which is being adapted.</param>
+        /// <param name="ownsTransaction">Optional. Identifies whether the adapter will take ownership of the transaction.</param>
         internal DbContextTransactionAdapter(IDbContextTransaction transaction, bool ownsTransaction = true)
             : base(ownsTransaction)
         {

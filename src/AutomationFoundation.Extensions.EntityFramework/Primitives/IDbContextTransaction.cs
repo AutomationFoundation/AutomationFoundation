@@ -6,7 +6,7 @@ namespace AutomationFoundation.Extensions.EntityFramework.Primitives
     /// <summary>
     /// Identifies an Entity Framework compatible database transaction.
     /// </summary>
-    public interface IDbContextTransaction : IDisposable
+    internal interface IDbContextTransaction : IDisposable
     {
         /// <summary>
         /// Gets the underling database context transaction.

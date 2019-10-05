@@ -6,7 +6,7 @@ namespace AutomationFoundation.Extensions.EntityFramework.Primitives
     /// <summary>
     /// Provides a wrapper which wraps a <see cref="DbContextTransaction"/> object.
     /// </summary>
-    public class DbContextTransactionWrapper : IDbContextTransaction
+    internal class DbContextTransactionWrapper : IDbContextTransaction
     {
         /// <summary>
         /// Gets the underlying transaction.
