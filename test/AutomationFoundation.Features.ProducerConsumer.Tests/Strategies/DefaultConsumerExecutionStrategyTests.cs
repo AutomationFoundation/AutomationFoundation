@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using AutomationFoundation.Features.ProducerConsumer.Abstractions;
-using AutomationFoundation.Features.ProducerConsumer.Strategies.Stubs;
+using AutomationFoundation.Features.ProducerConsumer.Strategies.TestObjects;
 using AutomationFoundation.Runtime;
 using Microsoft.Extensions.DependencyInjection;
 using Moq;

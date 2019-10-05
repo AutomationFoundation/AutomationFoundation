@@ -1,6 +1,6 @@
 ﻿using System;
 using AutomationFoundation.Features.ProducerConsumer.Abstractions;
-using AutomationFoundation.Features.ProducerConsumer.Resolvers.Stubs;
+using AutomationFoundation.Features.ProducerConsumer.Resolvers.TestObjects;
 using Moq;
 using NUnit.Framework;
 

@@ -1,5 +1,5 @@
 ﻿using System;
-using AutomationFoundation.Runtime.Stubs;
+using AutomationFoundation.Runtime.TestObjects;
 using NUnit.Framework;
 
 namespace AutomationFoundation.Runtime

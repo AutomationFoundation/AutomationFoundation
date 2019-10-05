@@ -1,5 +1,5 @@
 ﻿using System;
-using AutomationFoundation.Runtime.Stubs;
+using AutomationFoundation.Runtime.TestObjects;
 using Microsoft.Extensions.DependencyInjection;
 using Moq;
 using NUnit.Framework;

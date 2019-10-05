@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace AutomationFoundation.Runtime.Stubs
+namespace AutomationFoundation.Runtime.TestObjects
 {
     public class StubProcessingContext : ProcessingContext
     {

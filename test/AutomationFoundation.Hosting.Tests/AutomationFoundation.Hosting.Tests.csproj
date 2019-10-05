@@ -9,14 +9,21 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Abstractions\**" />
+    <Compile Remove="Stubs\**" />
+    <EmbeddedResource Remove="Abstractions\**" />
+    <EmbeddedResource Remove="Stubs\**" />
+    <None Remove="Abstractions\**" />
+    <None Remove="Stubs\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Moq" Version="4.13.0" />
     <PackageReference Include="NUnit" Version="3.12.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Abstractions\" />
     <Folder Include="Properties\" />
-    <Folder Include="Stubs\" />
   </ItemGroup>
 
   <ItemGroup>

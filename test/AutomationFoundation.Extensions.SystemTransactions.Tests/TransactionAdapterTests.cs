@@ -1,7 +1,7 @@
 using System;
 using System.Transactions;
 using AutomationFoundation.Extensions.SystemTransactions.Primitives;
-using AutomationFoundation.Extensions.SystemTransactions.Stubs;
+using AutomationFoundation.Extensions.SystemTransactions.TestObjects;
 using Moq;
 using NUnit.Framework;
 

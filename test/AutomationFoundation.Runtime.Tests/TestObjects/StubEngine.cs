@@ -1,4 +1,4 @@
-﻿namespace AutomationFoundation.Runtime.Stubs
+﻿namespace AutomationFoundation.Runtime.TestObjects
 {
     public class StubEngine : Engine
     {

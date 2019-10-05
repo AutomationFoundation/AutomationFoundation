@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace AutomationFoundation.Runtime.Stubs
+namespace AutomationFoundation.Runtime.TestObjects
 {
     public class StubProcessor : Processor
     {

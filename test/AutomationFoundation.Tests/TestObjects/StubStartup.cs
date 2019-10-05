@@ -2,7 +2,7 @@
 using AutomationFoundation.Hosting.Abstractions;
 using AutomationFoundation.Runtime.Abstractions.Builders;
 
-namespace AutomationFoundation.Stubs
+namespace AutomationFoundation.TestObjects
 {
     public class StubStartup : IStartup
     {
