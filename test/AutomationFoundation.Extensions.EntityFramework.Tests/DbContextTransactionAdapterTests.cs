@@ -11,12 +11,12 @@ namespace AutomationFoundation.Extensions.EntityFramework
     [TestFixture]
     public class DbContextTransactionAdapterTests
     {
-        private Mock<DbContextTransactionWrapper> transaction;
+        private Mock<IDbContextTransaction> transaction;
 
         [SetUp]
         public void Setup()
         {
-            transaction = new Mock<DbContextTransactionWrapper>();
+            transaction = new Mock<IDbContextTransaction>();
         }
 
         [Test]
@@ -48,7 +48,7 @@ namespace AutomationFoundation.Extensions.EntityFramework
             {
                 Assert.True(target.OwnsTransaction);
             }
-
+            
             transaction.Verify(o => o.Dispose(), Times.Once);
         }
 

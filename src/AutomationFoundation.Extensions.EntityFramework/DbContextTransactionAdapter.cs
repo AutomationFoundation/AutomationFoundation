@@ -12,7 +12,7 @@ namespace AutomationFoundation.Extensions.EntityFramework
     /// </summary>
     public sealed class DbContextTransactionAdapter : BaseTransactionAdapter<DbContextTransaction>
     {
-        private readonly DbContextTransactionWrapper transaction;
+        private readonly IDbContextTransaction transaction;
 
         /// <summary>
         /// Initializes an instance of the <see cref="DbContextTransactionAdapter"/> class.
@@ -30,7 +30,7 @@ namespace AutomationFoundation.Extensions.EntityFramework
             this.transaction = new DbContextTransactionWrapper(transaction);
         }
 
-        internal DbContextTransactionAdapter(DbContextTransactionWrapper transaction, bool ownsTransaction = true)
+        internal DbContextTransactionAdapter(IDbContextTransaction transaction, bool ownsTransaction = true)
             : base(ownsTransaction)
         {
             this.transaction = transaction ?? throw new ArgumentNullException(nameof(transaction));
