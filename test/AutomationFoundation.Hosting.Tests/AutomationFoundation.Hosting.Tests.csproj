@@ -9,17 +9,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Abstractions\**" />
-    <Compile Remove="Stubs\**" />
-    <EmbeddedResource Remove="Abstractions\**" />
-    <EmbeddedResource Remove="Stubs\**" />
-    <None Remove="Abstractions\**" />
-    <None Remove="Stubs\**" />
-  </ItemGroup>
-
-  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.3.0" />
     <PackageReference Include="Moq" Version="4.13.0" />
     <PackageReference Include="NUnit" Version="3.12.0" />
+    <PackageReference Include="NUnit3TestAdapter" Version="3.15.1" />
   </ItemGroup>
 
   <ItemGroup>
