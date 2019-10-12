@@ -64,9 +64,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AutomationFoundation.Extens
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AutomationFoundation.Extensions.EntityFramework.Tests", "test\AutomationFoundation.Extensions.EntityFramework.Tests\AutomationFoundation.Extensions.EntityFramework.Tests.csproj", "{F0EC8C50-509E-4A74-AAA8-81BEBE9A8709}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutomationFoundation.Extensions.EntityFrameworkCore", "src\AutomationFoundation.Extensions.EntityFrameworkCore\AutomationFoundation.Extensions.EntityFrameworkCore.csproj", "{7D6618BA-8557-4920-A19D-274D0ED596B5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AutomationFoundation.Extensions.EntityFrameworkCore", "src\AutomationFoundation.Extensions.EntityFrameworkCore\AutomationFoundation.Extensions.EntityFrameworkCore.csproj", "{7D6618BA-8557-4920-A19D-274D0ED596B5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutomationFoundation.Extensions.EntityFrameworkCore.Tests", "test\AutomationFoundation.Extensions.EntityFrameworkCore.Tests\AutomationFoundation.Extensions.EntityFrameworkCore.Tests.csproj", "{C774CA64-0C8C-4A08-A267-475C76B3B21C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AutomationFoundation.Extensions.EntityFrameworkCore.Tests", "test\AutomationFoundation.Extensions.EntityFrameworkCore.Tests\AutomationFoundation.Extensions.EntityFrameworkCore.Tests.csproj", "{C774CA64-0C8C-4A08-A267-475C76B3B21C}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AutomationFoundation.Extensions.SqlClient", "src\AutomationFoundation.Extensions.SqlClient\AutomationFoundation.Extensions.SqlClient.csproj", "{203C7051-8ACB-43B1-9FFF-C022939D2AFB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutomationFoundation.Extensions.SqlClient.Tests", "test\AutomationFoundation.Extensions.SqlClient.Tests\AutomationFoundation.Extensions.SqlClient.Tests.csproj", "{3288B904-2B45-4158-B7A1-865A409DB4EA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -174,6 +178,14 @@ Global
 		{C774CA64-0C8C-4A08-A267-475C76B3B21C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C774CA64-0C8C-4A08-A267-475C76B3B21C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C774CA64-0C8C-4A08-A267-475C76B3B21C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{203C7051-8ACB-43B1-9FFF-C022939D2AFB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{203C7051-8ACB-43B1-9FFF-C022939D2AFB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{203C7051-8ACB-43B1-9FFF-C022939D2AFB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{203C7051-8ACB-43B1-9FFF-C022939D2AFB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3288B904-2B45-4158-B7A1-865A409DB4EA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3288B904-2B45-4158-B7A1-865A409DB4EA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3288B904-2B45-4158-B7A1-865A409DB4EA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3288B904-2B45-4158-B7A1-865A409DB4EA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -202,6 +214,8 @@ Global
 		{F0EC8C50-509E-4A74-AAA8-81BEBE9A8709} = {51336679-9F77-4B62-8A82-F4B875371473}
 		{7D6618BA-8557-4920-A19D-274D0ED596B5} = {52B14C67-9A5D-410A-8444-B108FDF50CB3}
 		{C774CA64-0C8C-4A08-A267-475C76B3B21C} = {51336679-9F77-4B62-8A82-F4B875371473}
+		{203C7051-8ACB-43B1-9FFF-C022939D2AFB} = {52B14C67-9A5D-410A-8444-B108FDF50CB3}
+		{3288B904-2B45-4158-B7A1-865A409DB4EA} = {51336679-9F77-4B62-8A82-F4B875371473}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {A5E424F8-8EDD-4829-B7A0-49D3AA7A5AE9}
