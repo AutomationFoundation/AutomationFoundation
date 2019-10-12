@@ -9,7 +9,7 @@ namespace AutomationFoundation.Extensions.EntityFramework.Primitives
     internal interface IDbContextTransaction : IDisposable
     {
         /// <summary>
-        /// Gets the underling database context transaction.
+        /// Gets the underlying database context transaction.
         /// </summary>
         DbContextTransaction UnderlyingTransaction { get; }
 
