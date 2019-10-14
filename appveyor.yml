@@ -24,11 +24,7 @@ install:
 dotnet_csproj:
   patch: true
   file: '**\*.csproj'
-  version: '{version}-preview'
-  package_version: '{version}-preview'
-  assembly_version: '{version}-preview'
-  file_version: '{version}'
-  informational_version: '{version}-preview'
+  version_prefix: '${version}'
 
 nuget:
   disable_publish_on_pr: true
@@ -39,7 +35,7 @@ before_build:
   - cmd: nuget restore
 
 build_script:
-  - cmd: dotnet build AutomationFoundation.sln /p:Configuration="%Configuration%" /p:Platform="%Platform%"
+  - cmd: dotnet build AutomationFoundation.sln /p:Configuration="%Configuration%" /p:Platform="%Platform%" --version-suffix "%semver_suffix%"
 
 test_script:
   - cmd: dotnet test AutomationFoundation.sln /p:Configuration="%Configuration%" /p:Platform="%Platform%" /p:CollectCoverage=true /p:CoverletOutputFormat=opencover /p:CoverletOutput=".\TestResults\coverage.opencover.xml" --no-build --logger trx
