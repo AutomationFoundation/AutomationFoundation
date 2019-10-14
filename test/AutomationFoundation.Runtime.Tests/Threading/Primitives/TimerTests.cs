@@ -13,17 +13,16 @@ namespace AutomationFoundation.Runtime.Threading.Primitives
         {
             var called = false;
 
-            using (var waitEvent = new ManualResetEventSlim(false))
-            using (var target = new Timer())
-            {
-                target.Start(TimeSpan.FromSeconds(1), () =>
-                {
-                    called = true;
-                    waitEvent.Set();
-                }, error => { });
+            using var waitEvent = new ManualResetEventSlim(false);
+            using var target = new Timer();
 
-                waitEvent.Wait();
-            }
+            target.Start(TimeSpan.FromSeconds(1), () =>
+            {
+                called = true;
+                waitEvent.Set();
+            }, error => { });
+
+            waitEvent.Wait();
 
             Assert.True(called);
         }
@@ -34,19 +33,18 @@ namespace AutomationFoundation.Runtime.Threading.Primitives
         {
             var called = false;
 
-            using (var waitEvent = new ManualResetEventSlim(false))
-            using (var target = new Timer())
+            using var waitEvent = new ManualResetEventSlim(false);
+            using var target = new Timer();
+
+            target.Start(TimeSpan.FromSeconds(1), () => throw new InvalidOperationException(), error =>
             {
-                target.Start(TimeSpan.FromSeconds(1), () => throw new InvalidOperationException(), error =>
-                {
-                    Assert.IsInstanceOf<InvalidOperationException>(error);
+                Assert.IsInstanceOf<InvalidOperationException>(error);
 
-                    called = true;
-                    waitEvent.Set();
-                });
+                called = true;
+                waitEvent.Set();
+            });
 
-                waitEvent.Wait();
-            }
+            waitEvent.Wait();
 
             Assert.True(called);
         }
