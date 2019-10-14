@@ -19,10 +19,9 @@ namespace AutomationFoundation.Runtime.Threading.Primitives
             target.Start(TimeSpan.FromSeconds(1), () =>
             {
                 called = true;
-                waitEvent.Set();
             }, error => { });
 
-            waitEvent.Wait();
+            waitEvent.Wait(5000);
 
             Assert.True(called);
         }
@@ -41,10 +40,9 @@ namespace AutomationFoundation.Runtime.Threading.Primitives
                 Assert.IsInstanceOf<InvalidOperationException>(error);
 
                 called = true;
-                waitEvent.Set();
             });
 
-            waitEvent.Wait();
+            waitEvent.Wait(5000);
 
             Assert.True(called);
         }
