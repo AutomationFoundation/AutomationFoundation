@@ -43,7 +43,7 @@ build_script:
 #  verbosity: minimal
 
 test_script:
-  - cmd: dotnet test AutomationFoundation.sln /p:Configuration="%Configuration%" /p:Platform="%Platform%" /p:CollectCoverage=true /p:CoverletOutputFormat=opencover --no-build --logger trx
+  - cmd: dotnet test AutomationFoundation.sln /p:Configuration="%Configuration%" /p:Platform="%Platform%" /p:CollectCoverage=true /p:CoverletOutputFormat=opencover /p:CoverletOutput=".\TestResults\coverage.opencover.xml" --no-build --logger "C:\Program Files\AppVeyor\BuildAgent\Appveyor.MSBuildLogger.dll"
 #  - ps: opencover -target:"C:\Tools\NUnit3\nunit3-console.exe" -targetargs:"$(get-childitem *.tests.dll -recurse | where { $_.FullName -notmatch 'obj' } | %{ `"$_`" }) --skipnontestassemblies" -register -output:opencover.xml
 
 #after_test:
@@ -54,7 +54,7 @@ artifacts:
     name: NuGet
   - path: '**\TestResult.xml'
     name: Test Results
-  - path: '**\opencover.xml'
+  - path: '**\coverage.opencover.xml'
     name: Coverage Results
 
 deploy:
