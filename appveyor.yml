@@ -24,11 +24,11 @@ install:
 dotnet_csproj:
   patch: true
   file: '**\*.csproj'
-  version: '{version}-${semver_suffix}'
-  package_version: '{version}-${semver_suffix}'
-  assembly_version: '{version}-${semver_suffix}'
+  version: '{version}-$(semver_suffix)'
+  package_version: '{version}-$(semver_suffix)'
+  assembly_version: '{version}-$(semver_suffix)'
   file_version: '{version}'
-  informational_version: '{version}-${semver_suffix}'
+  informational_version: '{version}-$(semver_suffix)'
 
 nuget:
   disable_publish_on_pr: true
