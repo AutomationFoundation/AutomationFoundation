@@ -21,10 +21,8 @@ namespace AutomationFoundation.Extensions.SystemData
         [Test]
         public async Task MustCommitTheTransaction()
         {
-            using (var target = new DbTransactionAdapter<DbTransaction>(transaction.Object))
-            {
-                await target.CommitAsync(CancellationToken.None);
-            }
+            using var target = new DbTransactionAdapter<DbTransaction>(transaction.Object);
+            await target.CommitAsync(CancellationToken.None);
 
             transaction.Verify(o => o.Commit(), Times.Once);
         }
@@ -61,10 +59,8 @@ namespace AutomationFoundation.Extensions.SystemData
         [Test]
         public void ReturnsTheUnderlyingTransactionAsExpected()
         {
-            using (var target = new DbTransactionAdapter<DbTransaction>(transaction.Object))
-            {
-                Assert.AreEqual(transaction.Object, target.UnderlyingTransaction);
-            }
+            using var target = new DbTransactionAdapter<DbTransaction>(transaction.Object);
+            Assert.AreEqual(transaction.Object, target.UnderlyingTransaction);
         }
 
         [Test]

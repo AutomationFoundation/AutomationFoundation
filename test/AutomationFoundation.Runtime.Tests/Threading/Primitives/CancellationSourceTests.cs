@@ -19,29 +19,25 @@ namespace AutomationFoundation.Runtime.Threading.Primitives
         [Test]
         public void IndicatesCancellationWhenImmediate()
         {
-            using (var target = new CancellationSource())
-            {
-                Assert.False(target.IsCancellationRequested);
+            using var target = new CancellationSource();
+            Assert.False(target.IsCancellationRequested);
 
-                target.RequestImmediateCancellation();
+            target.RequestImmediateCancellation();
 
-                Assert.True(target.IsCancellationRequested);
-            }
+            Assert.True(target.IsCancellationRequested);
         }
 
         [Test]
         public void IndicatesCancellationWhenAfterAPeriodOfTime()
         {
-            using (var target = new CancellationSource())
-            {
-                Assert.False(target.IsCancellationRequested);
+            using var target = new CancellationSource();
+            Assert.False(target.IsCancellationRequested);
 
-                target.RequestCancellationAfter(TimeSpan.FromSeconds(1));
+            target.RequestCancellationAfter(TimeSpan.FromSeconds(1));
 
-                Thread.Sleep(TimeSpan.FromSeconds(2));
+            Thread.Sleep(TimeSpan.FromSeconds(2));
 
-                Assert.True(target.IsCancellationRequested);
-            }
+            Assert.True(target.IsCancellationRequested);
         }
     }
 }

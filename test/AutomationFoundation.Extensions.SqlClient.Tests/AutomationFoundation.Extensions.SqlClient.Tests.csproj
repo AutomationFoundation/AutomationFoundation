@@ -6,6 +6,7 @@
     <AssemblyOriginatorKeyFile>..\..\Public.snk</AssemblyOriginatorKeyFile>
     <DelaySign>false</DelaySign>
     <RootNamespace>AutomationFoundation.Extensions.SqlClient</RootNamespace>
+    <LangVersion>8.0</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>
@@ -22,6 +23,10 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\AutomationFoundation.Extensions.SqlClient\AutomationFoundation.Extensions.SqlClient.csproj" />
+  </ItemGroup>
+
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net472' ">
+    <Reference Include="System.Data" />
   </ItemGroup>
 
 </Project>

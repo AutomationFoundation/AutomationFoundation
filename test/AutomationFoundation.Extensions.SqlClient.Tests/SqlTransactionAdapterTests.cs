@@ -19,21 +19,21 @@ namespace AutomationFoundation.Extensions.SqlClient
         [Test]
         public void ThrowAnExceptionWhenSavePointNameIsNullOnRollback()
         {
-            var target = new SqlTransactionAdapter(transaction.Object);
+            using var target = new SqlTransactionAdapter(transaction.Object);
             Assert.Throws<ArgumentNullException>(() => target.Rollback(null));
         }
 
         [Test]
         public void ThrowAnExceptionWhenSavePointNameIsEmptyOnRollback()
         {
-            var target = new SqlTransactionAdapter(transaction.Object);
+            using var target = new SqlTransactionAdapter(transaction.Object);
             Assert.Throws<ArgumentNullException>(() => target.Rollback(""));
         }
 
         [Test]
         public void ThrowAnExceptionWhenSavePointNameIsWhiteSpaceOnRollback()
         {
-            var target = new SqlTransactionAdapter(transaction.Object);
+            using var target = new SqlTransactionAdapter(transaction.Object);
             Assert.Throws<ArgumentNullException>(() => target.Rollback("      "));
         }
 
@@ -43,7 +43,7 @@ namespace AutomationFoundation.Extensions.SqlClient
         {
             var savePointName = "MySavePointName";
 
-            var target = new SqlTransactionAdapter(transaction.Object);
+            using var target = new SqlTransactionAdapter(transaction.Object);
             target.Rollback(savePointName);
 
             transaction.Verify(o => o.Rollback(savePointName));
@@ -54,7 +54,7 @@ namespace AutomationFoundation.Extensions.SqlClient
         {
             var savePointName = "MySavePointName";
 
-            var target = new SqlTransactionAdapter(transaction.Object);
+            using var target = new SqlTransactionAdapter(transaction.Object);
             target.Save(savePointName);
 
             transaction.Verify(o => o.Save(savePointName));
@@ -63,21 +63,21 @@ namespace AutomationFoundation.Extensions.SqlClient
         [Test]
         public void ThrowAnExceptionWhenSavePointNameIsNullOnSave()
         {
-            var target = new SqlTransactionAdapter(transaction.Object);
+            using var target = new SqlTransactionAdapter(transaction.Object);
             Assert.Throws<ArgumentNullException>(() => target.Save(null));
         }
 
         [Test]
         public void ThrowAnExceptionWhenSavePointNameIsEmptyOnSave()
         {
-            var target = new SqlTransactionAdapter(transaction.Object);
+            using var target = new SqlTransactionAdapter(transaction.Object);
             Assert.Throws<ArgumentNullException>(() => target.Save(""));
         }
 
         [Test]
         public void ThrowAnExceptionWhenSavePointNameIsWhiteSpaceOnSave()
         {
-            var target = new SqlTransactionAdapter(transaction.Object);
+            using var target = new SqlTransactionAdapter(transaction.Object);
             Assert.Throws<ArgumentNullException>(() => target.Save("      "));
         }
     }

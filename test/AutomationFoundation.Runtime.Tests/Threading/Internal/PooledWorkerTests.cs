@@ -47,23 +47,19 @@ namespace AutomationFoundation.Runtime.Threading.Internal
         [Test]
         public void RunTheWorkerAsynchronouslyAsExpected()
         {
-            using (var target = new PooledWorker(cache.Object, worker.Object))
-            {
-                target.RunAsync();
+            using var target = new PooledWorker(cache.Object, worker.Object);
+            target.RunAsync();
 
-                worker.Verify(o => o.RunAsync(), Times.Once);
-            }
+            worker.Verify(o => o.RunAsync(), Times.Once);
         }
 
         [Test]
         public void RunTheWorkerSynchronouslyAsExpected()
         {
-            using (var target = new PooledWorker(cache.Object, worker.Object))
-            {
-                target.Run();
+            using var target = new PooledWorker(cache.Object, worker.Object);
+            target.Run();
 
-                worker.Verify(o => o.Run(), Times.Once);
-            }
+            worker.Verify(o => o.Run(), Times.Once);
         }
 
         [Test]
@@ -80,10 +76,8 @@ namespace AutomationFoundation.Runtime.Threading.Internal
         [Test]
         public void WaitsForTheWorkerToComplete()
         {
-            using (var target = new PooledWorker(cache.Object, worker.Object))
-            {
-                target.WaitForCompletion();
-            }
+            using var target = new PooledWorker(cache.Object, worker.Object);
+            target.WaitForCompletion();
 
             worker.Verify(o => o.WaitForCompletion(), Times.Once);
         }
@@ -93,10 +87,8 @@ namespace AutomationFoundation.Runtime.Threading.Internal
         {
             worker.Setup(o => o.WaitForCompletionAsync()).Returns(Task.CompletedTask);
 
-            using (var target = new PooledWorker(cache.Object, worker.Object))
-            {
-                await target.WaitForCompletionAsync();
-            }
+            using var target = new PooledWorker(cache.Object, worker.Object);
+            await target.WaitForCompletionAsync();
 
             worker.Verify(o => o.WaitForCompletionAsync(), Times.Once);
         }
