@@ -1,5 +1,7 @@
-﻿using AutomationFoundation.Extensions.SystemTransactions.Primitives;
-using AutomationFoundation.Extensions.SystemTransactions.Stubs;
+﻿using System.Threading;
+using System.Threading.Tasks;
+using AutomationFoundation.Extensions.SystemTransactions.Primitives;
+using AutomationFoundation.Extensions.SystemTransactions.TestObjects;
 using Moq;
 using NUnit.Framework;
 
@@ -17,11 +19,11 @@ namespace AutomationFoundation.Extensions.SystemTransactions
         }
 
         [Test]
-        public void MustCommitTheTransaction()
+        public async Task MustCommitTheTransaction()
         {
             using (var target = new TestableCommittableTransactionAdapter(transaction.Object, true))
             {
-                target.Commit();
+                await target.CommitAsync(CancellationToken.None);
             }
 
             transaction.Verify(o => o.Commit(), Times.Once);

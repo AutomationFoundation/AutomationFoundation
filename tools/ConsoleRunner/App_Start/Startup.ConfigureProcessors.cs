@@ -47,15 +47,15 @@ namespace ConsoleRunner
             }
         }
 
-        private static IApplicationProcessorBuilder GetBuilder(ProcessorTypeEnum processorType)
+        private static IApplicationProcessorBuilder GetBuilder(ProcessorType processorType)
         {
             switch (processorType)
             {
-                case ProcessorTypeEnum.ProducerConsumer:
+                case ProcessorType.ProducerConsumer:
                     return new ProducerConsumerProcessorBuilder();
 
-                case ProcessorTypeEnum.ScheduledJob:
-                case ProcessorTypeEnum.Task:
+                case ProcessorType.ScheduledJob:
+                case ProcessorType.Task:
                     throw new NotSupportedException($"The processor type '{processorType}' is not supported.");
             }
 

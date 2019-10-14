@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Data.Entity;
+using System.Threading;
+using System.Threading.Tasks;
 using AutomationFoundation.Extensions.EntityFramework.Primitives;
 using AutomationFoundation.Transactions.Abstractions;
 
@@ -10,25 +12,24 @@ namespace AutomationFoundation.Extensions.EntityFramework
     /// </summary>
     public sealed class DbContextTransactionAdapter : BaseTransactionAdapter<DbContextTransaction>
     {
-        private readonly DbContextTransactionWrapper transaction;
+        private readonly IDbContextTransaction transaction;
 
         /// <summary>
         /// Initializes an instance of the <see cref="DbContextTransactionAdapter"/> class.
         /// </summary>
         /// <param name="transaction">The transaction which is being adapted.</param>
         /// <param name="ownsTransaction">Optional. Identifies whether the adapter will take ownership of the transaction.</param>
-        public DbContextTransactionAdapter(DbContextTransaction transaction, bool ownsTransaction = true) 
-            : base(ownsTransaction)
+        public DbContextTransactionAdapter(DbContextTransaction transaction, bool ownsTransaction = true)
+            : this(new DbContextTransactionWrapper(transaction), ownsTransaction)
         {
-            if (transaction == null)
-            {
-                throw new ArgumentNullException(nameof(transaction));
-            }
-
-            this.transaction = new DbContextTransactionWrapper(transaction);
         }
 
-        internal DbContextTransactionAdapter(DbContextTransactionWrapper transaction, bool ownsTransaction = true)
+        /// <summary>
+        /// Initializes an instance of the <see cref="DbContextTransactionAdapter"/> class.
+        /// </summary>
+        /// <param name="transaction">The transaction which is being adapted.</param>
+        /// <param name="ownsTransaction">Optional. Identifies whether the adapter will take ownership of the transaction.</param>
+        internal DbContextTransactionAdapter(IDbContextTransaction transaction, bool ownsTransaction = true)
             : base(ownsTransaction)
         {
             this.transaction = transaction ?? throw new ArgumentNullException(nameof(transaction));
@@ -46,11 +47,27 @@ namespace AutomationFoundation.Extensions.EntityFramework
         }
 
         /// <inheritdoc />
+        public override Task RollbackAsync(CancellationToken cancellationToken)
+        {
+            Rollback();
+
+            return Task.CompletedTask;
+        }
+
+        /// <inheritdoc />
         public override void Commit()
         {
             GuardMustNotBeDisposed();
 
             transaction.Commit();
+        }
+
+        /// <inheritdoc />
+        public override Task CommitAsync(CancellationToken cancellationToken)
+        {
+            Commit();
+
+            return Task.CompletedTask;
         }
 
         /// <inheritdoc />

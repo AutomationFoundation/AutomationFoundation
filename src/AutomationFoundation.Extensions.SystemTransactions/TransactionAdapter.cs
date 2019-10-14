@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Transactions;
 using AutomationFoundation.Extensions.SystemTransactions.Primitives;
 using AutomationFoundation.Transactions.Abstractions;
@@ -39,6 +41,14 @@ namespace AutomationFoundation.Extensions.SystemTransactions
             GuardMustNotBeDisposed();
 
             Transaction.Rollback();
+        }
+
+        /// <inheritdoc />
+        public override Task RollbackAsync(CancellationToken cancellationToken)
+        {
+            Rollback();
+
+            return Task.CompletedTask;
         }
 
         /// <inheritdoc />

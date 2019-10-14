@@ -1,5 +1,5 @@
 version: 0.1.{build}
-image: Visual Studio 2017
+image: Visual Studio 2019
 configuration: Release
 platform: Any CPU
 
@@ -12,48 +12,47 @@ environment:
     secure: Wl4NefzdMAo7GP7gP11aWDrxKoQPC0eN78TZFcZBbHGMW3geBDFu40RVF1GxTFUaFzN/lAcQ3qL9m8huHSWLBg==
   snk_salt:
     secure: tIuRlNokDRTBkah55IRfeATr4WWOEfQOLDqUjrDMMcPEmgq4yOTHzQFKEky67G9rk51D2VvdMFsTcDQrecDonA==
+  semver_suffix: preview
 
 init:
   - cmd: nuget sources add -name "myget.org" -source "https://www.myget.org/F/winnster/api/v3/index.json"
 
 install:
-  - cmd: choco install opencover
-  - ps: set-alias opencover "${env:LocalAppData}\Apps\OpenCover\OpenCover.Console.exe"
-  - cmd: choco install sonarscanner-msbuild-net46
   - cmd: choco install secure-file --ignore-checksums
+  - cmd: dotnet tool install dotnet-sonarscanner --global
 
 dotnet_csproj:
   patch: true
   file: '**\*.csproj'
-  version: '{version}-preview'
-  package_version: '{version}-preview'
-  assembly_version: '{version}-preview'
+  version: '{version}-$(semver_suffix)'
+  package_version: '{version}-$(semver_suffix)'
+  assembly_version: '{version}-$(semver_suffix)'
   file_version: '{version}'
-  informational_version: '{version}-preview'
+  informational_version: '{version}-$(semver_suffix)'
 
 nuget:
   disable_publish_on_pr: true
 
 before_build:
   - cmd: secure-file.exe -decrypt Winnster.snk.enc -secret %snk_passphrase% -salt %snk_salt%
-  - cmd: SonarScanner.MSBuild.exe begin /k:"AutomationFoundation" /v:"%APPVEYOR_BUILD_VERSION%-preview" /d:"sonar.branch.name=%APPVEYOR_REPO_BRANCH%" /d:"sonar.host.url=https://sonarcloud.io" /o:"winnster" /d:"sonar.login=%sonarcloud_token%" /d:"sonar.cs.nunit.reportsPaths=**/TestResult.xml" /d:"sonar.cs.opencover.reportsPaths=**/opencover.xml" /d:"sonar.exclusions=**\Primitives\**,**\tools\**"
+  - cmd: dotnet sonarscanner begin /k:"AutomationFoundation" /v:"%APPVEYOR_BUILD_VERSION%-%semver_suffix%" /d:"sonar.branch.name=%APPVEYOR_REPO_BRANCH%" /d:"sonar.host.url=https://sonarcloud.io" /o:"winnster" /d:"sonar.login=%sonarcloud_token%" /d:"sonar.cs.nunit.reportsPaths=**/TestResults.xml" /d:"sonar.cs.opencover.reportsPaths=**/coverage.opencover.xml" /d:"sonar.exclusions=**\Primitives\**,**\tools\**"
   - cmd: nuget restore
 
-build:
-  verbosity: minimal
+build_script:
+  - cmd: dotnet build AutomationFoundation.sln /p:Configuration="%Configuration%" /p:Platform="%Platform%"
 
 test_script:
-  - ps: opencover -target:"C:\Tools\NUnit3\nunit3-console.exe" -targetargs:"$(get-childitem *.tests.dll -recurse | where { $_.FullName -notmatch 'obj' } | %{ `"$_`" }) --skipnontestassemblies" -register -output:opencover.xml
+  - cmd: dotnet test AutomationFoundation.sln /p:Configuration="%Configuration%" /p:Platform="%Platform%" /p:CollectCoverage=true /p:CoverletOutputFormat=opencover /p:CoverletOutput=".\TestResults\coverage.opencover.xml" --no-build --logger nunit
 
 after_test:
-  - cmd: SonarScanner.MSBuild.exe end /d:"sonar.login=%sonarcloud_token%"
+  - cmd: dotnet sonarscanner end /d:"sonar.login=%sonarcloud_token%"
 
 artifacts:
   - path: '**\*.nupkg'
     name: NuGet
-  - path: '**\TestResult.xml'
+  - path: '**\TestResults.xml'
     name: Test Results
-  - path: '**\opencover.xml'
+  - path: '**\coverage.opencover.xml'
     name: Coverage Results
 
 deploy:

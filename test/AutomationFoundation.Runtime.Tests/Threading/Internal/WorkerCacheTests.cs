@@ -1,6 +1,6 @@
 ﻿//using System;
 //using System.Collections.Generic;
-//using AutomationFoundation.Runtime.Tests.Stubs;
+//using AutomationFoundation.Runtime.Tests.TestObjects;
 //using AutomationFoundation.Runtime.Threading.Primitives;
 //using Moq;
 //using NUnit.Framework;

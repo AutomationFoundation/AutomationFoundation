@@ -1,6 +1,6 @@
 ﻿using AutomationFoundation.Extensions.SystemTransactions.Primitives;
 
-namespace AutomationFoundation.Extensions.SystemTransactions.Stubs
+namespace AutomationFoundation.Extensions.SystemTransactions.TestObjects
 {
     public class TestableDependentTransactionAdapter : DependentTransactionAdapter
     {

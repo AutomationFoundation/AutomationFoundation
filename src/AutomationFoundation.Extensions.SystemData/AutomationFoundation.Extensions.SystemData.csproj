@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net472</TargetFramework>
+    <TargetFrameworks>netstandard2.0;net472</TargetFrameworks>
     <Authors>Winnster.io</Authors>
     <Version>0.0.0</Version>
     <PackageVersion>$(Version)</PackageVersion>
@@ -18,7 +18,11 @@
     <ProjectReference Include="..\AutomationFoundation.Transactions.Abstractions\AutomationFoundation.Transactions.Abstractions.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
+  <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard2.0' ">
+    <PackageReference Include="System.Data.Common" Version="[4.3.0,5.0.0)" />
+  </ItemGroup>
+
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net472' ">
     <Reference Include="System.Data" />
   </ItemGroup>
 

@@ -1,7 +1,9 @@
-﻿using System.Transactions;
+﻿using System.Threading;
+using System.Threading.Tasks;
+using System.Transactions;
 using AutomationFoundation.Extensions.SystemTransactions.Primitives;
 
-namespace AutomationFoundation.Extensions.SystemTransactions.Stubs
+namespace AutomationFoundation.Extensions.SystemTransactions.TestObjects
 {
     public class StubTransactionAdapter : TransactionAdapter<CommittableTransactionWrapper, CommittableTransaction>
     {
@@ -12,6 +14,11 @@ namespace AutomationFoundation.Extensions.SystemTransactions.Stubs
 
         public override void Commit()
         {
+        }
+
+        public override Task CommitAsync(CancellationToken cancellationToken)
+        {
+            return Task.CompletedTask;
         }
     }
 }

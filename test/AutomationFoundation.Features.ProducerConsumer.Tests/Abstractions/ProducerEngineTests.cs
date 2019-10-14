@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Threading;
-using AutomationFoundation.Features.ProducerConsumer.Abstractions.Stubs;
+using AutomationFoundation.Features.ProducerConsumer.Abstractions.TestObjects;
 using AutomationFoundation.Runtime;
 using AutomationFoundation.Runtime.Abstractions.Threading.Primitives;
 using Moq;

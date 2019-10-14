@@ -1,12 +1,14 @@
 using System;
-using System.Transactions;
+using System.Threading;
+using System.Threading.Tasks;
 using AutomationFoundation.Extensions.SystemTransactions.Primitives;
-using AutomationFoundation.Extensions.SystemTransactions.Stubs;
+using AutomationFoundation.Extensions.SystemTransactions.TestObjects;
 using Moq;
 using NUnit.Framework;
 
 namespace AutomationFoundation.Extensions.SystemTransactions
 {
+    [TestFixture]
     public class TransactionAdapterTests
     {
         private Mock<CommittableTransactionWrapper> transaction;
@@ -18,11 +20,11 @@ namespace AutomationFoundation.Extensions.SystemTransactions
         }
 
         [Test]
-        public void MustRollbackTheTransaction()
+        public async Task MustRollbackTheTransaction()
         {
             using (var target = new StubTransactionAdapter(transaction.Object))
             {
-                target.Rollback();
+                await target.RollbackAsync(CancellationToken.None);
             }
 
             transaction.Verify(o => o.Rollback(), Times.Once);
@@ -56,7 +58,7 @@ namespace AutomationFoundation.Extensions.SystemTransactions
             var target = new StubTransactionAdapter(transaction.Object);
             target.Dispose();
 
-            Assert.Throws<ObjectDisposedException>(() => target.Rollback());
+            Assert.ThrowsAsync<ObjectDisposedException>(async () => await target.RollbackAsync(CancellationToken.None));
         }
 
         [Test]

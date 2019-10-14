@@ -2,7 +2,7 @@
 using AutomationFoundation.Runtime.Abstractions.Synchronization;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace AutomationFoundation.Features.ProducerConsumer.Strategies.Stubs
+namespace AutomationFoundation.Features.ProducerConsumer.Strategies.TestObjects
 {
     public class StubDefaultProducerExecutionStrategy<TItem> : DefaultProducerExecutionStrategy<TItem>
     {

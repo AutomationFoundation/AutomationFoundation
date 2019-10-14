@@ -1,7 +1,7 @@
 ﻿using System;
 using AutomationFoundation.Runtime.Abstractions.Threading.Internal;
 using AutomationFoundation.Runtime.Abstractions.Threading.Primitives;
-using AutomationFoundation.Runtime.Stubs;
+using AutomationFoundation.Runtime.TestObjects;
 using AutomationFoundation.Runtime.Threading.Internal;
 using Moq;
 using NUnit.Framework;

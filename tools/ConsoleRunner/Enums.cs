@@ -11,7 +11,7 @@
         All
     }
 
-    public enum ProcessorTypeEnum
+    public enum ProcessorType
     {
         ProducerConsumer,
         ScheduledJob,

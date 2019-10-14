@@ -1,22 +1,19 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net472</TargetFramework>
+    <TargetFramework>netcoreapp3.0</TargetFramework>
     <OutputType>Exe</OutputType>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Autofac" Version="4.9.4" />
     <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="4.4.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="[3.0.0,4.0.0)" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\AutomationFoundation.Extensions.EntityFramework\AutomationFoundation.Extensions.EntityFramework.csproj" />
-    <ProjectReference Include="..\..\src\AutomationFoundation.Extensions.SystemData\AutomationFoundation.Extensions.SystemData.csproj" />
-    <ProjectReference Include="..\..\src\AutomationFoundation.Extensions.SystemTransactions\AutomationFoundation.Extensions.SystemTransactions.csproj" />
     <ProjectReference Include="..\..\src\AutomationFoundation.Features.ProducerConsumer\AutomationFoundation.Features.ProducerConsumer.csproj" />
     <ProjectReference Include="..\..\src\AutomationFoundation.NETCore.App\AutomationFoundation.NETCore.App.csproj" />
-    <ProjectReference Include="..\..\src\AutomationFoundation.NETFX.App\AutomationFoundation.NETFX.App.csproj" />
     <ProjectReference Include="..\ConsoleRunner.BizServices.Domain\ConsoleRunner.BizServices.Domain.csproj" />
   </ItemGroup>
 

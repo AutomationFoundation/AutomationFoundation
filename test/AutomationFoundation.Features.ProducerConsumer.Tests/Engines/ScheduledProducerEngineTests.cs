@@ -3,6 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using AutomationFoundation.Features.ProducerConsumer.Abstractions;
 using AutomationFoundation.Features.ProducerConsumer.Engines.Configuration;
+using AutomationFoundation.Features.ProducerConsumer.Engines.TestObjects;
 using AutomationFoundation.Runtime;
 using AutomationFoundation.Runtime.Abstractions;
 using AutomationFoundation.Runtime.Abstractions.Threading.Primitives;
@@ -126,9 +127,64 @@ namespace AutomationFoundation.Features.ProducerConsumer.Engines
         }
 
         [Test]
-        public void DoesNotThrowAnExceptionWhenCancelledWhileDelayed()
+        public async Task DoesNotCauseFatalExceptionWhenCancelWhileDelayed()
         {
+            executionStrategy.Setup(o => o.ExecuteAsync(It.IsAny<Action<IProducerConsumerContext<object>>>(), It.IsAny<CancellationToken>()))
+                .Returns<Action<IProducerConsumerContext<object>>, CancellationToken>((context, cancellationToken) =>
+                {
+                    Task.Delay(1000, cancellationToken).GetAwaiter().GetResult();
 
+                    return Task.FromResult(false);
+                });
+
+            scheduler.Setup(o => o.CalculateNextExecution(It.IsAny<DateTimeOffset>(), It.IsAny<DateTimeOffset>()))
+                .Returns(DateTimeOffset.Now.AddMinutes(1));
+
+            using (var cancellationSource = new CancellationSource())
+            using (var target = new TestableScheduledProducerEngine(executionStrategy.Object, cancellationSourceFactory.Object, errorHandler.Object, scheduler.Object, new ScheduledEngineOptions()))
+            {
+                cancellationSourceFactory.Setup(o => o.Create(It.IsAny<CancellationToken>())).Returns(cancellationSource);
+
+                target.Initialize(context => { }, CancellationToken.None);
+
+                target.SetDelayCallback(() =>
+                {
+                    cancellationSource.RequestImmediateCancellation();
+                });
+
+                await target.StartAsync();
+                Assert.True(target.IsRunning);
+
+                await target.WaitForCompletionAsync();
+            }
+
+            errorHandler.Verify(o => o.Handle(It.IsAny<Exception>(), ErrorSeverityLevel.Fatal), Times.Never);
+        }
+
+        [Test]
+        public async Task CausesFatalExceptionWhenThrownOutsideInnerLoop()
+        {
+            scheduler.Setup(o => o.CalculateNextExecution(It.IsAny<DateTimeOffset>(), It.IsAny<DateTimeOffset>())).Throws<Exception>();
+
+            using (var cancellationSource = new CancellationSource())
+            using (var target = new TestableScheduledProducerEngine(executionStrategy.Object, cancellationSourceFactory.Object, errorHandler.Object, scheduler.Object, new ScheduledEngineOptions()))
+            {
+                cancellationSourceFactory.Setup(o => o.Create(It.IsAny<CancellationToken>())).Returns(cancellationSource);
+
+                target.Initialize(context => { }, CancellationToken.None);
+
+                target.SetDelayCallback(() =>
+                {
+                    cancellationSource.RequestImmediateCancellation();
+                });
+
+                await target.StartAsync();
+                Assert.True(target.IsRunning);
+
+                await target.WaitForCompletionAsync();
+            }
+
+            errorHandler.Verify(o => o.Handle(It.IsAny<Exception>(), ErrorSeverityLevel.Fatal), Times.Once);
         }
     }
 }

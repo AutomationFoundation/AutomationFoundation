@@ -1,4 +1,6 @@
-﻿using System.Transactions;
+﻿using System.Threading;
+using System.Threading.Tasks;
+using System.Transactions;
 using AutomationFoundation.Extensions.SystemTransactions.Primitives;
 
 namespace AutomationFoundation.Extensions.SystemTransactions
@@ -31,7 +33,17 @@ namespace AutomationFoundation.Extensions.SystemTransactions
         /// <inheritdoc />
         public override void Commit()
         {
+            GuardMustNotBeDisposed();
+
             Transaction.Commit();
+        }
+
+        /// <inheritdoc />
+        public override Task CommitAsync(CancellationToken cancellationToken)
+        {
+            Commit();
+
+            return Task.CompletedTask;
         }
     }
 }

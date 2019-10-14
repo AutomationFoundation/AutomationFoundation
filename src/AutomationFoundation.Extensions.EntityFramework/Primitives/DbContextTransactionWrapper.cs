@@ -3,49 +3,61 @@ using System.Data.Entity;
 
 namespace AutomationFoundation.Extensions.EntityFramework.Primitives
 {
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Major Code Smell", "S3881:\"IDisposable\" should be implemented correctly", 
-        Justification = "False Positive")]
-    internal class DbContextTransactionWrapper : IDisposable
+    /// <summary>
+    /// Provides a wrapper which wraps a <see cref="DbContextTransaction"/> object.
+    /// </summary>
+    internal class DbContextTransactionWrapper : IDbContextTransaction
     {
-        private readonly DbContextTransaction transaction;
+        /// <summary>
+        /// Gets the underlying transaction.
+        /// </summary>
+        public DbContextTransaction UnderlyingTransaction { get; }
 
-        public virtual DbContextTransaction UnderlyingTransaction => transaction;
-
-        public DbContextTransactionWrapper()
-        {
-        }
-
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DbContextTransactionWrapper"/> class.
+        /// </summary>
+        /// <param name="transaction">The database transaction being wrapped.</param>
         public DbContextTransactionWrapper(DbContextTransaction transaction)
         {
-            this.transaction = transaction ?? throw new ArgumentNullException(nameof(transaction));
+            UnderlyingTransaction = transaction ?? throw new ArgumentNullException(nameof(transaction));
         }
 
+        /// <summary>
+        /// Finalizes an instance of the <see cref="DbContextTransactionWrapper"/> class.
+        /// </summary>
         ~DbContextTransactionWrapper()
         {
             Dispose(false);
         }
 
-        public virtual void Commit()
+        /// <inheritdoc />
+        public void Commit()
         {
-            transaction.Commit();
+            UnderlyingTransaction.Commit();
         }
 
-        public virtual void Rollback()
+        /// <inheritdoc />
+        public void Rollback()
         {
-            transaction.Rollback();
+            UnderlyingTransaction.Rollback();
         }
 
-        public virtual void Dispose()
+        /// <inheritdoc />
+        public void Dispose()
         {
             Dispose(true);
             GC.SuppressFinalize(this);
         }
 
+        /// <summary>
+        /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+        /// </summary>
+        /// <param name="disposing">true to release both managed and unmanaged resources, otherwise false to release unmanaged resources.</param>
         protected virtual void Dispose(bool disposing)
         {
             if (disposing)
             {
-                transaction.Dispose();
+                UnderlyingTransaction.Dispose();
             }
         }
     }

@@ -40,28 +40,35 @@ namespace AutomationFoundation.Features.ProducerConsumer.Engines
         /// <inheritdoc />
         protected override async Task RunAsync(Action<IProducerConsumerContext<TItem>> onProducedCallback, CancellationToken cancellationToken, CancellationToken parentToken)
         {
-            while (!cancellationToken.IsCancellationRequested)
+            try
             {
-                var started = DateTimeOffset.Now;
-                var found = false;
-
-                do
+                while (!cancellationToken.IsCancellationRequested)
                 {
-                    try
-                    {
-                        found = await executionStrategy.ExecuteAsync(onProducedCallback, parentToken);
-                    }
-                    catch (Exception ex)
-                    {
-                        errorHandler.Handle(ex, ErrorSeverityLevel.NonFatal);
-                    }
-                } while (found && options.ContinueUntilEmpty
-                               && !cancellationToken.IsCancellationRequested);
+                    var started = DateTimeOffset.Now;
+                    var found = false;
 
-                if (!cancellationToken.IsCancellationRequested)
-                {
-                    await WaitUntilNextExecutionAsync(started, DateTimeOffset.Now, cancellationToken);
+                    do
+                    {
+                        try
+                        {
+                            found = await executionStrategy.ExecuteAsync(onProducedCallback, parentToken);
+                        }
+                        catch (Exception ex)
+                        {
+                            errorHandler.Handle(ex, ErrorSeverityLevel.NonFatal);
+                        }
+                    } while (found && options.ContinueUntilEmpty
+                                   && !cancellationToken.IsCancellationRequested);
+
+                    if (!cancellationToken.IsCancellationRequested)
+                    {
+                        await WaitUntilNextExecutionAsync(started, DateTimeOffset.Now, cancellationToken);
+                    }
                 }
+            }
+            catch (Exception ex)
+            {
+                errorHandler.Handle(ex, ErrorSeverityLevel.Fatal);
             }
         }
 

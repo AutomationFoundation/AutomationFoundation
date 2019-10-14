@@ -1,11 +1,10 @@
 ﻿using System;
-using System.Data.Odbc;
 using AutomationFoundation.Hosting;
 using AutomationFoundation.Hosting.Abstractions;
 using AutomationFoundation.Runtime.Abstractions.Builders;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace AutomationFoundation.Stubs
+namespace AutomationFoundation.TestObjects
 {
     public class TestableRuntimeHostBuilder : DefaultRuntimeHostBuilder
     {

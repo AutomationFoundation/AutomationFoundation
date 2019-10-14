@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Transactions;
 
+#pragma warning disable S3881
+
 namespace AutomationFoundation.Extensions.SystemTransactions.Primitives
 {
     /// <summary>
