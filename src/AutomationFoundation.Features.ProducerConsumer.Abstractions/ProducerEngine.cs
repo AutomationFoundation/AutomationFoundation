@@ -26,6 +26,11 @@ namespace AutomationFoundation.Features.ProducerConsumer.Abstractions
         public bool IsRunning => task != null && !task.IsCanceled && !task.IsCompleted && !task.IsFaulted;
 
         /// <summary>
+        /// Gets a value indicating whether the engine has been started.
+        /// </summary>
+        public bool IsStarted => task != null;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="ProducerEngine{TItem}"/> class.
         /// </summary>
         /// <param name="cancellationSourceFactory">The factory for creating cancellation sources.</param>
@@ -119,9 +124,20 @@ namespace AutomationFoundation.Features.ProducerConsumer.Abstractions
             GuardMustNotBeDisposed();
             GuardMustBeInitialized();
 
-            GuardMustBeRunning();
+            GuardMustBeStarted();
 
             return Task.WhenAll(task);
+        }
+
+        /// <summary>
+        /// Ensures the engine has been started.
+        /// </summary>
+        protected void GuardMustBeStarted()
+        {
+            if (!IsStarted)
+            {
+                throw new EngineException("The engine must be started.");
+            }
         }
 
         /// <summary>
@@ -149,6 +165,8 @@ namespace AutomationFoundation.Features.ProducerConsumer.Abstractions
         {
             GuardMustNotBeDisposed();
             GuardMustBeInitialized();
+
+            GuardMustBeStarted();
 
             cancellationSource.RequestImmediateCancellation();
 
