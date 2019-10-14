@@ -64,7 +64,6 @@ namespace AutomationFoundation.Features.ProducerConsumer.Engines
                 target.Initialize(context => { }, CancellationToken.None);
 
                 await target.StartAsync();
-                Assert.True(target.IsRunning);
 
                 cancellationSource.RequestCancellationAfter(TimeSpan.FromSeconds(5));
 
@@ -90,7 +89,6 @@ namespace AutomationFoundation.Features.ProducerConsumer.Engines
                 target.Initialize(context => { }, CancellationToken.None);
 
                 await target.StartAsync();
-                Assert.True(target.IsRunning);
 
                 cancellationSource.RequestCancellationAfter(TimeSpan.FromSeconds(5));
 
@@ -115,7 +113,6 @@ namespace AutomationFoundation.Features.ProducerConsumer.Engines
                 target.Initialize(context => { }, CancellationToken.None);
 
                 await target.StartAsync();
-                Assert.True(target.IsRunning);
 
                 cancellationSource.RequestCancellationAfter(TimeSpan.FromSeconds(5));
 
@@ -153,8 +150,6 @@ namespace AutomationFoundation.Features.ProducerConsumer.Engines
                 });
 
                 await target.StartAsync();
-                Assert.True(target.IsRunning);
-
                 await target.WaitForCompletionAsync();
             }
 
@@ -179,8 +174,6 @@ namespace AutomationFoundation.Features.ProducerConsumer.Engines
                 });
 
                 await target.StartAsync();
-                Assert.True(target.IsRunning);
-
                 await target.WaitForCompletionAsync();
             }
 
