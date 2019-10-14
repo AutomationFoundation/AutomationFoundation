@@ -43,7 +43,7 @@ build_script:
 #  verbosity: minimal
 
 test_script:
-  - cmd: dotnet test AutomationFoundation.sln /p:Configuration="%Configuration%" /p:Platform="%Platform%" /p:CollectCoverage=true /p:CoverletOutputFormat=opencover --no-build
+  - cmd: dotnet test AutomationFoundation.sln /p:Configuration="%Configuration%" /p:Platform="%Platform%" /p:CollectCoverage=true /p:CoverletOutputFormat=opencover --no-build --logger trx
 #  - ps: opencover -target:"C:\Tools\NUnit3\nunit3-console.exe" -targetargs:"$(get-childitem *.tests.dll -recurse | where { $_.FullName -notmatch 'obj' } | %{ `"$_`" }) --skipnontestassemblies" -register -output:opencover.xml
 
 #after_test:
