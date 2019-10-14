@@ -12,14 +12,14 @@ environment:
     secure: Wl4NefzdMAo7GP7gP11aWDrxKoQPC0eN78TZFcZBbHGMW3geBDFu40RVF1GxTFUaFzN/lAcQ3qL9m8huHSWLBg==
   snk_salt:
     secure: tIuRlNokDRTBkah55IRfeATr4WWOEfQOLDqUjrDMMcPEmgq4yOTHzQFKEky67G9rk51D2VvdMFsTcDQrecDonA==
+  semver_suffix: preview
 
 init:
   - cmd: nuget sources add -name "myget.org" -source "https://www.myget.org/F/winnster/api/v3/index.json"
 
 install:
-#  - cmd: choco install opencover
-#  - ps: set-alias opencover "${env:LocalAppData}\Apps\OpenCover\OpenCover.Console.exe"
   - cmd: choco install secure-file --ignore-checksums
+  - cmd: dotnet tool install dotnet-sonarscanner --global
 
 dotnet_csproj:
   patch: true
@@ -35,19 +35,17 @@ nuget:
 
 before_build:
   - cmd: secure-file.exe -decrypt Winnster.snk.enc -secret %snk_passphrase% -salt %snk_salt%
- # - cmd: SonarScanner.MSBuild.exe begin /k:"AutomationFoundation" /v:"%APPVEYOR_BUILD_VERSION%-preview" /d:"sonar.branch.name=%APPVEYOR_REPO_BRANCH%" /d:"sonar.host.url=https://sonarcloud.io" /o:"winnster" /d:"sonar.login=%sonarcloud_token%" /d:"sonar.cs.nunit.reportsPaths=**/TestResult.xml" /d:"sonar.cs.opencover.reportsPaths=**/opencover.xml" /d:"sonar.exclusions=**\Primitives\**,**\tools\**"
+  - cmd: dotnet sonarscanner begin /k:"AutomationFoundation" /v:"%APPVEYOR_BUILD_VERSION%-preview" /d:"sonar.branch.name=%APPVEYOR_REPO_BRANCH%" /d:"sonar.host.url=https://sonarcloud.io" /o:"winnster" /d:"sonar.login=%sonarcloud_token%" /d:"sonar.cs.vstest.reportsPaths=**/*.trx" /d:"sonar.cs.opencover.reportsPaths=**/coverage.opencover.xml" /d:"sonar.exclusions=**\Primitives\**,**\tools\**"
   - cmd: nuget restore
 
 build_script:
   - cmd: dotnet build AutomationFoundation.sln /p:Configuration="%Configuration%" /p:Platform="%Platform%"
-#  verbosity: minimal
 
 test_script:
-  - cmd: dotnet test AutomationFoundation.sln /p:Configuration="%Configuration%" /p:Platform="%Platform%" /p:CollectCoverage=true /p:CoverletOutputFormat=opencover /p:CoverletOutput=".\TestResults\coverage.opencover.xml" --no-build --logger "C:\Program Files\AppVeyor\BuildAgent\Appveyor.MSBuildLogger.dll"
-#  - ps: opencover -target:"C:\Tools\NUnit3\nunit3-console.exe" -targetargs:"$(get-childitem *.tests.dll -recurse | where { $_.FullName -notmatch 'obj' } | %{ `"$_`" }) --skipnontestassemblies" -register -output:opencover.xml
+  - cmd: dotnet test AutomationFoundation.sln /p:Configuration="%Configuration%" /p:Platform="%Platform%" /p:CollectCoverage=true /p:CoverletOutputFormat=opencover /p:CoverletOutput=".\TestResults\coverage.opencover.xml" --no-build --logger trx
 
-#after_test:
-#  - cmd: SonarScanner.MSBuild.exe end /d:"sonar.login=%sonarcloud_token%"
+after_test:
+  - cmd: dotnet sonarscanner end /d:"sonar.login=%sonarcloud_token%"
 
 artifacts:
   - path: '**\*.nupkg'
