@@ -22,23 +22,19 @@ namespace AutomationFoundation.Runtime
         [Test]
         public void ReturnsTheIdCorrectly()
         {
-            using (var target = new StubProcessingContext(id, scope.Object))
-            {
-                Assert.AreEqual(id, target.Id);
-            }
+            using var target = new StubProcessingContext(id, scope.Object);
+            Assert.AreEqual(id, target.Id);
         }
 
         [Test]
         public void SetsTheCurrentContext()
         {
-            using (var expected = new StubProcessingContext(id, scope.Object))
-            {
-                ProcessingContext.SetCurrent(expected);
+            using var expected = new StubProcessingContext(id, scope.Object);
+            ProcessingContext.SetCurrent(expected);
 
-                var result = ProcessingContext.Current;
+            var result = ProcessingContext.Current;
 
-                Assert.AreEqual(expected, result);
-            }
+            Assert.AreEqual(expected, result);
         }
 
         [Test]
@@ -50,15 +46,13 @@ namespace AutomationFoundation.Runtime
         [Test]
         public void ClearsTheCurrentContext()
         {
-            using (var target = new StubProcessingContext(id, scope.Object))
-            {
-                ProcessingContext.SetCurrent(target);
-                Assert.IsNotNull(ProcessingContext.Current);
+            using var target = new StubProcessingContext(id, scope.Object);
+            ProcessingContext.SetCurrent(target);
+            Assert.IsNotNull(ProcessingContext.Current);
 
-                ProcessingContext.Clear();
+            ProcessingContext.Clear();
 
-                Assert.IsNull(ProcessingContext.Current);
-            }
+            Assert.IsNull(ProcessingContext.Current);
         }
 
         [Test]

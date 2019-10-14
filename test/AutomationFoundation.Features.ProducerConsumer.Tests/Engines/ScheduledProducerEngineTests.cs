@@ -34,19 +34,18 @@ namespace AutomationFoundation.Features.ProducerConsumer.Engines
         [Timeout(10000)]
         public async Task StartAndStopTheEngineCorrectly()
         {
-            using (var cancellationSource = new CancellationSource())
-            using (var target = new ScheduledProducerEngine<object>(executionStrategy.Object, cancellationSourceFactory.Object, errorHandler.Object, scheduler.Object, new ScheduledEngineOptions()))
-            {
-                cancellationSourceFactory.Setup(o => o.Create(It.IsAny<CancellationToken>())).Returns(cancellationSource);
+            using var cancellationSource = new CancellationSource();
+            using var target = new ScheduledProducerEngine<object>(executionStrategy.Object, cancellationSourceFactory.Object, errorHandler.Object, scheduler.Object, new ScheduledEngineOptions());
 
-                target.Initialize(context => { }, CancellationToken.None);
+            cancellationSourceFactory.Setup(o => o.Create(It.IsAny<CancellationToken>())).Returns(cancellationSource);
 
-                await target.StartAsync();
-                Assert.True(target.IsRunning);
+            target.Initialize(context => { }, CancellationToken.None);
 
-                await target.StopAsync();
-                Assert.False(target.IsRunning);
-            }
+            await target.StartAsync();
+            Assert.True(target.IsRunning);
+
+            await target.StopAsync();
+            Assert.False(target.IsRunning);
         }
 
         [Test]
@@ -56,19 +55,18 @@ namespace AutomationFoundation.Features.ProducerConsumer.Engines
             executionStrategy.Setup(o => o.ExecuteAsync(It.IsAny<Action<IProducerConsumerContext<object>>>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(false);
 
-            using (var cancellationSource = new CancellationSource())
-            using (var target = new ScheduledProducerEngine<object>(executionStrategy.Object, cancellationSourceFactory.Object, errorHandler.Object, scheduler.Object, new ScheduledEngineOptions()))
-            {
-                cancellationSourceFactory.Setup(o => o.Create(It.IsAny<CancellationToken>())).Returns(cancellationSource);
+            using var cancellationSource = new CancellationSource();
+            using var target = new ScheduledProducerEngine<object>(executionStrategy.Object, cancellationSourceFactory.Object, errorHandler.Object, scheduler.Object, new ScheduledEngineOptions());
 
-                target.Initialize(context => { }, CancellationToken.None);
+            cancellationSourceFactory.Setup(o => o.Create(It.IsAny<CancellationToken>())).Returns(cancellationSource);
 
-                await target.StartAsync();
+            target.Initialize(context => { }, CancellationToken.None);
 
-                cancellationSource.RequestCancellationAfter(TimeSpan.FromSeconds(5));
+            await target.StartAsync();
 
-                await target.WaitForCompletionAsync();
-            }
+            cancellationSource.RequestCancellationAfter(TimeSpan.FromSeconds(5));
+
+            await target.WaitForCompletionAsync();
 
             executionStrategy.Verify(o => o.ExecuteAsync(It.IsAny<Action<IProducerConsumerContext<object>>>(), 
                 It.IsAny<CancellationToken>()), Times.AtLeastOnce);
@@ -81,19 +79,18 @@ namespace AutomationFoundation.Features.ProducerConsumer.Engines
             executionStrategy.Setup(o => o.ExecuteAsync(It.IsAny<Action<IProducerConsumerContext<object>>>(), It.IsAny<CancellationToken>()))
                 .ThrowsAsync(new Exception("An exception occurred"));
 
-            using (var cancellationSource = new CancellationSource())
-            using (var target = new ScheduledProducerEngine<object>(executionStrategy.Object, cancellationSourceFactory.Object, errorHandler.Object, scheduler.Object, new ScheduledEngineOptions()))
-            {
-                cancellationSourceFactory.Setup(o => o.Create(It.IsAny<CancellationToken>())).Returns(cancellationSource);
+            using var cancellationSource = new CancellationSource();
+            using var target = new ScheduledProducerEngine<object>(executionStrategy.Object, cancellationSourceFactory.Object, errorHandler.Object, scheduler.Object, new ScheduledEngineOptions());
 
-                target.Initialize(context => { }, CancellationToken.None);
+            cancellationSourceFactory.Setup(o => o.Create(It.IsAny<CancellationToken>())).Returns(cancellationSource);
 
-                await target.StartAsync();
+            target.Initialize(context => { }, CancellationToken.None);
 
-                cancellationSource.RequestCancellationAfter(TimeSpan.FromSeconds(5));
+            await target.StartAsync();
 
-                await target.WaitForCompletionAsync();
-            }
+            cancellationSource.RequestCancellationAfter(TimeSpan.FromSeconds(5));
+
+            await target.WaitForCompletionAsync();
 
             errorHandler.Verify(o => o.Handle(It.IsAny<Exception>(), ErrorSeverityLevel.NonFatal), Times.AtLeastOnce);
         }
@@ -105,19 +102,18 @@ namespace AutomationFoundation.Features.ProducerConsumer.Engines
             executionStrategy.Setup(o => o.ExecuteAsync(It.IsAny<Action<IProducerConsumerContext<object>>>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(true);
 
-            using (var cancellationSource = new CancellationSource())
-            using (var target = new ScheduledProducerEngine<object>(executionStrategy.Object, cancellationSourceFactory.Object, errorHandler.Object, scheduler.Object, new ScheduledEngineOptions()))
-            {
-                cancellationSourceFactory.Setup(o => o.Create(It.IsAny<CancellationToken>())).Returns(cancellationSource);
+            using var cancellationSource = new CancellationSource();
+            using var target = new ScheduledProducerEngine<object>(executionStrategy.Object, cancellationSourceFactory.Object, errorHandler.Object, scheduler.Object, new ScheduledEngineOptions());
 
-                target.Initialize(context => { }, CancellationToken.None);
+            cancellationSourceFactory.Setup(o => o.Create(It.IsAny<CancellationToken>())).Returns(cancellationSource);
 
-                await target.StartAsync();
+            target.Initialize(context => { }, CancellationToken.None);
 
-                cancellationSource.RequestCancellationAfter(TimeSpan.FromSeconds(5));
+            await target.StartAsync();
 
-                await target.WaitForCompletionAsync();
-            }
+            cancellationSource.RequestCancellationAfter(TimeSpan.FromSeconds(5));
+
+            await target.WaitForCompletionAsync();
 
             executionStrategy.Verify(o => o.ExecuteAsync(It.IsAny<Action<IProducerConsumerContext<object>>>(),
                 It.IsAny<CancellationToken>()), Times.AtLeastOnce);
@@ -137,21 +133,20 @@ namespace AutomationFoundation.Features.ProducerConsumer.Engines
             scheduler.Setup(o => o.CalculateNextExecution(It.IsAny<DateTimeOffset>(), It.IsAny<DateTimeOffset>()))
                 .Returns(DateTimeOffset.Now.AddMinutes(1));
 
-            using (var cancellationSource = new CancellationSource())
-            using (var target = new TestableScheduledProducerEngine(executionStrategy.Object, cancellationSourceFactory.Object, errorHandler.Object, scheduler.Object, new ScheduledEngineOptions()))
+            using var cancellationSource = new CancellationSource();
+            using var target = new TestableScheduledProducerEngine(executionStrategy.Object, cancellationSourceFactory.Object, errorHandler.Object, scheduler.Object, new ScheduledEngineOptions());
+
+            cancellationSourceFactory.Setup(o => o.Create(It.IsAny<CancellationToken>())).Returns(cancellationSource);
+
+            target.Initialize(context => { }, CancellationToken.None);
+
+            target.SetDelayCallback(() =>
             {
-                cancellationSourceFactory.Setup(o => o.Create(It.IsAny<CancellationToken>())).Returns(cancellationSource);
+                cancellationSource.RequestImmediateCancellation();
+            });
 
-                target.Initialize(context => { }, CancellationToken.None);
-
-                target.SetDelayCallback(() =>
-                {
-                    cancellationSource.RequestImmediateCancellation();
-                });
-
-                await target.StartAsync();
-                await target.WaitForCompletionAsync();
-            }
+            await target.StartAsync();
+            await target.WaitForCompletionAsync();
 
             errorHandler.Verify(o => o.Handle(It.IsAny<Exception>(), ErrorSeverityLevel.Fatal), Times.Never);
         }
@@ -161,21 +156,20 @@ namespace AutomationFoundation.Features.ProducerConsumer.Engines
         {
             scheduler.Setup(o => o.CalculateNextExecution(It.IsAny<DateTimeOffset>(), It.IsAny<DateTimeOffset>())).Throws<Exception>();
 
-            using (var cancellationSource = new CancellationSource())
-            using (var target = new TestableScheduledProducerEngine(executionStrategy.Object, cancellationSourceFactory.Object, errorHandler.Object, scheduler.Object, new ScheduledEngineOptions()))
+            using var cancellationSource = new CancellationSource();
+            using var target = new TestableScheduledProducerEngine(executionStrategy.Object, cancellationSourceFactory.Object, errorHandler.Object, scheduler.Object, new ScheduledEngineOptions());
+
+            cancellationSourceFactory.Setup(o => o.Create(It.IsAny<CancellationToken>())).Returns(cancellationSource);
+
+            target.Initialize(context => { }, CancellationToken.None);
+
+            target.SetDelayCallback(() =>
             {
-                cancellationSourceFactory.Setup(o => o.Create(It.IsAny<CancellationToken>())).Returns(cancellationSource);
+                cancellationSource.RequestImmediateCancellation();
+            });
 
-                target.Initialize(context => { }, CancellationToken.None);
-
-                target.SetDelayCallback(() =>
-                {
-                    cancellationSource.RequestImmediateCancellation();
-                });
-
-                await target.StartAsync();
-                await target.WaitForCompletionAsync();
-            }
+            await target.StartAsync();
+            await target.WaitForCompletionAsync();
 
             errorHandler.Verify(o => o.Handle(It.IsAny<Exception>(), ErrorSeverityLevel.Fatal), Times.Once);
         }

@@ -17,10 +17,8 @@ namespace ConsoleRunner
                 throw new ArgumentNullException(nameof(runtimeBuilder));
             }
 
-            using (var scope = runtimeBuilder.ApplicationServices.CreateScope())
-            {
-                ConfigureProcessors(runtimeBuilder, scope.ServiceProvider);
-            }
+            using var scope = runtimeBuilder.ApplicationServices.CreateScope();
+            ConfigureProcessors(runtimeBuilder, scope.ServiceProvider);
         }
 
         private static void ConfigureProcessors(IRuntimeBuilder runtimeBuilder, IServiceProvider serviceProvider)

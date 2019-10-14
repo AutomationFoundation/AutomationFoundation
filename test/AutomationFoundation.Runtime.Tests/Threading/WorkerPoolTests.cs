@@ -50,10 +50,8 @@ namespace AutomationFoundation.Runtime.Threading
         [Test]
         public void CreatesThePoolAsExpected()
         {
-            using (var target = WorkerPool.Create())
-            {
-                Assert.IsNotNull(target);
-            }
+            using var target = WorkerPool.Create();
+            Assert.IsNotNull(target);
         }
 
         [Test]
@@ -61,31 +59,25 @@ namespace AutomationFoundation.Runtime.Threading
         {
             cache.Setup(o => o.Get()).Returns(worker.Object);
 
-            using (var target = new WorkerPool(cache.Object, cacheMonitor.Object))
-            {
-                var result = target.Get(OnRun, OnCompleted);
+            using var target = new WorkerPool(cache.Object, cacheMonitor.Object);
+            var result = target.Get(OnRun, OnCompleted);
 
-                Assert.IsNotNull(result);
-                Assert.IsInstanceOf<PooledWorker>(result);
-            }
+            Assert.IsNotNull(result);
+            Assert.IsInstanceOf<PooledWorker>(result);
         }
 
         [Test]
         public void ThrowsAnExceptionWhenTheOnRunCallbackIsNull()
         {
-            using (var target = new WorkerPool(cache.Object, cacheMonitor.Object))
-            {
-                Assert.Throws<ArgumentNullException>(() => target.Get(null, OnCompleted));
-            }
+            using var target = new WorkerPool(cache.Object, cacheMonitor.Object);
+            Assert.Throws<ArgumentNullException>(() => target.Get(null, OnCompleted));
         }
 
         [Test]
         public void DoesNotThrowAnExceptionWhenThePostCompletedCallbackIsNull()
         {
-            using (var target = new WorkerPool(cache.Object, cacheMonitor.Object))
-            {
-                Assert.DoesNotThrow(() => target.Get(OnRun, null));
-            }
+            using var target = new WorkerPool(cache.Object, cacheMonitor.Object);
+            Assert.DoesNotThrow(() => target.Get(OnRun, null));
         }
 
         [Test]
@@ -93,13 +85,13 @@ namespace AutomationFoundation.Runtime.Threading
         {
             cache.Setup(o => o.Get()).Returns(worker.Object);
 
-            using (var target = new TestableWorkerPool(cache.Object, cacheMonitor.Object))
+            using var target = new TestableWorkerPool(cache.Object, cacheMonitor.Object)
             {
-                target.OnCreatePooledWorkerCallback = o => throw new ApplicationException("Test exception");
+                OnCreatePooledWorkerCallback = o => throw new ApplicationException("Test exception")
+            };
 
-                Assert.Throws<ApplicationException>(() => target.Get(OnRun, OnCompleted));
-                cache.Verify(o => o.Release(worker.Object), Times.Once);
-            }
+            Assert.Throws<ApplicationException>(() => target.Get(OnRun, OnCompleted));
+            cache.Verify(o => o.Release(worker.Object), Times.Once);
         }
 
         [Test]
@@ -107,13 +99,13 @@ namespace AutomationFoundation.Runtime.Threading
         {
             cache.Setup(o => o.Get()).Returns(worker.Object);
 
-            using (var target = new TestableWorkerPool(cache.Object, cacheMonitor.Object))
+            using var target = new TestableWorkerPool(cache.Object, cacheMonitor.Object)
             {
-                target.OnBaseCreatePooledWorkerCallback = o => null;
+                OnBaseCreatePooledWorkerCallback = o => null
+            };
 
-                Assert.Throws<ArgumentNullException>(() => target.Get(OnRun, OnCompleted));
-                cache.Verify(o => o.Release(worker.Object), Times.Once);
-            }
+            Assert.Throws<ArgumentNullException>(() => target.Get(OnRun, OnCompleted));
+            cache.Verify(o => o.Release(worker.Object), Times.Once);
         }
 
         [Test]

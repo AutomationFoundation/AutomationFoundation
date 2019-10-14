@@ -38,14 +38,12 @@ namespace AutomationFoundation.Runtime.Synchronization.Policies
         [Timeout(10000)]
         public async Task PreventMultipleThreadsFromAccessingTheResource()
         {
-            using (var target = new OneOrMoreThreadsPerResourcePolicy(1))
-            {
-                await target.AcquireLockAsync(CancellationToken.None);
+            using var target = new OneOrMoreThreadsPerResourcePolicy(1);
+            await target.AcquireLockAsync(CancellationToken.None);
 
-                cancellationSource.CancelAfter(1000);
+            cancellationSource.CancelAfter(1000);
 
-                Assert.ThrowsAsync<OperationCanceledException>(async () => await target.AcquireLockAsync(cancellationSource.Token));
-            }
+            Assert.ThrowsAsync<OperationCanceledException>(async () => await target.AcquireLockAsync(cancellationSource.Token));
         }
 
         [Test]

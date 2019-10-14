@@ -10,26 +10,22 @@ namespace AutomationFoundation.Runtime.Threading.Primitives
         [Test]
         public void CleanUpTheWorkerAsExpectedBeforeInitialize()
         {
-            using (var target = new Worker())
-            {
-                Assert.False(target.Initialized);
+            using var target = new Worker();
+            Assert.False(target.Initialized);
 
-                target.Reset();
+            target.Reset();
 
-                Assert.False(target.Initialized);
-            }
+            Assert.False(target.Initialized);
         }
 
         [Test]
         public void ThrowsAnExceptionIfInitializedWhileAlreadyInitialized()
         {
-            using (var target = new Worker())
-            {
-                target.Initialize(new WorkerExecutionContext());
+            using var target = new Worker();
+            target.Initialize(new WorkerExecutionContext());
 
-                Assert.True(target.Initialized);
-                Assert.Throws<InvalidOperationException>(() => target.Initialize(new WorkerExecutionContext()));
-            }
+            Assert.True(target.Initialized);
+            Assert.Throws<InvalidOperationException>(() => target.Initialize(new WorkerExecutionContext()));
         }
 
         [Test]
@@ -37,23 +33,21 @@ namespace AutomationFoundation.Runtime.Threading.Primitives
         {
             bool called1 = false, called2 = false;
 
-            using (var target = new Worker())
+            using var target = new Worker();
+            target.Initialize(new WorkerExecutionContext
             {
-                target.Initialize(new WorkerExecutionContext
-                {
-                    OnRunCallback = () => called1 = true
-                });
+                OnRunCallback = () => called1 = true
+            });
 
-                target.Run();
-                target.Reset();
+            target.Run();
+            target.Reset();
 
-                target.Initialize(new WorkerExecutionContext
-                {
-                    OnRunCallback = () => called2 = true
-                });
+            target.Initialize(new WorkerExecutionContext
+            {
+                OnRunCallback = () => called2 = true
+            });
 
-                target.Run();
-            }
+            target.Run();
 
             Assert.True(called1);
             Assert.True(called2);
@@ -64,20 +58,18 @@ namespace AutomationFoundation.Runtime.Threading.Primitives
         {
             var called = false;
 
-            using (var target = new Worker())
+            using var target = new Worker();
+            target.Initialize(new WorkerExecutionContext
             {
-                target.Initialize(new WorkerExecutionContext
+                OnRunCallback = () =>
                 {
-                    OnRunCallback = () =>
-                    {
-                        // ReSharper disable once AccessToDisposedClosure
-                        Assert.Throws<InvalidOperationException>(() => target.Initialize(new WorkerExecutionContext()));
-                        called = true;
-                    }
-                });
+                    // ReSharper disable once AccessToDisposedClosure
+                    Assert.Throws<InvalidOperationException>(() => target.Initialize(new WorkerExecutionContext()));
+                    called = true;
+                }
+            });
 
-                target.Run();
-            }
+            target.Run();
 
             Assert.True(called);
         }
@@ -94,19 +86,15 @@ namespace AutomationFoundation.Runtime.Threading.Primitives
         [Test]
         public void ThrowsAnExceptionIfRunAsyncCalledBeforeInitialize()
         {
-            using (var target = new Worker())
-            {
-                Assert.Throws<InvalidOperationException>(() => target.RunAsync());
-            }
+            using var target = new Worker();
+            Assert.Throws<InvalidOperationException>(() => target.RunAsync());
         }
 
         [Test]
         public void ThrowsAnExceptionIfRunSynchronouslyCalledBeforeInitialize()
         {
-            using (var target = new Worker())
-            {
-                Assert.Throws<InvalidOperationException>(() => target.Run());
-            }
+            using var target = new Worker();
+            Assert.Throws<InvalidOperationException>(() => target.Run());
         }
 
         [Test]
@@ -114,19 +102,17 @@ namespace AutomationFoundation.Runtime.Threading.Primitives
         {
             var called = false;
 
-            using (var target = new Worker())
+            using var target = new Worker();
+            target.Initialize(new WorkerExecutionContext
             {
-                target.Initialize(new WorkerExecutionContext
+                OnRunCallback = () =>
                 {
-                    OnRunCallback = () =>
-                    {
-                        Assert.True(target.IsRunning);
-                        called = true;
-                    }
-                });
+                    Assert.True(target.IsRunning);
+                    called = true;
+                }
+            });
 
-                target.Run();
-            }
+            target.Run();
 
             Assert.True(called);
         }
@@ -134,10 +120,8 @@ namespace AutomationFoundation.Runtime.Threading.Primitives
         [Test]
         public void ReturnsFalseWhenNotRunning()
         {
-            using (var target = new Worker())
-            {
-                Assert.False(target.IsRunning);
-            }
+            using var target = new Worker();
+            Assert.False(target.IsRunning);
         }
 
         [Test]
@@ -145,15 +129,13 @@ namespace AutomationFoundation.Runtime.Threading.Primitives
         {
             var called = false;
 
-            using (var target = new Worker())
+            using var target = new Worker();
+            target.Initialize(new WorkerExecutionContext
             {
-                target.Initialize(new WorkerExecutionContext
-                {
-                    OnRunCallback = () => called = true
-                });
+                OnRunCallback = () => called = true
+            });
 
-                await target.RunAsync();
-            }
+            await target.RunAsync();
 
             Assert.True(called);
         }
@@ -181,20 +163,18 @@ namespace AutomationFoundation.Runtime.Threading.Primitives
         {
             var called = false;
 
-            using (var target = new Worker())
+            using var target = new Worker();
+            target.Initialize(new WorkerExecutionContext
             {
-                target.Initialize(new WorkerExecutionContext
+                OnRunCallback = () =>
                 {
-                    OnRunCallback = () =>
-                    {
-                        called = true;
-                        throw new ApplicationException("Something broke.");
-                    }
-                });
+                    called = true;
+                    throw new ApplicationException("Something broke.");
+                }
+            });
 
-                var aggregateException = Assert.Throws<AggregateException>(() => target.Run());
-                CollectionAssert.AllItemsAreInstancesOfType(aggregateException.InnerExceptions, typeof(ApplicationException));
-            }
+            var aggregateException = Assert.Throws<AggregateException>(() => target.Run());
+            CollectionAssert.AllItemsAreInstancesOfType(aggregateException.InnerExceptions, typeof(ApplicationException));
 
             Assert.True(called);
         }
@@ -204,20 +184,18 @@ namespace AutomationFoundation.Runtime.Threading.Primitives
         {
             var called = false;
 
-            using (var target = new Worker())
+            using var target = new Worker();
+            target.Initialize(new WorkerExecutionContext
             {
-                target.Initialize(new WorkerExecutionContext
+                PostCompletedCallback = () =>
                 {
-                    PostCompletedCallback = () =>
-                    {
-                        called = true;
-                        throw new ApplicationException("Something broke.");
-                    }
-                });
+                    called = true;
+                    throw new ApplicationException("Something broke.");
+                }
+            });
 
-                var aggregateException = Assert.Throws<AggregateException>(() => target.Run());
-                CollectionAssert.AllItemsAreInstancesOfType(aggregateException.InnerExceptions, typeof(ApplicationException));
-            }
+            var aggregateException = Assert.Throws<AggregateException>(() => target.Run());
+            CollectionAssert.AllItemsAreInstancesOfType(aggregateException.InnerExceptions, typeof(ApplicationException));
 
             Assert.True(called);
         }
@@ -227,15 +205,13 @@ namespace AutomationFoundation.Runtime.Threading.Primitives
         {
             var called = false;
 
-            using (var target = new Worker())
+            using var target = new Worker();
+            target.Initialize(new WorkerExecutionContext
             {
-                target.Initialize(new WorkerExecutionContext
-                {
-                    PostCompletedCallback = () => { called = true; }
-                });
+                PostCompletedCallback = () => { called = true; }
+            });
 
-                target.Run();
-            }
+            target.Run();
 
             Assert.True(called);
         }
@@ -246,28 +222,26 @@ namespace AutomationFoundation.Runtime.Threading.Primitives
             var called1 = false;
             var called2 = false;
 
-            using (var target = new Worker())
+            using var target = new Worker();
+            target.Initialize(new WorkerExecutionContext
             {
-                target.Initialize(new WorkerExecutionContext
+                OnRunCallback = () =>
                 {
-                    OnRunCallback = () =>
-                    {
-                        Assert.False(called1);
-                        Assert.False(called2);
+                    Assert.False(called1);
+                    Assert.False(called2);
 
-                        called1 = true;
-                    },
-                    PostCompletedCallback = () =>
-                    {
-                        Assert.True(called1);
-                        Assert.False(called2);
+                    called1 = true;
+                },
+                PostCompletedCallback = () =>
+                {
+                    Assert.True(called1);
+                    Assert.False(called2);
 
-                        called2 = true;
-                    }
-                });
+                    called2 = true;
+                }
+            });
 
-                target.Run();
-            }
+            target.Run();
 
             Assert.True(called1);
             Assert.True(called2);
@@ -279,28 +253,26 @@ namespace AutomationFoundation.Runtime.Threading.Primitives
             var called1 = false;
             var called2 = false;
 
-            using (var target = new Worker())
+            using var target = new Worker();
+            target.Initialize(new WorkerExecutionContext
             {
-                target.Initialize(new WorkerExecutionContext
+                OnRunCallback = () =>
                 {
-                    OnRunCallback = () =>
-                    {
-                        Assert.False(called1);
-                        Assert.False(called2);
+                    Assert.False(called1);
+                    Assert.False(called2);
 
-                        called1 = true;
-                    },
-                    PostCompletedCallback = () =>
-                    {
-                        Assert.True(called1);
-                        Assert.False(called2);
+                    called1 = true;
+                },
+                PostCompletedCallback = () =>
+                {
+                    Assert.True(called1);
+                    Assert.False(called2);
 
-                        called2 = true;
-                    }
-                });
+                    called2 = true;
+                }
+            });
 
-                await target.RunAsync();
-            }
+            await target.RunAsync();
 
             Assert.True(called1);
             Assert.True(called2);
