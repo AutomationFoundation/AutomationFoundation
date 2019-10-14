@@ -35,14 +35,14 @@ nuget:
 
 before_build:
   - cmd: secure-file.exe -decrypt Winnster.snk.enc -secret %snk_passphrase% -salt %snk_salt%
-  - cmd: dotnet sonarscanner begin /k:"AutomationFoundation" /v:"%APPVEYOR_BUILD_VERSION%-%semver_suffix%" /d:"sonar.branch.name=%APPVEYOR_REPO_BRANCH%" /d:"sonar.host.url=https://sonarcloud.io" /o:"winnster" /d:"sonar.login=%sonarcloud_token%" /d:"sonar.cs.vstest.reportsPaths=**/*.trx" /d:"sonar.cs.opencover.reportsPaths=**/coverage.opencover.xml" /d:"sonar.exclusions=**\Primitives\**,**\tools\**"
+  - cmd: dotnet sonarscanner begin /k:"AutomationFoundation" /v:"%APPVEYOR_BUILD_VERSION%-%semver_suffix%" /d:"sonar.branch.name=%APPVEYOR_REPO_BRANCH%" /d:"sonar.host.url=https://sonarcloud.io" /o:"winnster" /d:"sonar.login=%sonarcloud_token%" /d:"sonar.cs.nunit.reportsPaths=**/TestResults.xml" /d:"sonar.cs.opencover.reportsPaths=**/coverage.opencover.xml" /d:"sonar.exclusions=**\Primitives\**,**\tools\**"
   - cmd: nuget restore
 
 build_script:
   - cmd: dotnet build AutomationFoundation.sln /p:Configuration="%Configuration%" /p:Platform="%Platform%" --version-suffix "%semver_suffix%"
 
 test_script:
-  - cmd: dotnet test AutomationFoundation.sln /p:Configuration="%Configuration%" /p:Platform="%Platform%" /p:CollectCoverage=true /p:CoverletOutputFormat=opencover /p:CoverletOutput=".\TestResults\coverage.opencover.xml" --no-build --logger trx
+  - cmd: dotnet test AutomationFoundation.sln /p:Configuration="%Configuration%" /p:Platform="%Platform%" /p:CollectCoverage=true /p:CoverletOutputFormat=opencover /p:CoverletOutput=".\TestResults\coverage.opencover.xml" --no-build --logger nunit
 
 after_test:
   - cmd: dotnet sonarscanner end /d:"sonar.login=%sonarcloud_token%"
@@ -50,7 +50,7 @@ after_test:
 artifacts:
   - path: '**\*.nupkg'
     name: NuGet
-  - path: '**\*.trx'
+  - path: '**\TestResults.xml'
     name: Test Results
   - path: '**\coverage.opencover.xml'
     name: Coverage Results
