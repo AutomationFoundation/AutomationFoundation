@@ -8,7 +8,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		appveyor.yml = appveyor.yml
 	EndProjectSection
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{FCA4596F-9EC1-4086-8CA1-6F70D0716F49}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "2. Core", "2. Core", "{FCA4596F-9EC1-4086-8CA1-6F70D0716F49}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AutomationFoundation.Transactions.Abstractions", "src\AutomationFoundation.Transactions.Abstractions\AutomationFoundation.Transactions.Abstractions.csproj", "{2A6E0E15-A334-4AAE-A0F4-38C6D08492A4}"
 EndProject
@@ -24,7 +24,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AutomationFoundation.Runtim
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AutomationFoundation.Runtime.Abstractions", "src\AutomationFoundation.Runtime.Abstractions\AutomationFoundation.Runtime.Abstractions.csproj", "{A0215706-2D0B-4D06-A4DF-DD4EE540E171}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Features", "Features", "{7CFB3B8F-7B60-4DBD-9BB5-A4D4F7554A8E}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "3. Features", "3. Features", "{7CFB3B8F-7B60-4DBD-9BB5-A4D4F7554A8E}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{51336679-9F77-4B62-8A82-F4B875371473}"
 EndProject
@@ -42,7 +42,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AutomationFoundation", "src
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AutomationFoundation.Tests", "test\AutomationFoundation.Tests\AutomationFoundation.Tests.csproj", "{7EF40655-C9A1-4087-B842-A9249DE5C4BF}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Framework", "Framework", "{D0129F07-1B9D-46B4-A42A-2000C2F3DBDC}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "1. Framework", "1. Framework", "{D0129F07-1B9D-46B4-A42A-2000C2F3DBDC}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AutomationFoundation.NETCore.App", "src\AutomationFoundation.NETCore.App\AutomationFoundation.NETCore.App.csproj", "{EDDB83DB-C92E-4B53-AA79-F65C86EC8899}"
 EndProject
@@ -50,7 +50,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AutomationFoundation.NETFX.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AutomationFoundation.NETCore.App.Tests", "test\AutomationFoundation.NETCore.App.Tests\AutomationFoundation.NETCore.App.Tests.csproj", "{87B0748F-A884-4039-B20B-F1747856C3A4}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Extensions", "Extensions", "{52B14C67-9A5D-410A-8444-B108FDF50CB3}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "4. Extensions", "4. Extensions", "{52B14C67-9A5D-410A-8444-B108FDF50CB3}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AutomationFoundation.Extensions.EntityFramework", "src\AutomationFoundation.Extensions.EntityFramework\AutomationFoundation.Extensions.EntityFramework.csproj", "{E3D8863F-7547-4436-BE40-A7E776289C34}"
 EndProject
@@ -70,7 +70,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AutomationFoundation.Extens
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AutomationFoundation.Extensions.SqlClient", "src\AutomationFoundation.Extensions.SqlClient\AutomationFoundation.Extensions.SqlClient.csproj", "{203C7051-8ACB-43B1-9FFF-C022939D2AFB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutomationFoundation.Extensions.SqlClient.Tests", "test\AutomationFoundation.Extensions.SqlClient.Tests\AutomationFoundation.Extensions.SqlClient.Tests.csproj", "{3288B904-2B45-4158-B7A1-865A409DB4EA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AutomationFoundation.Extensions.SqlClient.Tests", "test\AutomationFoundation.Extensions.SqlClient.Tests\AutomationFoundation.Extensions.SqlClient.Tests.csproj", "{3288B904-2B45-4158-B7A1-865A409DB4EA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
