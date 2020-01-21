@@ -1,9 +1,7 @@
 ﻿using System;
-using AutomationFoundation.Hosting.Abstractions;
 using AutomationFoundation.Runtime.Abstractions.Builders;
 using AutomationFoundation.Runtime.Builders;
 using AutomationFoundation.TestObjects;
-using Microsoft.Extensions.DependencyInjection;
 using Moq;
 using NUnit.Framework;
 
