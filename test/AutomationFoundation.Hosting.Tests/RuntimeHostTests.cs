@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Threading;
+using System.Threading.Tasks;
 using AutomationFoundation.Hosting.Abstractions;
 using AutomationFoundation.Runtime.Abstractions;
 using Moq;
@@ -40,21 +42,21 @@ namespace AutomationFoundation.Hosting
         }
 
         [Test]
-        public void StartsTheRuntime()
+        public async Task StartsTheRuntime()
         {
             var target = new RuntimeHost(runtime.Object, environment.Object, services.Object);
-            target.Start();
+            await target.StartAsync();
 
-            runtime.Verify(o => o.Start(), Times.Once);
+            runtime.Verify(o => o.StartAsync(It.IsAny<CancellationToken>()), Times.Once);
         }
 
         [Test]
-        public void StopsTheRuntime()
+        public async Task StopsTheRuntime()
         {
             var target = new RuntimeHost(runtime.Object, environment.Object, services.Object);
-            target.Stop();
+            await target.StopAsync();
 
-            runtime.Verify(o => o.Stop(), Times.Once);
+            runtime.Verify(o => o.StopAsync(It.IsAny<CancellationToken>()), Times.Once);
         }
 
         [Test]

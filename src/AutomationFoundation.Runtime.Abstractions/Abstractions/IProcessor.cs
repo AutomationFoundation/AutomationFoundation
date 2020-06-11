@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace AutomationFoundation.Runtime.Abstractions
 {
@@ -20,11 +22,13 @@ namespace AutomationFoundation.Runtime.Abstractions
         /// <summary>
         /// Starts the processor.
         /// </summary>
-        void Start();
+        /// <param name="cancellationToken">The cancellation token to monitor for cancellation requests.</param>
+        Task StartAsync(CancellationToken cancellationToken);
 
         /// <summary>
         /// Stops the processor.
         /// </summary>
-        void Stop();
+        /// <param name="cancellationToken">The cancellation token to monitor for cancellation requests.</param>
+        Task StopAsync(CancellationToken cancellationToken);
     }
 }

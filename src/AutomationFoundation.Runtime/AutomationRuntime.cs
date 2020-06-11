@@ -1,7 +1,10 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using AutomationFoundation.Runtime.Abstractions;
 
 namespace AutomationFoundation.Runtime
@@ -11,7 +14,6 @@ namespace AutomationFoundation.Runtime
     /// </summary>
     public sealed class AutomationRuntime : IRuntime
     {
-        private readonly object syncRoot = new object();
         private readonly IList<IProcessor> processors = new List<IProcessor>();
 
         private bool disposed;
@@ -22,14 +24,7 @@ namespace AutomationFoundation.Runtime
         public IEnumerable<IProcessor> Processors => new ReadOnlyCollection<IProcessor>(processors);
 
         /// <inheritdoc />
-        public bool IsActive => processors.Any(o => o.State >= ProcessorState.Started);
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="AutomationRuntime"/> class.
-        /// </summary>
-        public AutomationRuntime()
-        {
-        }
+        public bool IsRunning => processors.Any(o => o.State >= ProcessorState.Started);
 
         /// <summary>
         /// Finalizes an instance of the <see cref="AutomationRuntime"/> class.
@@ -46,21 +41,16 @@ namespace AutomationFoundation.Runtime
             {
                 throw new ArgumentNullException(nameof(processor));
             }
-            
+
             GuardMustNotBeDisposed();
 
-            lock (syncRoot)
+            if (!processors.Contains(processor))
             {
-                GuardMustNotBeDisposed();
-
-                if (!processors.Contains(processor))
-                {
-                    processors.Add(processor);
-                    return true;
-                }
-
-                return false;
+                processors.Add(processor);
+                return true;
             }
+
+            return false;
         }
 
         /// <inheritdoc />
@@ -73,47 +63,36 @@ namespace AutomationFoundation.Runtime
 
             GuardMustNotBeDisposed();
 
-            lock (syncRoot)
+            if (processors.Contains(processor))
             {
-                GuardMustNotBeDisposed();
+                processors.Remove(processor);
+                return true;
+            }
 
-                if (processors.Contains(processor))
-                {
-                    processors.Remove(processor);
-                    return true;
-                }
+            return false;
+        }
 
-                return false;
+        /// <inheritdoc />
+        public async Task StartAsync(CancellationToken cancellationToken = default)
+        {
+            GuardMustNotBeDisposed();
+
+            foreach (var processor in processors)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+
+                await processor.StartAsync(cancellationToken);
             }
         }
 
         /// <inheritdoc />
-        public void Start()
-        {
-            GuardMustNotBeDisposed();
-            
-            lock (syncRoot)
-            {
-                GuardMustNotBeDisposed();
-
-                foreach (var processor in Processors)
-                {
-                    processor.Start();
-                }
-            }
-        }
-
-        /// <inheritdoc />
-        public void Stop()
+        public async Task StopAsync(CancellationToken cancellationToken = default)
         {
             GuardMustNotBeDisposed();
 
-            lock (syncRoot)
+            foreach (var processor in processors)
             {
-                foreach (var processor in Processors)
-                {
-                    processor.Stop();
-                }
+                await processor.StopAsync(cancellationToken);
             }
         }
 
@@ -128,26 +107,20 @@ namespace AutomationFoundation.Runtime
         {
             if (disposing)
             {
-                lock (syncRoot)
+                foreach (var processor in Processors)
                 {
-                    foreach (var processor in Processors)
-                    {
-                        processor.Dispose();
-                    }
-
-                    disposed = true;
+                    processor.Dispose();
                 }
+
+                disposed = true;
             }
         }
 
         private void GuardMustNotBeDisposed()
         {
-            lock (syncRoot)
+            if (disposed)
             {
-                if (disposed)
-                {
-                    throw new ObjectDisposedException(nameof(AutomationRuntime));
-                }
+                throw new ObjectDisposedException(nameof(AutomationRuntime));
             }
         }
     }

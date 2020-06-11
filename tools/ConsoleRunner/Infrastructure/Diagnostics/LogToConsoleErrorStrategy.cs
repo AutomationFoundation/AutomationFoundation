@@ -1,17 +1,14 @@
 ﻿using System;
 using AutomationFoundation.Runtime;
-using ConsoleRunner.Abstractions;
 
 namespace ConsoleRunner.Infrastructure.Diagnostics
 {
     public class LogToConsoleErrorStrategy : IErrorHandlingStrategy
     {
-        private readonly IConsoleWriter writer;
         private readonly LoggingLevel level;
 
-        public LogToConsoleErrorStrategy(IConsoleWriter writer, LoggingLevel level)
+        public LogToConsoleErrorStrategy(LoggingLevel level)
         {
-            this.writer = writer ?? throw new ArgumentNullException(nameof(writer));
             this.level = level;
         }
 
@@ -36,7 +33,7 @@ namespace ConsoleRunner.Infrastructure.Diagnostics
                 return;
             }
 
-            WriteException(error, ConsoleColor.Yellow);
+            WriteException(error);
         }
 
         private void WriteError(Exception error)
@@ -46,17 +43,12 @@ namespace ConsoleRunner.Infrastructure.Diagnostics
                 return;
             }
 
-            WriteException(error, ConsoleColor.Red);
+            WriteException(error);
         }
 
-        private void WriteException(Exception error, ConsoleColor color)
+        private void WriteException(Exception error)
         {
-            WriteLine(error.ToString(), color);
-        }
-
-        private void WriteLine(string message, ConsoleColor color)
-        {
-            writer.WriteLine(message, color);
+            Console.Out.WriteLine(error.ToString());
         }
 
         private bool ShouldLogLevel(LoggingLevel value)

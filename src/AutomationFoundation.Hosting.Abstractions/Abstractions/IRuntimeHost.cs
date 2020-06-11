@@ -1,11 +1,13 @@
 ﻿using System;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace AutomationFoundation.Hosting.Abstractions
 {
     /// <summary>
     /// Identifies a host for a runtime.
     /// </summary>
-    public interface IRuntimeHost
+    public interface IRuntimeHost : IDisposable
     {
         /// <summary>
         /// Gets the application services.
@@ -20,11 +22,13 @@ namespace AutomationFoundation.Hosting.Abstractions
         /// <summary>
         /// Starts the host.
         /// </summary>
-        void Start();
+        /// <param name="cancellationToken">The cancellation token to monitor for cancellation requests.</param>
+        Task StartAsync(CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Stops the host.
         /// </summary>
-        void Stop();
+        /// <param name="cancellationToken">The cancellation token to monitor for cancellation requests.</param>
+        Task StopAsync(CancellationToken cancellationToken = default);
     }
 }

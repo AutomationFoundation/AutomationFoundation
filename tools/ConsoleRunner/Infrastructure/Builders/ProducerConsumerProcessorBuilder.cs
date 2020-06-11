@@ -12,7 +12,6 @@ using AutomationFoundation.Runtime.Threading;
 using AutomationFoundation.Runtime.Threading.Primitives;
 using ConsoleRunner.Abstractions;
 using ConsoleRunner.Infrastructure.Diagnostics;
-using ConsoleRunner.Infrastructure.IO;
 using ConsoleRunner.Infrastructure.WorkProcessors;
 using ConsoleRunner.Model;
 using Microsoft.Extensions.DependencyInjection;
@@ -64,7 +63,7 @@ namespace ConsoleRunner.Infrastructure.Builders
                     false),
                 new CancellationSourceFactory(),
                 new StrategyErrorHandler(
-                    new LogToConsoleErrorStrategy(new ConsoleWriter(), LoggingLevel.All)),
+                    new LogToConsoleErrorStrategy(LoggingLevel.All)),
                 new PollingScheduler(TimeSpan.FromSeconds(5)),
                 new ScheduledEngineOptions
                 {

@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Threading;
+using System.Threading.Tasks;
 using AutomationFoundation.Hosting.Abstractions;
 using AutomationFoundation.Hosting.Abstractions.Builders;
 using AutomationFoundation.Runtime.Abstractions;
@@ -31,16 +33,35 @@ namespace AutomationFoundation.Hosting
             ApplicationServices = applicationServices;
         }
 
-        /// <inheritdoc />
-        public void Start()
+        ~RuntimeHost()
         {
-            runtime.Start();
+            Dispose(false);
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                runtime.Dispose();
+            }
         }
 
         /// <inheritdoc />
-        public void Stop()
+        public async Task StartAsync(CancellationToken cancellationToken = default)
         {
-            runtime.Stop();
+            await runtime.StartAsync(cancellationToken);
+        }
+
+        /// <inheritdoc />
+        public async Task StopAsync(CancellationToken cancellationToken = default)
+        {
+            await runtime.StopAsync(cancellationToken);
         }
 
         /// <summary>

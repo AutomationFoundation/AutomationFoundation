@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Threading;
+using System.Threading.Tasks;
 using AutomationFoundation.Runtime.Abstractions;
 
 namespace AutomationFoundation.Runtime
@@ -9,11 +11,6 @@ namespace AutomationFoundation.Runtime
     public abstract class Processor : IProcessor
     {
         private bool disposed;
-
-        /// <summary>
-        /// Gets the object used for thread synchronization.
-        /// </summary>
-        protected object SyncRoot { get; } = new object();
 
         /// <inheritdoc />
         public string Name { get; }
@@ -44,31 +41,25 @@ namespace AutomationFoundation.Runtime
         }
 
         /// <inheritdoc />
-        public void Start()
+        public async Task StartAsync(CancellationToken cancellationToken)
         {
             GuardMustNotBeDisposed();
 
             GuardMustNotHaveEncounteredAnError();
             GuardMustNotAlreadyBeStarted();
 
-            lock (SyncRoot)
+            try
             {
-                GuardMustNotHaveEncounteredAnError();
-                GuardMustNotAlreadyBeStarted();
+                State = ProcessorState.Starting;
 
-                try
-                {
-                    State = ProcessorState.Starting;
-                    
-                    OnStart();
+                await OnStartAsync(cancellationToken);
 
-                    State = ProcessorState.Started;
-                }
-                catch (Exception)
-                {
-                    State = ProcessorState.Error;
-                    throw;
-                }
+                State = ProcessorState.Started;
+            }
+            catch (Exception)
+            {
+                State = ProcessorState.Error;
+                throw;
             }
         }
 
@@ -86,36 +77,31 @@ namespace AutomationFoundation.Runtime
         /// <summary>
         /// Occurs when the processor is being started.
         /// </summary>
-        protected abstract void OnStart();
+        /// <param name="cancellationToken">The cancellation token to monitor for cancellation requests.</param>
+        protected abstract Task OnStartAsync(CancellationToken cancellationToken);
 
         /// <inheritdoc />
-        public void Stop()
+        public async Task StopAsync(CancellationToken cancellationToken)
         {
             GuardMustNotBeDisposed();
 
             GuardMustNotHaveEncounteredAnError();
             GuardMustNotAlreadyBeStopped();
 
-            lock (SyncRoot)
+            try
             {
-                GuardMustNotHaveEncounteredAnError();
-                GuardMustNotAlreadyBeStopped();
+                State = ProcessorState.Stopping;
 
-                try
-                {
-                    State = ProcessorState.Stopping;
+                await OnStopAsync(cancellationToken);
 
-                    OnStop();
-
-                    State = ProcessorState.Stopped;
-                }
-                catch (Exception)
-                {
-                    State = ProcessorState.Error;
-                    throw;
-                }
+                State = ProcessorState.Stopped;
             }
-        }        
+            catch (Exception)
+            {
+                State = ProcessorState.Error;
+                throw;
+            }
+        }
 
         /// <summary>
         /// Ensures the processor has not already been stopped.
@@ -131,7 +117,8 @@ namespace AutomationFoundation.Runtime
         /// <summary>
         /// Occurs when the processor is being stopped.
         /// </summary>
-        protected abstract void OnStop();
+        /// <param name="cancellationToken">The cancellation token to monitor for cancellation requests.</param>
+        protected abstract Task OnStopAsync(CancellationToken cancellationToken);
 
         /// <summary>
         /// Ensures the processor has not encountered an error.

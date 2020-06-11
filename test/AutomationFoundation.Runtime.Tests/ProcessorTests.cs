@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Threading;
+using System.Threading.Tasks;
 using AutomationFoundation.Runtime.TestObjects;
 using NUnit.Framework;
 
@@ -7,40 +9,59 @@ namespace AutomationFoundation.Runtime
     [TestFixture]
     public class ProcessorTests
     {
+        private StubProcessor target;
+        private string name;
+
+        [SetUp]
+        public void Init()
+        {
+            name = Guid.NewGuid().ToString();
+            target = new StubProcessor(name);
+        }
+
+        [TearDown]
+        public void Cleanup()
+        {
+            try
+            {
+                target.Dispose();
+            }
+            catch (Exception)
+            {
+                // Just in case a test put the target intentionally into a bad state.
+            }
+        }
+
         [Test]
         public void ThrowsAnExceptionWhenStartedAfterDisposed()
         {
-            var target = new StubProcessor();
             target.Dispose();
 
-            Assert.Throws<ObjectDisposedException>(() => target.Start());
+            Assert.ThrowsAsync<ObjectDisposedException>(async () => await target.StartAsync(CancellationToken.None));
         }
 
         [Test]
         public void ThrowsAnExceptionWhenStoppedAfterDisposed()
         {
-            var target = new StubProcessor();
             target.Dispose();
 
-            Assert.Throws<ObjectDisposedException>(() => target.Stop());
+            Assert.ThrowsAsync<ObjectDisposedException>(async () => await target.StopAsync(CancellationToken.None));
         }
 
         [Test]
         public void ThrowsAnExceptionWhenStartingWhileInTheErrorState()
         {
-            using var target = new StubProcessor();
             target.SetState(ProcessorState.Error);
 
-            Assert.Throws<RuntimeException>(() => target.Start());
+            Assert.ThrowsAsync<RuntimeException>(async () => await target.StartAsync(CancellationToken.None));
         }
 
         [Test]
         public void ThrowsAnExceptionWhenStoppingWhileInTheErrorState()
         {
-            using var target = new StubProcessor();
             target.SetState(ProcessorState.Error);
 
-            Assert.Throws<RuntimeException>(() => target.Stop());
+            Assert.ThrowsAsync<RuntimeException>(async () => await target.StopAsync(CancellationToken.None));
         }
 
         [Test]
@@ -70,103 +91,94 @@ namespace AutomationFoundation.Runtime
         [Test]
         public void ReturnsTheCreatedStateUponNew()
         {
-            using var target = new StubProcessor();
             Assert.AreEqual(ProcessorState.Created, target.State);
         }
 
         [Test]
-        public void StoppingTwiceThrowsAnException()
+        public async Task StoppingTwiceThrowsAnException()
         {
-            using var target = new StubProcessor();
-            target.Start();
-            target.Stop();
+            await target.StartAsync(CancellationToken.None);
+            await target.StopAsync(CancellationToken.None);
 
-            Assert.Throws<RuntimeException>(() => target.Stop());
+            Assert.ThrowsAsync<RuntimeException>(async () => await target.StopAsync(CancellationToken.None));
         }
 
         [Test]
         public void SetsTheNamePropertyDuringInitialization()
         {
-            using var target = new StubProcessor("Test");
-            Assert.AreEqual("Test", target.Name);
+            Assert.AreEqual(name, target.Name);
         }
 
         [Test]
         public void ChangeToAnErrorStateWhenExceptionThrownDuringStart()
         {
-            using var target = new StubProcessor();
             target.SetupCallbacks(() => throw new Exception("This is a test exception"));
 
-            Assert.Throws<Exception>(() => target.Start());
+            Assert.ThrowsAsync<Exception>(async () => await target.StartAsync(CancellationToken.None));
             Assert.AreEqual(ProcessorState.Error, target.State);
         }
 
         [Test]
-        public void ChangeToAnErrorStateWhenExceptionThrownDuringStop()
+        public async Task ChangeToAnErrorStateWhenExceptionThrownDuringStop()
         {
-            using var target = new StubProcessor();
             target.SetupCallbacks(onStopCallback: () => throw new Exception("This is a test exception"));
-            target.Start();
+            await target.StartAsync(CancellationToken.None);
 
-            Assert.Throws<Exception>(() => target.Stop());
+            Assert.ThrowsAsync<Exception>(async () => await target.StopAsync(CancellationToken.None));
             Assert.AreEqual(ProcessorState.Error, target.State);
         }
 
         [Test]
-        public void ChangeTheProcessorStatesDuringStart()
+        public async Task ChangeTheProcessorStatesDuringStart()
         {
             var tested = false;
 
-            using var target = new StubProcessor();
             target.SetupCallbacks(() =>
             {
                 Assert.AreEqual(ProcessorState.Starting, target.State);
                 tested = true;
             });
 
-            target.Start();
+            await target.StartAsync(CancellationToken.None);
 
             Assert.True(tested);
             Assert.AreEqual(ProcessorState.Started, target.State);
         }
 
         [Test]
-        public void ChangeTheProcessorStatesDuringStop()
+        public async Task ChangeTheProcessorStatesDuringStop()
         {
             var tested = false;
 
-            using var target = new StubProcessor();
             target.SetupCallbacks(onStopCallback: () =>
             {
                 Assert.AreEqual(ProcessorState.Stopping, target.State);
                 tested = true;
             });
 
-            target.Start();
-            target.Stop();
+            await target.StartAsync(CancellationToken.None);
+            await target.StopAsync(CancellationToken.None);
 
             Assert.True(tested);
             Assert.AreEqual(ProcessorState.Stopped, target.State);
         }
 
         [Test]
-        public void ThrowAnExceptionWhenTheProcessorIsAlreadyStarted()
+        public async Task ThrowAnExceptionWhenTheProcessorIsAlreadyStarted()
         {
-            using var target = new StubProcessor();
-            target.Start();
+            await target.StartAsync(CancellationToken.None);
 
             Assert.AreEqual(ProcessorState.Started, target.State);
             Assert.Throws<RuntimeException>(() => target.ExecuteGuardMustNotAlreadyBeStarted());
         }
 
         [Test]
-        public void ThrowAnExceptionWhenTheProcessorIsAlreadyStopped()
+        public async Task ThrowAnExceptionWhenTheProcessorIsAlreadyStopped()
         {
-            using var target = new StubProcessor();
-            target.Start();
+            await target.StartAsync(CancellationToken.None);
             Assert.AreEqual(ProcessorState.Started, target.State);
 
-            target.Stop();
+            await target.StopAsync(CancellationToken.None);
             Assert.AreEqual(ProcessorState.Stopped, target.State);
 
             Assert.Throws<RuntimeException>(() => target.ExecuteGuardMustNotAlreadyBeStopped());
@@ -177,7 +189,6 @@ namespace AutomationFoundation.Runtime
         {
             var called = false;
 
-            var target = new StubProcessor();
             target.SetupCallbacks(onDispose: () => called = true);
 
             target.Dispose();

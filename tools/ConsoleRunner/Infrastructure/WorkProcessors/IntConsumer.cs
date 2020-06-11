@@ -1,12 +1,11 @@
 ﻿using System.Threading.Tasks;
 using AutomationFoundation.Features.ProducerConsumer.Abstractions;
-using ConsoleRunner.Infrastructure.IO;
 
 namespace ConsoleRunner.Infrastructure.WorkProcessors
 {
     public class IntConsumer : IConsumer<int>
     {
-        private static readonly Monitor Monitor = new Monitor("Consumed", new ConsoleWriter());
+        private static readonly Monitor Monitor = new Monitor("Consumed");
 
         static IntConsumer()
         {

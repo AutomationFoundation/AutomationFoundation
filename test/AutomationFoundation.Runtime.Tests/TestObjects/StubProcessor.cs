@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace AutomationFoundation.Runtime.TestObjects
 {
@@ -18,14 +20,16 @@ namespace AutomationFoundation.Runtime.TestObjects
         {            
         }
 
-        protected override void OnStart()
+        protected override Task OnStartAsync(CancellationToken cancellationToken)
         {
             onStartCallback?.Invoke();
+            return Task.CompletedTask;
         }
 
-        protected override void OnStop()
+        protected override Task OnStopAsync(CancellationToken cancellationToken)
         {
             onStopCallback?.Invoke();
+            return Task.CompletedTask;
         }
 
         protected override void Dispose(bool disposing)

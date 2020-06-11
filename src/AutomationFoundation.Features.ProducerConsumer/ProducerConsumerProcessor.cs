@@ -36,7 +36,7 @@ namespace AutomationFoundation.Features.ProducerConsumer
         }
 
         /// <inheritdoc />
-        protected override void OnStart()
+        protected override async Task OnStartAsync(CancellationToken cancellationToken)
         {
             InitializeCancellationSource();
 
@@ -46,7 +46,7 @@ namespace AutomationFoundation.Features.ProducerConsumer
             using (var t1 = StartProducerEngines())
             using (var t2 = StartConsumerEngine())
             {
-                Task.WaitAll(t1, t2);
+                await Task.WhenAll(t1, t2);
             }
         }
 
@@ -77,12 +77,12 @@ namespace AutomationFoundation.Features.ProducerConsumer
         }
 
         /// <inheritdoc />
-        protected override void OnStop()
+        protected override async Task OnStopAsync(CancellationToken cancellationToken)
         {
             using (var t1 = StopProducerEngines())
             using (var t2 = StopConsumerEngine())
             {
-                Task.WaitAll(t1, t2);
+                await Task.WhenAll(t1, t2);
             }
         }
 

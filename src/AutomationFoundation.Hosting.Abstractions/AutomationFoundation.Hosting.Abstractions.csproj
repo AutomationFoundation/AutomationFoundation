@@ -10,14 +10,11 @@
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <Description>Contains the hosting abstractions for the Automation Foundation framework.</Description>
     <RootNamespace>AutomationFoundation.Hosting</RootNamespace>
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\AutomationFoundation.Runtime.Abstractions\AutomationFoundation.Runtime.Abstractions.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Properties\" />
   </ItemGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

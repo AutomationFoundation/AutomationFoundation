@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using AutomationFoundation.Runtime.Abstractions;
 using Moq;
 using NUnit.Framework;
@@ -34,7 +36,7 @@ namespace AutomationFoundation.Runtime
             using var target = new AutomationRuntime();
             target.Add(processor.Object);
 
-            Assert.True(target.IsActive);
+            Assert.True(target.IsRunning);
         }
 
         [Test]
@@ -45,7 +47,7 @@ namespace AutomationFoundation.Runtime
             using var target = new AutomationRuntime();
             target.Add(processor.Object);
 
-            Assert.True(target.IsActive);
+            Assert.True(target.IsRunning);
         }
 
         [Test]
@@ -101,25 +103,25 @@ namespace AutomationFoundation.Runtime
         }
 
         [Test]
-        public void StartsTheProcessor()
+        public async Task StartsTheProcessor()
         {
             using var target = new AutomationRuntime();
             target.Add(processor.Object);
 
-            target.Start();
+            await target.StartAsync();
 
-            processor.Verify(o => o.Start(), Times.Once);
+            processor.Verify(o => o.StartAsync(It.IsAny<CancellationToken>()), Times.Once);
         }
 
         [Test]
-        public void StopsTheProcessor()
+        public async Task StopsTheProcessor()
         {
             using var target = new AutomationRuntime();
             target.Add(processor.Object);
 
-            target.Stop();
+            await target.StopAsync();
 
-            processor.Verify(o => o.Stop(), Times.Once);
+            processor.Verify(o => o.StopAsync(It.IsAny<CancellationToken>()), Times.Once);
         }
 
         [Test]
@@ -128,7 +130,7 @@ namespace AutomationFoundation.Runtime
             var target = new AutomationRuntime();
             target.Dispose();
 
-            Assert.Throws<ObjectDisposedException>(() => target.Start());
+            Assert.ThrowsAsync<ObjectDisposedException>(async () => await target.StartAsync());
         }
 
         [Test]
@@ -137,7 +139,7 @@ namespace AutomationFoundation.Runtime
             var target = new AutomationRuntime();
             target.Dispose();
 
-            Assert.Throws<ObjectDisposedException>(() => target.Stop());
+            Assert.ThrowsAsync<ObjectDisposedException>(async () => await target.StopAsync());
         }
     }
 }
