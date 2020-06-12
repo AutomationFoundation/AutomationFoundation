@@ -21,10 +21,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Properties\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\..\src\AutomationFoundation.NETCore.App\AutomationFoundation.NETCore.App.csproj" />
   </ItemGroup>
 

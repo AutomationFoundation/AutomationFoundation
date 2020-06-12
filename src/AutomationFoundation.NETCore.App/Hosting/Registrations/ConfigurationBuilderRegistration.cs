@@ -3,7 +3,7 @@ using AutomationFoundation.Runtime.Builders;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace AutomationFoundation.Hosting.Builders
+namespace AutomationFoundation.Hosting.Registrations
 {
     /// <summary>
     /// Provides a registration for performing configuration builder tasks during startup.
