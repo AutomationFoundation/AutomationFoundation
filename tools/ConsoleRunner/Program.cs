@@ -7,7 +7,7 @@ using AutomationFoundation.Hosting.Abstractions.Builders;
 
 namespace ConsoleRunner
 {
-    public class Program
+    public static class Program
     {
         private static readonly CancellationTokenSource CancellationSource = new CancellationTokenSource();
 
