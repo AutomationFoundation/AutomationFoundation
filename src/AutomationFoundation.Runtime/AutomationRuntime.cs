@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -76,12 +77,21 @@ namespace AutomationFoundation.Runtime
         {
             GuardMustNotBeDisposed();
 
+            var tasks = new List<Task>();
+
             foreach (var processor in processors)
             {
                 cancellationToken.ThrowIfCancellationRequested();
 
-                await processor.StartAsync(cancellationToken);
+                var task = Task.Run(async () =>
+                {
+                    await processor.StartAsync(cancellationToken);
+                }, CancellationToken.None);
+
+                tasks.Add(task);
             }
+
+            await Task.WhenAll(tasks);
         }
 
         /// <inheritdoc />
@@ -89,10 +99,19 @@ namespace AutomationFoundation.Runtime
         {
             GuardMustNotBeDisposed();
 
+            var tasks = new List<Task>();
+
             foreach (var processor in processors)
             {
-                await processor.StopAsync(cancellationToken);
+                var task = Task.Run(async () =>
+                {
+                    await processor.StopAsync(cancellationToken);
+                }, CancellationToken.None);
+
+                tasks.Add(task);
             }
+
+            await Task.WhenAll(tasks);
         }
 
         /// <inheritdoc />

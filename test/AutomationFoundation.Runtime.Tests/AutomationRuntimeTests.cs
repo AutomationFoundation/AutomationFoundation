@@ -113,14 +113,10 @@ namespace AutomationFoundation.Runtime
         [Test]
         public void ThrowsAnExceptionWhenCanceledWhileStartingTheProcessors()
         {
+            cancellationSource.Cancel(); // Need to preemptively cancel as the 
+
             target.Add(processor1.Object);
             target.Add(processor2.Object);
-
-            processor1.Setup(o => o.StartAsync(It.IsAny<CancellationToken>())).Returns<CancellationToken>(cancellationToken =>
-            {
-                cancellationSource.Cancel();
-                return Task.CompletedTask;
-            });
 
             Assert.ThrowsAsync<OperationCanceledException>(async () => await target.StartAsync(cancellationSource.Token));
         }
