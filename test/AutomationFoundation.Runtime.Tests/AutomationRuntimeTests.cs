@@ -11,30 +11,42 @@ namespace AutomationFoundation.Runtime
     [TestFixture]
     public class AutomationRuntimeTests
     {
-        private Mock<IProcessor> processor;
+        private AutomationRuntime target;
+        private CancellationTokenSource cancellationSource;
+        private Mock<IProcessor> processor1;
+        private Mock<IProcessor> processor2;
 
         [SetUp]
         public void Setup()
         {
-            processor = new Mock<IProcessor>();
+            target = new AutomationRuntime();
+            
+            processor1 = new Mock<IProcessor>();
+            processor2 = new Mock<IProcessor>();
+            cancellationSource = new CancellationTokenSource();
+        }
+
+        [TearDown]
+        public void Cleanup()
+        {
+            target?.Dispose();
+            cancellationSource?.Dispose();
         }
 
         [Test]
         public void ReturnsTheProcessorsThatHaveBeenAdded()
         {
-            using var target = new AutomationRuntime();
-            target.Add(processor.Object);
+            target.Add(processor1.Object);
 
-            Assert.True(target.Processors.Contains(processor.Object));
+            Assert.True(target.Processors.Contains(processor1.Object));
         }
 
         [Test]
         public void IdentifiesTrueIfTheProcessorIsStarted()
         {
-            processor.Setup(o => o.State).Returns(ProcessorState.Started);
+            processor1.Setup(o => o.State).Returns(ProcessorState.Started);
 
-            using var target = new AutomationRuntime();
-            target.Add(processor.Object);
+            target.Add(processor1.Object);
 
             Assert.True(target.IsRunning);
         }
@@ -42,10 +54,9 @@ namespace AutomationFoundation.Runtime
         [Test]
         public void IdentifiesTrueIfTheProcessorIsBusy()
         {
-            processor.Setup(o => o.State).Returns(ProcessorState.Busy);
+            processor1.Setup(o => o.State).Returns(ProcessorState.Busy);
 
-            using var target = new AutomationRuntime();
-            target.Add(processor.Object);
+            target.Add(processor1.Object);
 
             Assert.True(target.IsRunning);
         }
@@ -53,8 +64,7 @@ namespace AutomationFoundation.Runtime
         [Test]
         public void ReturnsTrueWhenTheProcessorHasBeenAdded()
         {
-            using var target = new AutomationRuntime();
-            var result = target.Add(processor.Object);
+            var result = target.Add(processor1.Object);
 
             Assert.True(result);
         }
@@ -62,28 +72,25 @@ namespace AutomationFoundation.Runtime
         [Test]
         public void ReturnsFalseWhenTheProcessorHasAlreadyBeenAdded()
         {
-            using var target = new AutomationRuntime();
-            target.Add(processor.Object);
+            target.Add(processor1.Object);
 
-            var result = target.Add(processor.Object);
+            var result = target.Add(processor1.Object);
             Assert.False(result);
         }
 
         [Test]
         public void ReturnsTrueWhenTheProcessorHasBeenRemoved()
         {
-            using var target = new AutomationRuntime();
-            target.Add(processor.Object);
+            target.Add(processor1.Object);
 
-            var result = target.Remove(processor.Object);
+            var result = target.Remove(processor1.Object);
             Assert.True(result);
         }
 
         [Test]
         public void ReturnsFalseWhenTheProcessorHasNotBeenAdded()
         {
-            using var target = new AutomationRuntime();
-            var result = target.Remove(processor.Object);
+            var result = target.Remove(processor1.Object);
 
             Assert.False(result);
         }
@@ -91,43 +98,60 @@ namespace AutomationFoundation.Runtime
         [Test]
         public void ThrowsAnExceptionIfTheProcessorIsNullWhenAdded()
         {
-            using var target = new AutomationRuntime();
             Assert.Throws<ArgumentNullException>(() => target.Add(null));
         }
 
         [Test]
         public void ThrowsAnExceptionIfTheProcessorIsNullWhenRemoved()
         {
-            using var target = new AutomationRuntime();
             Assert.Throws<ArgumentNullException>(() => target.Remove(null));
         }
 
+        /// <summary>
+        /// When cancellation occurs while starting the runtime, 
+        /// </summary>
         [Test]
-        public async Task StartsTheProcessor()
+        public void ThrowsAnExceptionWhenCanceledWhileStartingTheProcessors()
         {
-            using var target = new AutomationRuntime();
-            target.Add(processor.Object);
+            target.Add(processor1.Object);
+            target.Add(processor2.Object);
 
-            await target.StartAsync();
+            processor1.Setup(o => o.StartAsync(It.IsAny<CancellationToken>())).Returns<CancellationToken>(cancellationToken =>
+            {
+                cancellationSource.Cancel();
+                return Task.CompletedTask;
+            });
 
-            processor.Verify(o => o.StartAsync(It.IsAny<CancellationToken>()), Times.Once);
+            Assert.ThrowsAsync<OperationCanceledException>(async () => await target.StartAsync(cancellationSource.Token));
         }
 
         [Test]
-        public async Task StopsTheProcessor()
+        public async Task StartsTheProcessors()
         {
-            using var target = new AutomationRuntime();
-            target.Add(processor.Object);
+            target.Add(processor1.Object);
+            target.Add(processor2.Object);
+
+            await target.StartAsync();
+
+            processor1.Verify(o => o.StartAsync(It.IsAny<CancellationToken>()));
+            processor2.Verify(o => o.StartAsync(It.IsAny<CancellationToken>()));
+        }
+
+        [Test]
+        public async Task StopsTheProcessors()
+        {
+            target.Add(processor1.Object);
+            target.Add(processor2.Object);
 
             await target.StopAsync();
 
-            processor.Verify(o => o.StopAsync(It.IsAny<CancellationToken>()), Times.Once);
+            processor1.Verify(o => o.StopAsync(It.IsAny<CancellationToken>()));
+            processor2.Verify(o => o.StopAsync(It.IsAny<CancellationToken>()));
         }
 
         [Test]
         public void ThrowAnExceptionWhenStartedAfterDisposed()
         {
-            var target = new AutomationRuntime();
             target.Dispose();
 
             Assert.ThrowsAsync<ObjectDisposedException>(async () => await target.StartAsync());
@@ -136,7 +160,6 @@ namespace AutomationFoundation.Runtime
         [Test]
         public void ThrowAnExceptionWhenStoppedAfterDisposed()
         {
-            var target = new AutomationRuntime();
             target.Dispose();
 
             Assert.ThrowsAsync<ObjectDisposedException>(async () => await target.StopAsync());
