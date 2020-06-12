@@ -43,8 +43,8 @@ namespace AutomationFoundation.Features.ProducerConsumer
             InitializeProducerEngines();
             InitializeConsumerEngine();
 
-            using (var t1 = StartProducerEngines())
-            using (var t2 = StartConsumerEngine())
+            using (var t1 = StartProducerEnginesAsync())
+            using (var t2 = StartConsumerEngineAsync())
             {
                 await Task.WhenAll(t1, t2);
             }
@@ -79,14 +79,14 @@ namespace AutomationFoundation.Features.ProducerConsumer
         /// <inheritdoc />
         protected override async Task OnStopAsync(CancellationToken cancellationToken)
         {
-            using (var t1 = StopProducerEngines())
-            using (var t2 = StopConsumerEngine())
+            using (var t1 = StopProducerEnginesAsync())
+            using (var t2 = StopConsumerEngineAsync())
             {
                 await Task.WhenAll(t1, t2);
             }
         }
 
-        private Task StartProducerEngines()
+        private async Task StartProducerEnginesAsync()
         {
             var tasks = new List<Task>();
 
@@ -96,7 +96,7 @@ namespace AutomationFoundation.Features.ProducerConsumer
                 tasks.Add(task);
             }
 
-            return Task.WhenAll(tasks);
+            await Task.WhenAll(tasks);
         }
 
         private void OnProducedCallback(IProducerConsumerContext<TItem> context)
@@ -106,7 +106,7 @@ namespace AutomationFoundation.Features.ProducerConsumer
             consumerEngine.Consume(context);
         }
 
-        private Task StopProducerEngines()
+        private async Task StopProducerEnginesAsync()
         {
             var tasks = new List<Task>();
 
@@ -117,17 +117,17 @@ namespace AutomationFoundation.Features.ProducerConsumer
                 tasks.Add(task);
             }
 
-            return Task.WhenAll(tasks);
+            await Task.WhenAll(tasks);
         }
 
-        private Task StartConsumerEngine()
+        private async Task StartConsumerEngineAsync()
         {
-            return consumerEngine.StartIfAsynchronous();
+            await consumerEngine.StartIfAsynchronous();
         }
 
-        private Task StopConsumerEngine()
+        private async Task StopConsumerEngineAsync()
         {
-            return consumerEngine.StopIfAsynchronous();
+            await consumerEngine.StopIfAsynchronous();
         }
 
         /// <inheritdoc />

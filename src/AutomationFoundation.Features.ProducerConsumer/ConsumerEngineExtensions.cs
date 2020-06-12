@@ -15,15 +15,17 @@ namespace AutomationFoundation.Features.ProducerConsumer
         /// </summary>
         /// <param name="engine">The consumer engine.</param>
         /// <returns>The task being used to start the engine, otherwise a completed task if no task was required.</returns>
-        public static Task StartIfAsynchronous<TItem>(this IConsumerEngine<TItem> engine)
+        public static async Task StartIfAsynchronous<TItem>(this IConsumerEngine<TItem> engine)
         {
             if (engine == null)
             {
                 throw new ArgumentNullException(nameof(engine));
             }
 
-            return (engine as IStartable)?.StartAsync() ??
-                   Task.CompletedTask;
+            if (engine is IStartable startable)
+            {
+                await startable.StartAsync();
+            }
         }
 
         /// <summary>
@@ -31,15 +33,17 @@ namespace AutomationFoundation.Features.ProducerConsumer
         /// </summary>
         /// <param name="engine">The consumer engine.</param>
         /// <returns>The task being used to stop the engine, otherwise a completed task if no task was required.</returns>
-        public static Task StopIfAsynchronous<TItem>(this IConsumerEngine<TItem> engine)
+        public static async Task StopIfAsynchronous<TItem>(this IConsumerEngine<TItem> engine)
         {
             if (engine == null)
             {
                 throw new ArgumentNullException(nameof(engine));
             }
 
-            return (engine as IStoppable)?.StopAsync() ??
-                   Task.CompletedTask;
+            if (engine is IStoppable stoppable)
+            {
+                await stoppable.StopAsync();
+            }
         }
     }
 }

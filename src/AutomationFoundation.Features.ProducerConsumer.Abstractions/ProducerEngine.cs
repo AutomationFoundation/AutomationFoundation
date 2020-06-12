@@ -40,19 +40,19 @@ namespace AutomationFoundation.Features.ProducerConsumer.Abstractions
         }
 
         /// <inheritdoc />
-        public void Initialize(Action<IProducerConsumerContext<TItem>> onProducedCallback, CancellationToken parentToken)
+        public void Initialize(Action<IProducerConsumerContext<TItem>> callback, CancellationToken cancellationToken)
         {
-            if (onProducedCallback == null)
+            if (callback == null)
             {
-                throw new ArgumentNullException(nameof(onProducedCallback));
+                throw new ArgumentNullException(nameof(callback));
             }
 
             GuardMustNotBeDisposed();
             GuardMustNotBeInitialized();
 
-            ConfigureCancellationSource(parentToken);
-            this.parentToken = parentToken;
-            this.onProducedCallback = onProducedCallback;
+            ConfigureCancellationSource(cancellationToken);
+            parentToken = cancellationToken;
+            onProducedCallback = callback;
             OnInitialized();
         }
 
@@ -97,8 +97,10 @@ namespace AutomationFoundation.Features.ProducerConsumer.Abstractions
             GuardMustNotBeDisposed();
             GuardMustBeInitialized();
 
-            task = new Task(async () => await RunAsync(onProducedCallback, cancellationSource.CancellationToken, parentToken), TaskCreationOptions.LongRunning);
-            task.Start();
+            task = Task.Run(async () =>
+            {
+                await RunAsync(onProducedCallback, cancellationSource.CancellationToken, parentToken);
+            }, CancellationToken.None);
 
             return Task.CompletedTask;
         }
@@ -119,14 +121,14 @@ namespace AutomationFoundation.Features.ProducerConsumer.Abstractions
         /// Wait for the engine to complete asynchronously.
         /// </summary>
         /// <returns>The task to await.</returns>
-        public Task WaitForCompletionAsync()
+        public async Task WaitForCompletionAsync()
         {
             GuardMustNotBeDisposed();
             GuardMustBeInitialized();
 
             GuardMustBeStarted();
 
-            return Task.WhenAll(task);
+            await task;
         }
 
         /// <summary>
@@ -161,7 +163,7 @@ namespace AutomationFoundation.Features.ProducerConsumer.Abstractions
         protected abstract Task RunAsync(Action<IProducerConsumerContext<TItem>> onProducedCallback, CancellationToken cancellationToken, CancellationToken parentToken);
 
         /// <inheritdoc />
-        public Task StopAsync()
+        public async Task StopAsync()
         {
             GuardMustNotBeDisposed();
             GuardMustBeInitialized();
@@ -170,7 +172,7 @@ namespace AutomationFoundation.Features.ProducerConsumer.Abstractions
 
             cancellationSource.RequestImmediateCancellation();
 
-            return Task.WhenAll(task);
+            await task;
         }
 
         /// <inheritdoc />

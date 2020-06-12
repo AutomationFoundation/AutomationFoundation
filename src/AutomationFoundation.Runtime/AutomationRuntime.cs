@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using AutomationFoundation.Runtime.Abstractions;
+using AutomationFoundation.Runtime.Threading;
 
 namespace AutomationFoundation.Runtime
 {
@@ -105,7 +106,15 @@ namespace AutomationFoundation.Runtime
             {
                 var task = Task.Run(async () =>
                 {
-                    await processor.StopAsync(cancellationToken);
+                    try
+                    {
+                        var stopTask = processor.StopAsync(cancellationToken);
+                        await stopTask.AbandonWhen(cancellationToken);
+                    }
+                    catch (TaskAbandonedException)
+                    {
+                        // TODO: This needs to get logged which process was abandoned.
+                    }
                 }, CancellationToken.None);
 
                 tasks.Add(task);

@@ -23,8 +23,10 @@ namespace ConsoleRunner
 
         public static async Task Main()
         {
-            Console.CancelKeyPress += (sender, e) =>
+            Console.CancelKeyPress += async (sender, e) =>
             {
+                await Console.Out.WriteLineAsync("Stopping...");
+
                 CancellationSource.Cancel();
                 e.Cancel = true; // Termination will occur when the host stops running.
             };
@@ -34,13 +36,15 @@ namespace ConsoleRunner
             try
             {
                 using var host = CreateRuntimeHostBuilder().Build();
-                await host.RunAsync(CancellationSource.Token);
+                await host.RunAsync(CancellationSource.Token, shutdownTimeoutMs: 30000);
             }
             catch (Exception ex)
             {
                 await Console.Error.WriteLineAsync(ex.ToString());
                 Environment.ExitCode = -1;
             }
+
+            await Console.Out.WriteLineAsync("Stopped.");
         }
     }
 }

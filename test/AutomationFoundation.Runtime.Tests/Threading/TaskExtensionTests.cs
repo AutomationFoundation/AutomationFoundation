@@ -9,6 +9,66 @@ namespace AutomationFoundation.Runtime.Threading
     public class TaskExtensionTests
     {
         [Test]
+        public void ReturnsWithoutAbandoningAsExpected()
+        {
+            var task = Task.Run(() => Task.CompletedTask);
+            Assert.DoesNotThrowAsync(async () => await task.AbandonWhen(CancellationToken.None));
+        }
+
+        [Test]
+        public void ThrowsAnExceptionWhenTheTokenIsSignaled()
+        {
+            var task = Task.Run(async () => await Task.Delay(Timeout.InfiniteTimeSpan));
+            Assert.ThrowsAsync<TaskAbandonedException>(async () => await task.AbandonWhen(new CancellationToken(true)));
+        }
+
+        [Test]
+        public void PropagatesTheExceptionAsExpected()
+        {
+            var task = Task.Run(() => throw new InvalidOperationException());
+            Assert.ThrowsAsync<InvalidOperationException>(async () => await task.AbandonWhen(CancellationToken.None));
+        }
+
+        [Test]
+        public async Task ReturnsResultWithoutAbandoningAsExpected()
+        {
+            var task = Task.Run(() => Task.FromResult(1));
+            var result = await task.AbandonWhen(CancellationToken.None);
+
+            Assert.AreEqual(1, result);
+        }
+
+        [Test]
+        public void ThrowsAnExceptionWhenTheTokenIsSignaled2()
+        {
+            var task = Task.Run(async () =>
+            {
+                await Task.Delay(Timeout.InfiniteTimeSpan);
+                return 1;
+            });
+
+            Assert.ThrowsAsync<TaskAbandonedException>(async () => await task.AbandonWhen(new CancellationToken(true)));
+        }
+
+        [Test]
+        public void PropagatesTheExceptionAsExpected2()
+        {
+            var task = Task.Run(() =>
+            {
+                if (true)
+                {
+                    throw new InvalidOperationException();
+                }
+
+#pragma warning disable CS0162
+                return 1;
+#pragma warning restore CS0162
+            });
+
+            Assert.ThrowsAsync<InvalidOperationException>(async () => await task.AbandonWhen(CancellationToken.None));
+        }
+
+        [Test]
         public void ThrowsAnExceptionWhenTaskIsNull_IsRunning()
         {
             Assert.Throws<ArgumentNullException>(() => TaskExtensions.IsRunning(null));

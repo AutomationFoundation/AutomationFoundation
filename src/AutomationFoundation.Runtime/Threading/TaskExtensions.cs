@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace AutomationFoundation.Runtime.Threading
@@ -8,6 +9,42 @@ namespace AutomationFoundation.Runtime.Threading
     /// </summary>
     public static class TaskExtensions
     {
+        /// <summary>
+        /// Abandons the task when the cancellation token is signaled.
+        /// </summary>
+        /// <param name="task">The task which should be abandoned.</param>
+        /// <param name="cancellationToken">The cancellation token to monitor for cancellation requests.</param>
+        /// <returns>The task to await.</returns>
+        /// <exception cref="TaskAbandonedException">The task was abandoned.</exception>
+        public static async Task AbandonWhen(this Task task, CancellationToken cancellationToken)
+        {
+            var completedTask = await Task.WhenAny(task, Task.Delay(Timeout.Infinite, cancellationToken));
+            if (completedTask == task)
+            {
+                await task; // Required to propagate exceptions (if any occurred).
+                return;
+            }
+
+            throw new TaskAbandonedException();
+        }
+
+        /// <summary>
+        /// Abandons the task when the cancellation token is signaled.
+        /// </summary>
+        /// <param name="task">The task which should be abandoned.</param>
+        /// <param name="cancellationToken">The cancellation token to monitor for cancellation requests.</param>
+        /// <returns>The task to await.</returns>
+        public static async Task<TResult> AbandonWhen<TResult>(this Task<TResult> task, CancellationToken cancellationToken)
+        {
+            var completedTask = await Task.WhenAny(task, Task.Delay(Timeout.Infinite, cancellationToken));
+            if (completedTask == task)
+            {
+                return await task; // Required to propagate exceptions (if any occurred).
+            }
+
+            throw new TaskAbandonedException();
+        }
+
         /// <summary>
         /// Optionally disposes the task depending on the state of the task.
         /// </summary>

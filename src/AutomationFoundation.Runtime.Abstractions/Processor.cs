@@ -124,7 +124,7 @@ namespace AutomationFoundation.Runtime
         /// <summary>
         /// Ensures the processor has not encountered an error.
         /// </summary>
-        protected void GuardMustNotHaveEncounteredAnError()
+        private void GuardMustNotHaveEncounteredAnError()
         {
             if (State <= ProcessorState.Error)
             {
