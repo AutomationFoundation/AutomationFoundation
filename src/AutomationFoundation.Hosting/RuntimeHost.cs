@@ -33,17 +33,25 @@ namespace AutomationFoundation.Hosting
             ApplicationServices = applicationServices;
         }
 
+        /// <summary>
+        /// Finalizes an instance of the <see cref="RuntimeHost"/> class.
+        /// </summary>
         ~RuntimeHost()
         {
             Dispose(false);
         }
 
+        /// <inheritdoc />
         public void Dispose()
         {
             Dispose(true);
             GC.SuppressFinalize(this);
         }
 
+        /// <summary>
+        /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+        /// </summary>
+        /// <param name="disposing">true to free both managed and unmanaged resources, false to free only unmanaged resources.</param>
         protected virtual void Dispose(bool disposing)
         {
             if (disposing)
