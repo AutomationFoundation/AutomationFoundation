@@ -8,7 +8,7 @@ namespace AutomationFoundation.Extensions.SqlClient
     /// <summary>
     /// Provides an adapter for a <see cref="SqlTransaction"/> transaction.
     /// </summary>
-    public sealed class SqlTransactionAdapter : DbTransactionAdapter<SqlTransaction>, ISqlTransactionAdapter
+    public sealed class SqlTransactionAdapter : DbTransactionAdapter<SqlTransaction, ISqlTransaction>, ISqlTransactionAdapter
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="SqlTransactionAdapter"/> class.
@@ -25,7 +25,7 @@ namespace AutomationFoundation.Extensions.SqlClient
         /// </summary>
         /// <param name="transaction">The transaction which is being adapted.</param>
         /// <param name="ownsTransaction">Optional. Identifies whether the adapter will take ownership of the transaction.</param>
-        internal SqlTransactionAdapter(ISqlTransactionWrapper transaction, bool ownsTransaction = true)
+        internal SqlTransactionAdapter(ISqlTransaction transaction, bool ownsTransaction = true)
             : base(transaction, ownsTransaction)
         {
         }
@@ -40,8 +40,7 @@ namespace AutomationFoundation.Extensions.SqlClient
 
             GuardMustNotBeDisposed();
 
-            GetSqlTransactionWrapper()
-                .Rollback(savePointName);
+            Transaction.Rollback(savePointName);
         }
 
         /// <inheritdoc />
@@ -54,13 +53,7 @@ namespace AutomationFoundation.Extensions.SqlClient
 
             GuardMustNotBeDisposed();
 
-            GetSqlTransactionWrapper()
-                .Save(savePointName);
-        }
-
-        private ISqlTransactionWrapper GetSqlTransactionWrapper()
-        {
-            return (ISqlTransactionWrapper)Transaction;
+            Transaction.Save(savePointName);
         }
     }
 }

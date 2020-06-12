@@ -19,16 +19,6 @@ namespace AutomationFoundation.Extensions.EntityFrameworkCore
         }
 
         [Test]
-        public void MustCommitTheTransaction()
-        {
-            using (var target = new DbContextTransactionAdapter(transaction.Object))
-            {
-                target.Commit();
-            }
-
-            transaction.Verify(o => o.Commit(), Times.Once);
-        }
-        [Test]
         public async Task MustCommitTheTransactionAsync()
         {
             using (var target = new DbContextTransactionAdapter(transaction.Object))
@@ -36,18 +26,7 @@ namespace AutomationFoundation.Extensions.EntityFrameworkCore
                 await target.CommitAsync(CancellationToken.None);
             }
 
-            transaction.Verify(o => o.CommitAsync(It.IsAny<CancellationToken>()), Times.Once);
-        }
-
-        [Test]
-        public void MustRollbackTheTransaction()
-        {
-            using (var target = new DbContextTransactionAdapter(transaction.Object))
-            {
-                target.Rollback();
-            }
-
-            transaction.Verify(o => o.Rollback(), Times.Once);
+            transaction.Verify(o => o.CommitAsync(It.IsAny<CancellationToken>()));
         }
 
         [Test]
@@ -58,7 +37,7 @@ namespace AutomationFoundation.Extensions.EntityFrameworkCore
                 await target.RollbackAsync(CancellationToken.None);
             }
 
-            transaction.Verify(o => o.RollbackAsync(It.IsAny<CancellationToken>()), Times.Once);
+            transaction.Verify(o => o.RollbackAsync(It.IsAny<CancellationToken>()));
         }
 
         [Test]

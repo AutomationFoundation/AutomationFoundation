@@ -8,7 +8,7 @@ namespace AutomationFoundation.Extensions.SystemTransactions
     /// <summary>
     /// Provides an adapter for a <see cref="CommittableTransaction"/> which can be used by the framework.
     /// </summary>
-    public class CommittableTransactionAdapter : TransactionAdapter<CommittableTransactionWrapper, CommittableTransaction>
+    public class CommittableTransactionAdapter : TransactionAdapter<CommittableTransaction, CommittableTransactionWrapper>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="CommittableTransactionAdapter"/> class.
@@ -31,17 +31,11 @@ namespace AutomationFoundation.Extensions.SystemTransactions
         }
 
         /// <inheritdoc />
-        public override void Commit()
+        public override Task CommitAsync(CancellationToken cancellationToken)
         {
             GuardMustNotBeDisposed();
 
             Transaction.Commit();
-        }
-
-        /// <inheritdoc />
-        public override Task CommitAsync(CancellationToken cancellationToken)
-        {
-            Commit();
 
             return Task.CompletedTask;
         }

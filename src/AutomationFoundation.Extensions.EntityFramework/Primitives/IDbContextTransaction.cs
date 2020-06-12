@@ -4,9 +4,9 @@ using System.Data.Entity;
 namespace AutomationFoundation.Extensions.EntityFramework.Primitives
 {
     /// <summary>
-    /// Identifies an Entity Framework compatible database transaction.
+    /// INFRASTRUCTURE ONLY: This interface is not intended to be used within your application code, use at your own risk!
     /// </summary>
-    internal interface IDbContextTransaction : IDisposable
+    public interface IDbContextTransaction : IDisposable
     {
         /// <summary>
         /// Gets the underlying database context transaction.

@@ -4,9 +4,9 @@ using System.Data.Entity;
 namespace AutomationFoundation.Extensions.EntityFramework.Primitives
 {
     /// <summary>
-    /// Provides a wrapper which wraps a <see cref="DbContextTransaction"/> object.
+    /// INFRASTRUCTURE ONLY: This interface is not intended to be used within your application code, use at your own risk!
     /// </summary>
-    internal class DbContextTransactionWrapper : IDbContextTransaction
+    public class DbContextTransactionWrapper : IDbContextTransaction
     {
         /// <summary>
         /// Gets the underlying transaction.

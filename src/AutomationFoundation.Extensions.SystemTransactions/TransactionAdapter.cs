@@ -10,9 +10,9 @@ namespace AutomationFoundation.Extensions.SystemTransactions
     /// <summary>
     /// Provides an adapter for a <see cref="CommittableTransaction"/> transaction.
     /// </summary>
-    /// <typeparam name="TWrapper">The type of wrapper for the transaction.</typeparam>
     /// <typeparam name="TTransaction">The type of transaction being adapted.</typeparam>
-    public abstract class TransactionAdapter<TWrapper, TTransaction> : BaseTransactionAdapter<TTransaction>
+    /// <typeparam name="TWrapper">The type of wrapper for the transaction.</typeparam>
+    public abstract class TransactionAdapter<TTransaction, TWrapper> : BaseTransactionAdapter<TTransaction>
         where TWrapper : TransactionWrapper<TTransaction>
         where TTransaction : Transaction
     {
@@ -36,17 +36,11 @@ namespace AutomationFoundation.Extensions.SystemTransactions
         }
 
         /// <inheritdoc />
-        public override void Rollback()
+        public override Task RollbackAsync(CancellationToken cancellationToken)
         {
             GuardMustNotBeDisposed();
 
             Transaction.Rollback();
-        }
-
-        /// <inheritdoc />
-        public override Task RollbackAsync(CancellationToken cancellationToken)
-        {
-            Rollback();
 
             return Task.CompletedTask;
         }

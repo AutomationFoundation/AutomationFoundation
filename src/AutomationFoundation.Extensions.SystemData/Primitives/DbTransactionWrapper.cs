@@ -4,7 +4,7 @@ using System.Data.Common;
 namespace AutomationFoundation.Extensions.SystemData.Primitives
 {
     /// <summary>
-    /// INFRASTRUCTURE ONLY: This class is not intended for use within your application code, use at your own risk.
+    /// INFRASTRUCTURE ONLY: This class is not intended for use within your application code, use at your own risk!
     /// </summary>
     /// <typeparam name="TTransaction">The type of transaction being wrapped.</typeparam>
     public class DbTransactionWrapper<TTransaction> : IDbTransactionWrapper<TTransaction> 

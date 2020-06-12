@@ -8,7 +8,7 @@ namespace AutomationFoundation.Extensions.SystemTransactions
     /// <summary>
     /// Provides an adapter for a <see cref="DependentTransaction"/> which can be used by the framework.
     /// </summary>
-    public class DependentTransactionAdapter : TransactionAdapter<DependentTransactionWrapper, DependentTransaction>
+    public class DependentTransactionAdapter : TransactionAdapter<DependentTransaction, DependentTransactionWrapper>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="DependentTransactionAdapter"/> class.
@@ -31,18 +31,12 @@ namespace AutomationFoundation.Extensions.SystemTransactions
         }
 
         /// <inheritdoc />
-        public override void Commit()
+        public override Task CommitAsync(CancellationToken cancellationToken)
         {
             GuardMustNotBeDisposed();
 
             Transaction.Complete();
-        }
 
-        /// <inheritdoc />
-        public override Task CommitAsync(CancellationToken cancellationToken)
-        {
-            Commit();
-            
             return Task.CompletedTask;
         }
     }

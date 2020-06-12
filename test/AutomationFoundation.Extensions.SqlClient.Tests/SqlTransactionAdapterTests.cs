@@ -8,12 +8,12 @@ namespace AutomationFoundation.Extensions.SqlClient
     [TestFixture]
     public class SqlTransactionAdapterTests
     {
-        private Mock<ISqlTransactionWrapper> transaction;
+        private Mock<ISqlTransaction> transaction;
 
         [SetUp]
         public void Setup()
         {
-            transaction = new Mock<ISqlTransactionWrapper>();
+            transaction = new Mock<ISqlTransaction>();
         }
 
         [Test]

@@ -11,25 +11,35 @@ namespace AutomationFoundation.Extensions.SystemData
     /// Provides an adapter for a <see cref="DbTransaction"/> transaction.
     /// </summary>
     /// <typeparam name="TTransaction">The type of transaction being adapted.</typeparam>
-    public class DbTransactionAdapter<TTransaction> : BaseTransactionAdapter<TTransaction>
+    public class DbTransactionAdapter<TTransaction> : DbTransactionAdapter<TTransaction, DbTransactionWrapper<TTransaction>>
         where TTransaction : DbTransaction
     {
         /// <summary>
-        /// Initializes an instance of the <see cref="DbTransactionAdapter{TTransaction}"/> class.
+        /// Initializes an instance of the <see cref="DbTransactionAdapter{TTransaction, TWrapper}"/> class.
         /// </summary>
         /// <param name="transaction">The transaction which is being adapted.</param>
         /// <param name="ownsTransaction">Optional. Identifies whether the adapter will take ownership of the transaction.</param>
-        public DbTransactionAdapter(TTransaction transaction, bool ownsTransaction = true) 
-            : this(new DbTransactionWrapper<TTransaction>(transaction), ownsTransaction)
+        public DbTransactionAdapter(TTransaction transaction, bool ownsTransaction = true)
+            : base(new DbTransactionWrapper<TTransaction>(transaction), ownsTransaction)
         {
         }
+    }
 
+    /// <summary>
+    /// Provides an adapter for a <see cref="DbTransaction"/> transaction.
+    /// </summary>
+    /// <typeparam name="TTransaction">The type of transaction being adapted.</typeparam>
+    /// <typeparam name="TWrapper">The type of wrapper surrounding the transaction.</typeparam>
+    public abstract class DbTransactionAdapter<TTransaction, TWrapper> : BaseTransactionAdapter<TTransaction>
+        where TTransaction : DbTransaction
+        where TWrapper : class, IDbTransactionWrapper<TTransaction>
+    {        
         /// <summary>
-        /// Initializes an instance of the <see cref="DbTransactionAdapter{TTransaction}"/> class.
+        /// Initializes an instance of the <see cref="DbTransactionAdapter{TTransaction, TWrapper}"/> class.
         /// </summary>
         /// <param name="transaction">The wrapped transaction which is being adapted.</param>
         /// <param name="ownsTransaction">Optional. Identifies whether the adapter will take ownership of the transaction.</param>
-        public DbTransactionAdapter(IDbTransactionWrapper<TTransaction> transaction, bool ownsTransaction)
+        protected DbTransactionAdapter(TWrapper transaction, bool ownsTransaction)
             : base(ownsTransaction)
         {
             Transaction = transaction ?? throw new ArgumentNullException(nameof(transaction));
@@ -41,37 +51,25 @@ namespace AutomationFoundation.Extensions.SystemData
         /// <summary>
         /// Gets the wrapped transaction being held by the adapter.
         /// </summary>
-        protected IDbTransactionWrapper<TTransaction> Transaction { get; }
-
-        /// <inheritdoc />
-        public override void Rollback()
-        {
-            GuardMustNotBeDisposed();
-
-            Transaction.Rollback();
-        }
+        protected TWrapper Transaction { get; }
 
         /// <inheritdoc />
         public override Task RollbackAsync(CancellationToken cancellationToken)
         {
-            Rollback();
+            GuardMustNotBeDisposed();
+
+            Transaction.Rollback();
 
             return Task.CompletedTask;
         }
 
         /// <inheritdoc />
-        public override void Commit()
+        public override Task CommitAsync(CancellationToken cancellationToken)
         {
             GuardMustNotBeDisposed();
 
             Transaction.Commit();
-        }
-
-        /// <inheritdoc />
-        public override Task CommitAsync(CancellationToken cancellationToken)
-        {
-            Commit();
-
+            
             return Task.CompletedTask;
         }
 
