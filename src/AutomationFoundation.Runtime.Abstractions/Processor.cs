@@ -44,9 +44,12 @@ namespace AutomationFoundation.Runtime
         public async Task StartAsync(CancellationToken cancellationToken)
         {
             GuardMustNotBeDisposed();
-
             GuardMustNotHaveEncounteredAnError();
-            GuardMustNotAlreadyBeStarted();
+
+            if (!ShouldAttemptToStart())
+            {
+                return;
+            }
 
             try
             {
@@ -64,14 +67,12 @@ namespace AutomationFoundation.Runtime
         }
 
         /// <summary>
-        /// Ensures the processor has not already been started.
+        /// Determines whether the processor should attempt to start.
         /// </summary>
-        protected void GuardMustNotAlreadyBeStarted()
+        /// <returns>true if the processor should be started, otherwise false.</returns>
+        private bool ShouldAttemptToStart()
         {
-            if (State >= ProcessorState.Started)
-            {
-                throw new RuntimeException("The processor has already been started.");
-            }
+            return State < ProcessorState.Starting;
         }
 
         /// <summary>
@@ -85,8 +86,10 @@ namespace AutomationFoundation.Runtime
         {
             GuardMustNotBeDisposed();
 
-            GuardMustNotHaveEncounteredAnError();
-            GuardMustNotAlreadyBeStopped();
+            if (!ShouldAttemptToStop())
+            {
+                return;
+            }
 
             try
             {
@@ -104,14 +107,12 @@ namespace AutomationFoundation.Runtime
         }
 
         /// <summary>
-        /// Ensures the processor has not already been stopped.
+        /// Determines whether the processor should attempt to stop.
         /// </summary>
-        protected void GuardMustNotAlreadyBeStopped()
+        /// <returns>true if the processor should attempt to stop, otherwise false.</returns>
+        private bool ShouldAttemptToStop()
         {
-            if (State >= ProcessorState.Stopping && State <= ProcessorState.Stopped)
-            {
-                throw new RuntimeException("The processor has not been started.");
-            }
+            return State != ProcessorState.Error && State >= ProcessorState.Started;
         }
 
         /// <summary>

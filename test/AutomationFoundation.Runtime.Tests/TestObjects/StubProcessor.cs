@@ -45,16 +45,6 @@ namespace AutomationFoundation.Runtime.TestObjects
             this.onDispose = onDispose;
         }
 
-        public void ExecuteGuardMustNotAlreadyBeStarted()
-        {
-            GuardMustNotAlreadyBeStarted();
-        }
-
-        public void ExecuteGuardMustNotAlreadyBeStopped()
-        {
-            GuardMustNotAlreadyBeStopped();
-        }
-
         public void SetState(ProcessorState value)
         {
             State = value;

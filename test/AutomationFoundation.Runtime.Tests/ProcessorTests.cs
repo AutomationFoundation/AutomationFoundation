@@ -22,14 +22,7 @@ namespace AutomationFoundation.Runtime
         [TearDown]
         public void Cleanup()
         {
-            try
-            {
-                target.Dispose();
-            }
-            catch (Exception)
-            {
-                // Just in case a test put the target intentionally into a bad state.
-            }
+            target?.Dispose();
         }
 
         [Test]
@@ -61,7 +54,7 @@ namespace AutomationFoundation.Runtime
         {
             target.SetState(ProcessorState.Error);
 
-            Assert.ThrowsAsync<RuntimeException>(async () => await target.StopAsync(CancellationToken.None));
+            Assert.DoesNotThrowAsync(async () => await target.StopAsync(CancellationToken.None));
         }
 
         [Test]
@@ -92,15 +85,6 @@ namespace AutomationFoundation.Runtime
         public void ReturnsTheCreatedStateUponNew()
         {
             Assert.AreEqual(ProcessorState.Created, target.State);
-        }
-
-        [Test]
-        public async Task StoppingTwiceThrowsAnException()
-        {
-            await target.StartAsync(CancellationToken.None);
-            await target.StopAsync(CancellationToken.None);
-
-            Assert.ThrowsAsync<RuntimeException>(async () => await target.StopAsync(CancellationToken.None));
         }
 
         [Test]
@@ -164,24 +148,27 @@ namespace AutomationFoundation.Runtime
         }
 
         [Test]
-        public async Task ThrowAnExceptionWhenTheProcessorIsAlreadyStarted()
+        public void DoNotThrowAnExceptionWhenStoppedWhileInErrorState()
         {
-            await target.StartAsync(CancellationToken.None);
+            target.SetState(ProcessorState.Error);
 
-            Assert.AreEqual(ProcessorState.Started, target.State);
-            Assert.Throws<RuntimeException>(() => target.ExecuteGuardMustNotAlreadyBeStarted());
+            Assert.DoesNotThrowAsync(async () => await target.StopAsync(CancellationToken.None));
         }
 
         [Test]
-        public async Task ThrowAnExceptionWhenTheProcessorIsAlreadyStopped()
+        public void DoNotThrowAnExceptionWhenTheProcessorIsAlreadyStarted()
         {
-            await target.StartAsync(CancellationToken.None);
-            Assert.AreEqual(ProcessorState.Started, target.State);
+            target.SetState(ProcessorState.Started);
 
-            await target.StopAsync(CancellationToken.None);
-            Assert.AreEqual(ProcessorState.Stopped, target.State);
+            Assert.DoesNotThrowAsync(async () => await target.StartAsync(CancellationToken.None));
+        }
 
-            Assert.Throws<RuntimeException>(() => target.ExecuteGuardMustNotAlreadyBeStopped());
+        [Test]
+        public void ThrowAnExceptionWhenTheProcessorIsAlreadyStopped()
+        {
+            target.SetState(ProcessorState.Stopped);
+
+            Assert.DoesNotThrowAsync(async () => await target.StopAsync(CancellationToken.None));
         }
 
         [Test]
