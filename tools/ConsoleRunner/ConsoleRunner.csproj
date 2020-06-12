@@ -14,7 +14,6 @@
   <ItemGroup>
     <ProjectReference Include="..\..\src\AutomationFoundation.Features.ProducerConsumer\AutomationFoundation.Features.ProducerConsumer.csproj" />
     <ProjectReference Include="..\..\src\AutomationFoundation.NETCore.App\AutomationFoundation.NETCore.App.csproj" />
-    <ProjectReference Include="..\ConsoleRunner.BizServices.Domain\ConsoleRunner.BizServices.Domain.csproj" />
   </ItemGroup>
 
 </Project>

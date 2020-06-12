@@ -36,8 +36,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AutomationFoundation.Featur
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConsoleRunner", "tools\ConsoleRunner\ConsoleRunner.csproj", "{04320F2A-E3D9-4E96-86F0-B19A9D123178}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConsoleRunner.BizServices.Domain", "tools\ConsoleRunner.BizServices.Domain\ConsoleRunner.BizServices.Domain.csproj", "{BF6352DF-B763-434A-981D-A2FF2E2BD178}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AutomationFoundation", "src\AutomationFoundation\AutomationFoundation.csproj", "{86FB5F41-85DD-43E0-883D-72DB4EBB447C}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AutomationFoundation.Tests", "test\AutomationFoundation.Tests\AutomationFoundation.Tests.csproj", "{7EF40655-C9A1-4087-B842-A9249DE5C4BF}"
@@ -122,10 +120,6 @@ Global
 		{04320F2A-E3D9-4E96-86F0-B19A9D123178}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{04320F2A-E3D9-4E96-86F0-B19A9D123178}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{04320F2A-E3D9-4E96-86F0-B19A9D123178}.Release|Any CPU.Build.0 = Release|Any CPU
-		{BF6352DF-B763-434A-981D-A2FF2E2BD178}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{BF6352DF-B763-434A-981D-A2FF2E2BD178}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{BF6352DF-B763-434A-981D-A2FF2E2BD178}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{BF6352DF-B763-434A-981D-A2FF2E2BD178}.Release|Any CPU.Build.0 = Release|Any CPU
 		{86FB5F41-85DD-43E0-883D-72DB4EBB447C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{86FB5F41-85DD-43E0-883D-72DB4EBB447C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{86FB5F41-85DD-43E0-883D-72DB4EBB447C}.Release|Any CPU.ActiveCfg = Release|Any CPU
