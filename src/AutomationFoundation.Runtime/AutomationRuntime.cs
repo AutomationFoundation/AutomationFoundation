@@ -14,6 +14,7 @@ namespace AutomationFoundation.Runtime
     /// </summary>
     public sealed class AutomationRuntime : IRuntime
     {
+        private readonly SemaphoreSlim @lock = new SemaphoreSlim(1);
         private readonly IList<IProcessor> processors = new List<IProcessor>();
 
         private bool disposed;
@@ -44,10 +45,19 @@ namespace AutomationFoundation.Runtime
 
             GuardMustNotBeDisposed();
 
-            if (!processors.Contains(processor))
+            @lock.Wait();
+
+            try
             {
-                processors.Add(processor);
-                return true;
+                if (!processors.Contains(processor))
+                {
+                    processors.Add(processor);
+                    return true;
+                }
+            }
+            finally
+            {
+                @lock.Release();
             }
 
             return false;
@@ -63,10 +73,19 @@ namespace AutomationFoundation.Runtime
 
             GuardMustNotBeDisposed();
 
-            if (processors.Contains(processor))
+            @lock.Wait();
+
+            try
             {
-                processors.Remove(processor);
-                return true;
+                if (processors.Contains(processor))
+                {
+                    processors.Remove(processor);
+                    return true;
+                }
+            }
+            finally
+            {
+                @lock.Release();
             }
 
             return false;
@@ -79,16 +98,25 @@ namespace AutomationFoundation.Runtime
 
             var tasks = new List<Task>();
 
-            foreach (var processor in processors)
+            await @lock.WaitAsync(cancellationToken);
+
+            try
             {
-                cancellationToken.ThrowIfCancellationRequested();
-
-                var task = Task.Run(async () =>
+                foreach (var processor in processors)
                 {
-                    await processor.StartAsync(cancellationToken);
-                }, CancellationToken.None);
+                    cancellationToken.ThrowIfCancellationRequested();
 
-                tasks.Add(task);
+                    var task = Task.Run(async () =>
+                    {
+                        await processor.StartAsync(cancellationToken);
+                    }, CancellationToken.None);
+
+                    tasks.Add(task);
+                }
+            }
+            finally
+            {
+                @lock.Release();
             }
 
             await Task.WhenAll(tasks);
@@ -101,22 +129,31 @@ namespace AutomationFoundation.Runtime
 
             var tasks = new List<Task>();
 
-            foreach (var processor in processors)
-            {
-                var task = Task.Run(async () =>
-                {
-                    try
-                    {
-                        var stopTask = processor.StopAsync(cancellationToken);
-                        await stopTask.AbandonWhen(cancellationToken);
-                    }
-                    catch (TaskAbandonedException)
-                    {
-                        // TODO: This needs to get logged which process was abandoned.
-                    }
-                }, CancellationToken.None);
+            await @lock.WaitAsync(cancellationToken);
 
-                tasks.Add(task);
+            try
+            {
+                foreach (var processor in processors)
+                {
+                    var task = Task.Run(async () =>
+                    {
+                        try
+                        {
+                            var stopTask = processor.StopAsync(cancellationToken);
+                            await stopTask.AbandonWhen(cancellationToken);
+                        }
+                        catch (TaskAbandonedException)
+                        {
+                            // TODO: This needs to get logged which process was abandoned.
+                        }
+                    }, CancellationToken.None);
+
+                    tasks.Add(task);
+                }
+            }
+            finally
+            {
+                @lock.Release();
             }
 
             await Task.WhenAll(tasks);
@@ -137,6 +174,8 @@ namespace AutomationFoundation.Runtime
                 {
                     processor.Dispose();
                 }
+
+                @lock.Dispose();
 
                 disposed = true;
             }

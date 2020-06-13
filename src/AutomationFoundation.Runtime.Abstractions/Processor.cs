@@ -10,6 +10,7 @@ namespace AutomationFoundation.Runtime
     /// </summary>
     public abstract class Processor : IProcessor
     {
+        private readonly SemaphoreSlim @lock = new SemaphoreSlim(1);
         private bool disposed;
 
         /// <inheritdoc />
@@ -51,6 +52,8 @@ namespace AutomationFoundation.Runtime
                 return;
             }
 
+            await @lock.WaitAsync(cancellationToken);
+
             try
             {
                 State = ProcessorState.Starting;
@@ -63,6 +66,10 @@ namespace AutomationFoundation.Runtime
             {
                 State = ProcessorState.Error;
                 throw;
+            }
+            finally
+            {
+                @lock.Release();
             }
         }
 
@@ -91,6 +98,8 @@ namespace AutomationFoundation.Runtime
                 return;
             }
 
+            await @lock.WaitAsync(cancellationToken);
+
             try
             {
                 State = ProcessorState.Stopping;
@@ -103,6 +112,10 @@ namespace AutomationFoundation.Runtime
             {
                 State = ProcessorState.Error;
                 throw;
+            }
+            finally
+            {
+                @lock.Release();
             }
         }
 
@@ -145,6 +158,11 @@ namespace AutomationFoundation.Runtime
         /// <param name="disposing">true to release both managed and unmanaged resources, otherwise false to release unmanaged resources.</param>
         protected virtual void Dispose(bool disposing)
         {
+            if (disposing)
+            {
+                @lock.Dispose();
+            }
+
             disposed = true;
         }
 
