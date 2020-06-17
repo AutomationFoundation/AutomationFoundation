@@ -22,13 +22,13 @@ namespace AutomationFoundation.Runtime.Abstractions
         /// <summary>
         /// Starts the processor.
         /// </summary>
-        /// <param name="cancellationToken">The cancellation token to monitor for cancellation requests.</param>
+        /// <param name="cancellationToken">Indicates when the start process has been aborted.</param>
         Task StartAsync(CancellationToken cancellationToken);
 
         /// <summary>
         /// Stops the processor.
         /// </summary>
-        /// <param name="cancellationToken">The cancellation token to monitor for cancellation requests.</param>
+        /// <param name="cancellationToken">Indicates when the stop process should no longer be graceful.</param>
         Task StopAsync(CancellationToken cancellationToken);
     }
 }

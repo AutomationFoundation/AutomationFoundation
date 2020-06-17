@@ -23,6 +23,13 @@ namespace AutomationFoundation.Hosting.Abstractions.Builders
         IRuntimeHostBuilder ConfigureServices(Action<IServiceCollection> callback);
 
         /// <summary>
+        /// Configures the strategy used for running the host until triggered to stop.
+        /// </summary>
+        /// <typeparam name="TStrategy">The type of strategy to use.</typeparam>
+        /// <returns>The current runtime host builder instance.</returns>
+        IRuntimeHostBuilder UseRunStrategy<TStrategy>() where TStrategy : IRuntimeHostRunAsyncStrategy;
+
+        /// <summary>
         /// Identifies the startup type which should be used.
         /// </summary>
         /// <typeparam name="TStartup">The type of startup to use when starting the host.</typeparam>

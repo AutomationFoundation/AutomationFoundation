@@ -10,6 +10,7 @@
     <RepositoryType>git</RepositoryType>
     <PackageTags>automation,automationfoundation</PackageTags>
     <Description>Contains a metapackage for consuming the Automation Foundation framework.</Description>
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>
