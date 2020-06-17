@@ -21,14 +21,14 @@ namespace AutomationFoundation.Hosting
         public virtual string EnvironmentName { get; }
 
         /// <inheritdoc />
-        public bool IsEnvironment(string environmentName)
+        public bool IsEnvironment(string environmentName, StringComparison comparisonType = StringComparison.CurrentCultureIgnoreCase)
         {
             if (string.IsNullOrWhiteSpace(environmentName))
             {
                 throw new ArgumentNullException(nameof(environmentName));
             }
 
-            return EnvironmentName.StartsWith(environmentName, StringComparison.CurrentCultureIgnoreCase);
+            return EnvironmentName.StartsWith(environmentName, comparisonType);
         }
     }
 }
