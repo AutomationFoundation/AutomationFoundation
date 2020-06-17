@@ -10,17 +10,8 @@ namespace AutomationFoundation.Hosting
     /// </summary>
     public class CtrlCRuntimeHostRunAsyncStrategy : IRuntimeHostRunAsyncStrategy, IDisposable
     {
-        private readonly CancellationTokenSource cancellationSource;
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="CtrlCRuntimeHostRunAsyncStrategy"/> class.
-        /// </summary>
-        /// <param name="cancellationSource">The cancellation source managing when to cancel.</param>
-        public CtrlCRuntimeHostRunAsyncStrategy(CancellationTokenSource cancellationSource)
-        {
-            this.cancellationSource = cancellationSource ?? throw new ArgumentNullException(nameof(cancellationSource));
-        }
-
+        private readonly CancellationTokenSource cancellationSource = new CancellationTokenSource();
+        
         /// <summary>
         /// Finalizes an instance of the <see cref="CtrlCRuntimeHostRunAsyncStrategy"/> class.
         /// </summary>
@@ -56,7 +47,7 @@ namespace AutomationFoundation.Hosting
         {
             Console.CancelKeyPress += async (sender, e) =>
             {
-                await Console.Out.WriteLineAsync("Stopping application...");
+                await Console.Out.WriteLineAsync("Stopping application, please be patient as this may take some time...");
 
                 cancellationSource.Cancel();
                 e.Cancel = true; // Termination will occur when the host stops running.
