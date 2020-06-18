@@ -1,5 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using AutomationFoundation.Features.ProducerConsumer.Abstractions;
 using AutomationFoundation.Runtime.Abstractions;
 
@@ -17,11 +16,6 @@ namespace AutomationFoundation.Features.ProducerConsumer
         /// <returns>The task being used to start the engine, otherwise a completed task if no task was required.</returns>
         public static async Task StartIfAsynchronous<TItem>(this IConsumerEngine<TItem> engine)
         {
-            if (engine == null)
-            {
-                throw new ArgumentNullException(nameof(engine));
-            }
-
             if (engine is IStartable startable)
             {
                 await startable.StartAsync();
@@ -35,11 +29,6 @@ namespace AutomationFoundation.Features.ProducerConsumer
         /// <returns>The task being used to stop the engine, otherwise a completed task if no task was required.</returns>
         public static async Task StopIfAsynchronous<TItem>(this IConsumerEngine<TItem> engine)
         {
-            if (engine == null)
-            {
-                throw new ArgumentNullException(nameof(engine));
-            }
-
             if (engine is IStoppable stoppable)
             {
                 await stoppable.StopAsync();
