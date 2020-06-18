@@ -1,6 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
-using AutomationFoundation.Features.ProducerConsumer.Abstractions;
+﻿using System.Threading.Tasks;
 using AutomationFoundation.Features.ProducerConsumer.TestObjects;
 using Moq;
 using NUnit.Framework;
@@ -26,26 +24,6 @@ namespace AutomationFoundation.Features.ProducerConsumer
             await target.Object.StartIfAsynchronous();
 
             target.Verify(o => o.StartAsync());
-        }
-
-        [Test]
-        public void ThrowsAnExceptionWhenEngineIsNullWhileStart()
-        {
-            IConsumerEngine<int> target = null;
-
-            Assert.ThrowsAsync<ArgumentNullException>(async () =>
-                // ReSharper disable once ExpressionIsAlwaysNull
-                await target.StartIfAsynchronous());
-        }
-
-        [Test]
-        public void ThrowsAnExceptionWhenEngineIsNullWhileStop()
-        {
-            IConsumerEngine<int> target = null;
-
-            Assert.ThrowsAsync<ArgumentNullException>(async () =>
-                // ReSharper disable once ExpressionIsAlwaysNull
-                await target.StopIfAsynchronous());
         }
     }
 }

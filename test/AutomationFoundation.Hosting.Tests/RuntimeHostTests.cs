@@ -15,12 +15,16 @@ namespace AutomationFoundation.Hosting
         private Mock<IHostingEnvironment> environment;
         private Mock<IServiceProvider> services;
 
+        private RuntimeHost target;
+
         [SetUp]
         public void Setup()
         {
             runtime = new Mock<IRuntime>();
             environment = new Mock<IHostingEnvironment>();
             services = new Mock<IServiceProvider>();
+
+            target = new RuntimeHost(runtime.Object, environment.Object, services.Object);
         }
 
         [Test]
@@ -44,7 +48,6 @@ namespace AutomationFoundation.Hosting
         [Test]
         public async Task StartsTheRuntime()
         {
-            var target = new RuntimeHost(runtime.Object, environment.Object, services.Object);
             await target.StartAsync();
 
             runtime.Verify(o => o.StartAsync(It.IsAny<CancellationToken>()), Times.Once);
@@ -53,7 +56,6 @@ namespace AutomationFoundation.Hosting
         [Test]
         public async Task StopsTheRuntime()
         {
-            var target = new RuntimeHost(runtime.Object, environment.Object, services.Object);
             await target.StopAsync();
 
             runtime.Verify(o => o.StopAsync(It.IsAny<CancellationToken>()), Times.Once);
@@ -62,15 +64,21 @@ namespace AutomationFoundation.Hosting
         [Test]
         public void ReturnsTheServices()
         {
-            var target = new RuntimeHost(runtime.Object, environment.Object, services.Object);
             Assert.AreSame(services.Object, target.ApplicationServices);
         }
 
         [Test]
         public void ReturnsTheEnvironment()
         {
-            var target = new RuntimeHost(runtime.Object, environment.Object, services.Object);
             Assert.AreSame(environment.Object, target.Environment);
+        }
+
+        [Test]
+        public void DisposesTheRuntime()
+        {
+            target.Dispose();
+
+            runtime.Verify(o => o.Dispose());
         }
     }
 }
