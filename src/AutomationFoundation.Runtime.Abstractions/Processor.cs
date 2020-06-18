@@ -85,7 +85,7 @@ namespace AutomationFoundation.Runtime
         /// <summary>
         /// Occurs when the processor is being started.
         /// </summary>
-        /// <param name="cancellationToken">The cancellation token to monitor for cancellation requests.</param>
+        /// <param name="cancellationToken">The cancellation token which indicates when the start process has been aborted.</param>
         protected abstract Task OnStartAsync(CancellationToken cancellationToken);
 
         /// <inheritdoc />
@@ -131,7 +131,7 @@ namespace AutomationFoundation.Runtime
         /// <summary>
         /// Occurs when the processor is being stopped.
         /// </summary>
-        /// <param name="cancellationToken">The cancellation token to monitor for cancellation requests.</param>
+        /// <param name="cancellationToken">The cancellation token which indicates when the stop process should no longer be graceful.</param>
         protected abstract Task OnStopAsync(CancellationToken cancellationToken);
 
         /// <summary>
