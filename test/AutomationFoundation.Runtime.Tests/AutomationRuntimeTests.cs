@@ -107,20 +107,6 @@ namespace AutomationFoundation.Runtime
             Assert.Throws<ArgumentNullException>(() => target.Remove(null));
         }
 
-        /// <summary>
-        /// When cancellation occurs while starting the runtime, 
-        /// </summary>
-        [Test]
-        public void ThrowsAnExceptionWhenCanceledWhileStartingTheProcessors()
-        {
-            cancellationSource.Cancel(); // Need to preemptively cancel as the 
-
-            target.Add(processor1.Object);
-            target.Add(processor2.Object);
-
-            Assert.ThrowsAsync<OperationCanceledException>(async () => await target.StartAsync(cancellationSource.Token));
-        }
-
         [Test]
         public async Task StartsTheProcessors()
         {

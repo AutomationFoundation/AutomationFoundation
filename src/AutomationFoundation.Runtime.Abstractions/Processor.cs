@@ -10,7 +10,7 @@ namespace AutomationFoundation.Runtime
     /// </summary>
     public abstract class Processor : IProcessor
     {
-        private readonly SemaphoreSlim @lock = new SemaphoreSlim(1);
+        private readonly SemaphoreSlim syncRoot = new SemaphoreSlim(1);
         private bool disposed;
 
         /// <inheritdoc />
@@ -52,7 +52,7 @@ namespace AutomationFoundation.Runtime
                 return;
             }
 
-            await @lock.WaitAsync(cancellationToken);
+            await syncRoot.WaitAsync(cancellationToken);
 
             try
             {
@@ -69,7 +69,7 @@ namespace AutomationFoundation.Runtime
             }
             finally
             {
-                @lock.Release();
+                syncRoot.Release();
             }
         }
 
@@ -98,7 +98,7 @@ namespace AutomationFoundation.Runtime
                 return;
             }
 
-            await @lock.WaitAsync(cancellationToken);
+            await syncRoot.WaitAsync(cancellationToken);
 
             try
             {
@@ -115,7 +115,7 @@ namespace AutomationFoundation.Runtime
             }
             finally
             {
-                @lock.Release();
+                syncRoot.Release();
             }
         }
 
@@ -160,7 +160,7 @@ namespace AutomationFoundation.Runtime
         {
             if (disposing)
             {
-                @lock.Dispose();
+                syncRoot.Dispose();
             }
 
             disposed = true;

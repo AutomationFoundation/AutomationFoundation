@@ -14,7 +14,7 @@ namespace AutomationFoundation.Runtime
     /// </summary>
     public sealed class AutomationRuntime : IRuntime
     {
-        private readonly SemaphoreSlim @lock = new SemaphoreSlim(1);
+        private readonly SemaphoreSlim syncRoot = new SemaphoreSlim(1);
         private readonly IList<IProcessor> processors = new List<IProcessor>();
 
         private bool disposed;
@@ -45,7 +45,7 @@ namespace AutomationFoundation.Runtime
 
             GuardMustNotBeDisposed();
 
-            @lock.Wait();
+            syncRoot.Wait();
 
             try
             {
@@ -57,7 +57,7 @@ namespace AutomationFoundation.Runtime
             }
             finally
             {
-                @lock.Release();
+                syncRoot.Release();
             }
 
             return false;
@@ -73,7 +73,7 @@ namespace AutomationFoundation.Runtime
 
             GuardMustNotBeDisposed();
 
-            @lock.Wait();
+            syncRoot.Wait();
 
             try
             {
@@ -85,7 +85,7 @@ namespace AutomationFoundation.Runtime
             }
             finally
             {
-                @lock.Release();
+                syncRoot.Release();
             }
 
             return false;
@@ -96,9 +96,9 @@ namespace AutomationFoundation.Runtime
         {
             GuardMustNotBeDisposed();
 
-            var tasks = new List<Task>();
+            await syncRoot.WaitAsync(cancellationToken);
 
-            await @lock.WaitAsync(cancellationToken);
+            var tasks = new List<Task>();
 
             try
             {
@@ -116,7 +116,7 @@ namespace AutomationFoundation.Runtime
             }
             finally
             {
-                @lock.Release();
+                syncRoot.Release();
             }
 
             await Task.WhenAll(tasks);
@@ -127,9 +127,9 @@ namespace AutomationFoundation.Runtime
         {
             GuardMustNotBeDisposed();
 
-            var tasks = new List<Task>();
+            await syncRoot.WaitAsync(cancellationToken);
 
-            await @lock.WaitAsync(cancellationToken);
+            var tasks = new List<Task>();
 
             try
             {
@@ -153,7 +153,7 @@ namespace AutomationFoundation.Runtime
             }
             finally
             {
-                @lock.Release();
+                syncRoot.Release();
             }
 
             await Task.WhenAll(tasks);
@@ -175,7 +175,7 @@ namespace AutomationFoundation.Runtime
                     processor.Dispose();
                 }
 
-                @lock.Dispose();
+                syncRoot.Dispose();
 
                 disposed = true;
             }
