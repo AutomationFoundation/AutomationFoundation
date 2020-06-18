@@ -88,7 +88,7 @@ namespace AutomationFoundation.Hosting
         /// <returns>The task to await.</returns>
         protected virtual async Task RunUntilSignaledAsync(IRuntimeHost host, int startupTimeoutMs)
         {
-            using var startupCancellationSource = new CancellationTokenSource(startupTimeoutMs);
+            using var startupCancellationSource = CancellationTokenSource.CreateLinkedTokenSource(CancellationSource.Token);
 
             startupCancellationSource.CancelAfter(startupTimeoutMs);
 
