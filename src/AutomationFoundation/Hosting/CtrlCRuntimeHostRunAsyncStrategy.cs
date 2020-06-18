@@ -11,7 +11,7 @@ namespace AutomationFoundation.Hosting
     public class CtrlCRuntimeHostRunAsyncStrategy : IRuntimeHostRunAsyncStrategy, IDisposable
     {
         private readonly CancellationTokenSource cancellationSource = new CancellationTokenSource();
-        
+
         /// <summary>
         /// Finalizes an instance of the <see cref="CtrlCRuntimeHostRunAsyncStrategy"/> class.
         /// </summary>
@@ -23,13 +23,12 @@ namespace AutomationFoundation.Hosting
         /// <inheritdoc />
         public async Task RunAsync(IRuntimeHost host, int startupTimeoutMs, int shutdownTimeoutMs)
         {
-            AttachToCancelKeyPressEvent();
-
-            await Console.Out.WriteLineAsync("Press CTRL+C to stop the application...");
+            await AttachToCancelKeyPressEventAsync();
+            await LogTheKeyPressToStopAsync();
 
             try
             {
-                await RunUntilKeyPressed(host, startupTimeoutMs);
+                await RunUntilKeyPressedAsync(host, startupTimeoutMs);
             }
             catch (OperationCanceledException)
             {
@@ -37,24 +36,45 @@ namespace AutomationFoundation.Hosting
             }
             finally
             {
-                await StopTheRuntimeHost(host, shutdownTimeoutMs);
-
-                await Console.Out.WriteLineAsync("Application stopped.");
+                await StopTheRuntimeHostAsync(host, shutdownTimeoutMs);
+                await LogTheApplicationStoppedAsync();
             }
         }
 
-        private void AttachToCancelKeyPressEvent()
+        private async Task LogTheKeyPressToStopAsync()
+        {
+            await LogMessage("Press CTRL+C to stop the application...");
+        }
+
+        private async Task LogTheApplicationStoppedAsync()
+        {
+            await LogMessage("Application stopped.");
+        }
+
+        /// <summary>
+        /// Writes the message to the console.
+        /// </summary>
+        /// <param name="message">The message to write.</param>
+        /// <returns>The task to await.</returns>
+        private async Task LogMessage(string message)
+        {
+            await Console.Out.WriteLineAsync(message);
+        }
+
+        private Task AttachToCancelKeyPressEventAsync()
         {
             Console.CancelKeyPress += async (sender, e) =>
             {
-                await Console.Out.WriteLineAsync("Stopping application, please be patient as this may take some time...");
+                await LogMessage("Stopping application, please be patient as this may take some time...");
 
                 cancellationSource.Cancel();
                 e.Cancel = true; // Termination will occur when the host stops running.
             };
+
+            return Task.CompletedTask;
         }
 
-        private async Task RunUntilKeyPressed(IRuntimeHost host, int startupTimeoutMs)
+        private async Task RunUntilKeyPressedAsync(IRuntimeHost host, int startupTimeoutMs)
         {
             using var startupCancellationSource = new CancellationTokenSource(startupTimeoutMs);
 
@@ -64,7 +84,7 @@ namespace AutomationFoundation.Hosting
             await Task.Delay(Timeout.InfiniteTimeSpan, cancellationSource.Token);
         }
 
-        private async Task StopTheRuntimeHost(IRuntimeHost host, int shutdownTimeoutMs)
+        private async Task StopTheRuntimeHostAsync(IRuntimeHost host, int shutdownTimeoutMs)
         {
             try
             {
