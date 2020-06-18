@@ -5,6 +5,7 @@ using AutomationFoundation.Hosting;
 using AutomationFoundation.Hosting.Abstractions.Builders;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using NLog.Extensions.Logging;
 
 namespace ConsoleRunner
 {
@@ -13,16 +14,20 @@ namespace ConsoleRunner
         private static IRuntimeHostBuilder CreateRuntimeHostBuilder()
         {
             return RuntimeHost.CreateBuilder<DefaultRuntimeHostBuilder>()
+                .ConfigureHostingEnvironment(environment =>
+                {
+                    environment.SetEnvironmentName("DEV");
+                })
                 .ConfigureServices(services =>
                 {
                     services.AddLogging(logging =>
                     {
                         logging.SetMinimumLevel(LogLevel.Information);
-                        logging.AddConsole();
+                        logging.AddNLog();
                     });
                     services.AddAutofac();
                 })
-                .UseRunStrategy<CtrlCRuntimeHostRunAsyncStrategy>()
+                .UseRunStrategy<SigTermRunAsyncStrategy>()
                 .UseStartup<Startup>();
         }
 

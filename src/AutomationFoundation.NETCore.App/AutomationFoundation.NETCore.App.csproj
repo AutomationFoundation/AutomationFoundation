@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.0;netcoreapp3.1</TargetFrameworks>
+    <TargetFrameworks>netcoreapp3.1</TargetFrameworks>
     <RootNamespace>AutomationFoundation</RootNamespace>
     <Authors>Winnster.io</Authors>
     <VersionPrefix>0.0.0</VersionPrefix>
@@ -11,6 +11,7 @@
     <RepositoryType>git</RepositoryType>
     <PackageTags>automation,automationfoundation</PackageTags>
     <Description>Contains a metapackage for consuming the Automation Foundation framework from a .NET Core application.</Description>
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>

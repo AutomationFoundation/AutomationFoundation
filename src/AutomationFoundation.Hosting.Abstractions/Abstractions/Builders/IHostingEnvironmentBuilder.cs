@@ -8,8 +8,8 @@
         /// <summary>
         /// Sets the environment name.
         /// </summary>
-        /// <param name="environmentName">The name of the environment.</param>
-        void SetEnvironmentName(string environmentName);
+        /// <param name="value">The name of the environment.</param>
+        void SetEnvironmentName(string value);
 
         /// <summary>
         /// Builds the hosting environment.

@@ -16,7 +16,7 @@ namespace AutomationFoundation.Hosting
         private const int DefaultTimeoutMs = Timeout.Infinite;
 
         /// <summary>
-        /// Runs until the cancellation token is signaled.
+        /// Runs until signaled to stop via the run strategy.
         /// </summary>
         /// <param name="host">The host.</param>
         /// <param name="startupTimeoutMs">The timeout (in milliseconds) upon which startup will be aborted.</param>

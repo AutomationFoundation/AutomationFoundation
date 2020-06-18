@@ -22,14 +22,14 @@ namespace AutomationFoundation.Hosting
         private string environmentName;
 
         /// <inheritdoc />
-        public void SetEnvironmentName(string environmentName)
+        public void SetEnvironmentName(string value)
         {
-            if (string.IsNullOrWhiteSpace(environmentName))
+            if (string.IsNullOrWhiteSpace(value))
             {
-                throw new ArgumentNullException(nameof(environmentName));
+                throw new ArgumentNullException(nameof(value));
             }
 
-            this.environmentName = environmentName;
+            environmentName = value;
         }
 
         /// <inheritdoc />
