@@ -1,9 +1,12 @@
-﻿namespace AutomationFoundation.Hosting.Abstractions
+﻿using Microsoft.Extensions.DependencyInjection;
+
+namespace AutomationFoundation.Hosting.Abstractions
 {
     /// <summary>
     /// Identifies an object which configures a container.
     /// </summary>
     /// <typeparam name="TBuilder">The type of builder for the container.</typeparam>
+    /// <remarks>This interface requires an <see cref="IServiceProviderFactory{TContainerBuilder}"/> to be registered with the container.</remarks>
     public interface IConfigureContainer<in TBuilder>
     {
         /// <summary>
