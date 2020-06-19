@@ -22,12 +22,7 @@ namespace AutomationFoundation.Hosting
         /// <inheritdoc />
         public IRuntimeHostBuilder ConfigureHostingEnvironment(Action<IHostingEnvironmentBuilder> callback)
         {
-            if (callback == null)
-            {
-                throw new ArgumentNullException(nameof(callback));
-            }
-
-            hostingEnvironmentConfigurationCallback = callback;
+            hostingEnvironmentConfigurationCallback = callback ?? throw new ArgumentNullException(nameof(callback));
             return this;
         }
 
