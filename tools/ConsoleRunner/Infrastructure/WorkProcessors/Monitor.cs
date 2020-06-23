@@ -12,7 +12,7 @@ namespace ConsoleRunner.Infrastructure.WorkProcessors
 
         private readonly Timer timer;
         private readonly string name;
-        private int count;
+        private long count;
 
         public Monitor(string name)
         {
@@ -33,21 +33,15 @@ namespace ConsoleRunner.Infrastructure.WorkProcessors
 
         private void OnTimerCallback(object state)
         {
-            var temp = count;
-            Reset();
+            var current = Interlocked.Exchange(ref count, 0);
 
-            var itemsPerSecond = temp / ThirtySeconds.TotalSeconds;
+            var itemsPerSecond = current / ThirtySeconds.TotalSeconds;
             Console.Out.WriteLine($"{name}@{DateTime.Now:hh:mm:ss}: {itemsPerSecond}/sec");
         }
 
         public void Increment()
         {
             Interlocked.Increment(ref count);
-        }
-
-        private void Reset()
-        {
-            Interlocked.Exchange(ref count, 0);
         }
     }
 }

@@ -73,11 +73,21 @@ namespace AutomationFoundation.Hosting
             catch (OperationCanceledException)
             {
                 // Swallow when cancellation has occurred.
+                await OnCanceledWhileRunningAsync();
             }
             finally
             {
                 await StopTheRuntimeHostAsync(host, shutdownTimeoutMs);
             }
+        }
+
+        /// <summary>
+        /// Occurs when the runtime has been canceled while running.
+        /// </summary>
+        /// <returns>The task to await.</returns>
+        protected virtual Task OnCanceledWhileRunningAsync()
+        {
+            return Task.CompletedTask;
         }
 
         /// <summary>
@@ -112,7 +122,17 @@ namespace AutomationFoundation.Hosting
             catch (OperationCanceledException)
             {
                 // Swallow when the graceful shutdown period has expired.
+                await OnCanceledWhileStoppingAsync();
             }
+        }
+
+        /// <summary>
+        /// Occurs when the runtime has been canceled while stopping.
+        /// </summary>
+        /// <returns>The task to await.</returns>
+        protected virtual Task OnCanceledWhileStoppingAsync()
+        {
+            return Task.CompletedTask;
         }
     }
 }

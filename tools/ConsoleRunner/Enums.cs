@@ -13,7 +13,7 @@
 
     public enum ProcessorType
     {
-        ProducerConsumer,
+        Test,
         ScheduledJob,
         Task
     }

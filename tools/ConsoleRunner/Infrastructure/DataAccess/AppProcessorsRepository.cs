@@ -8,14 +8,15 @@ namespace ConsoleRunner.Infrastructure.DataAccess
     {
         public IList<AppProcessor> GetProcessorsForMachine(string machine)
         {
-            return new[]
+            return new []
             {
                 new AppProcessor
                 {
                     AppProcessorId = 1,
+                    Count = 1,
                     IsEnabled = true,
-                    Name = "Test 1",
-                    ProcessorType = ProcessorType.ProducerConsumer
+                    Name = "Test",
+                    ProcessorType = ProcessorType.Test
                 }
             };
         }

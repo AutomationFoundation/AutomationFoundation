@@ -17,7 +17,7 @@ namespace AutomationFoundation.Hosting
 
         private Action<IHostingEnvironmentBuilder> hostingEnvironmentConfigurationCallback;
         private bool startupHasBeenConfigured;
-        private Type runStrategy = typeof(CtrlCRuntimeHostRunAsyncStrategy);
+        private Type runStrategy;
 
         /// <inheritdoc />
         public IRuntimeHostBuilder ConfigureHostingEnvironment(Action<IHostingEnvironmentBuilder> callback)
@@ -176,7 +176,10 @@ namespace AutomationFoundation.Hosting
                 callback(serviceCollection);
             }
 
-            serviceCollection.AddScoped(typeof(IRuntimeHostRunAsyncStrategy), runStrategy);
+            if (runStrategy != null)
+            {
+                serviceCollection.AddScoped(typeof(IRuntimeHostRunAsyncStrategy), runStrategy);
+            }
         }
 
         /// <summary>

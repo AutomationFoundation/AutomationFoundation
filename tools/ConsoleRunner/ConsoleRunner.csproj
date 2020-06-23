@@ -14,10 +14,6 @@
     <PackageReference Include="NLog.Extensions.Logging" Version="1.6.4" />
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\..\src\AutomationFoundation.Features.ProducerConsumer\AutomationFoundation.Features.ProducerConsumer.csproj" />
-  </ItemGroup>
-
   <ItemGroup Condition=" '$(TargetFramework)' == 'net472' ">
     <ProjectReference Include="..\..\src\AutomationFoundation.NETFX.App\AutomationFoundation.NETFX.App.csproj" />
   </ItemGroup>

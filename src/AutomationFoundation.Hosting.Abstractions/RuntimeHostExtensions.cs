@@ -1,6 +1,7 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 using AutomationFoundation.Hosting.Abstractions;
+using AutomationFoundation.Hosting.Abstractions.Builders;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace AutomationFoundation.Hosting
@@ -24,7 +25,12 @@ namespace AutomationFoundation.Hosting
         /// <returns>The task to await.</returns>
         public static async Task RunAsync(this IRuntimeHost host, int startupTimeoutMs = DefaultTimeoutMs, int shutdownTimeoutMs = DefaultTimeoutMs)
         {
-            var runStrategy = host.ApplicationServices.GetRequiredService<IRuntimeHostRunAsyncStrategy>();
+            var runStrategy = host.ApplicationServices.GetService<IRuntimeHostRunAsyncStrategy>();
+            if (runStrategy == null)
+            {
+                throw new HostingException($"The run strategy has not been defined. Please ensure the {nameof(IRuntimeHostBuilder.UseRunStrategy)} method has been called on the {nameof(IRuntimeHostBuilder)}.");
+            }
+
             await runStrategy.RunAsync(host, startupTimeoutMs, shutdownTimeoutMs);
         }
     }

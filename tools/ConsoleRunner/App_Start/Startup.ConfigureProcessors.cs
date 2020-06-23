@@ -3,7 +3,7 @@ using AutomationFoundation.Hosting.Abstractions;
 using AutomationFoundation.Runtime.Abstractions.Builders;
 using ConsoleRunner.Abstractions;
 using ConsoleRunner.Abstractions.DataAccess;
-using ConsoleRunner.Infrastructure.Builders;
+using ConsoleRunner.Infrastructure.WorkProcessors;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace ConsoleRunner
@@ -49,8 +49,8 @@ namespace ConsoleRunner
         {
             switch (processorType)
             {
-                case ProcessorType.ProducerConsumer:
-                    return new ProducerConsumerProcessorBuilder();
+                case ProcessorType.Test:
+                    return new TestProcessorBuilder();
 
                 case ProcessorType.ScheduledJob:
                 case ProcessorType.Task:

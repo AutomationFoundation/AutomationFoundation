@@ -27,7 +27,7 @@ namespace ConsoleRunner
                     });
                     services.AddAutofac();
                 })
-                .UseRunStrategy<SigTermRunAsyncStrategy>()
+                .UseRunStrategy<CtrlCRuntimeHostRunAsyncStrategy>()
                 .UseStartup<Startup>();
         }
 
