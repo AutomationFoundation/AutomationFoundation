@@ -1,6 +1,5 @@
 ﻿using System;
-using AutomationFoundation.Hosting.Abstractions;
-using AutomationFoundation.Hosting.Abstractions.Builders;
+using AutomationFoundation.Hosting.Builders;
 
 namespace AutomationFoundation.Hosting
 {

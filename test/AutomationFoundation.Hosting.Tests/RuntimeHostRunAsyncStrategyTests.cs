@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
-using AutomationFoundation.Hosting.Abstractions;
 using AutomationFoundation.Hosting.TestObjects;
 using Moq;
 using NUnit.Framework;

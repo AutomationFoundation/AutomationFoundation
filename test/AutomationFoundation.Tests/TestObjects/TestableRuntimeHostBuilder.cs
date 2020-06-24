@@ -1,6 +1,5 @@
 ﻿using System;
 using AutomationFoundation.Hosting;
-using AutomationFoundation.Hosting.Abstractions;
 using AutomationFoundation.Runtime.Abstractions.Builders;
 using Microsoft.Extensions.DependencyInjection;
 

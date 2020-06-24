@@ -1,5 +1,5 @@
 ﻿using Autofac;
-using AutomationFoundation.Hosting.Abstractions;
+using AutomationFoundation.Hosting;
 using ConsoleRunner.Infrastructure;
 
 namespace ConsoleRunner

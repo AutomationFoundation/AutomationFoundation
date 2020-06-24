@@ -1,5 +1,5 @@
 ﻿using System;
-using AutomationFoundation.Hosting.Abstractions;
+using AutomationFoundation.Hosting;
 using AutomationFoundation.Runtime.Abstractions.Builders;
 
 namespace AutomationFoundation.TestObjects

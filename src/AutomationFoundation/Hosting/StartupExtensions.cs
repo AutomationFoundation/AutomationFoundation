@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using AutomationFoundation.Hosting.Abstractions;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace AutomationFoundation.Hosting
