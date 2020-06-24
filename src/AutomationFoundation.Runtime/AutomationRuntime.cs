@@ -4,7 +4,6 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using AutomationFoundation.Runtime.Abstractions;
 using AutomationFoundation.Runtime.Threading;
 
 namespace AutomationFoundation.Runtime

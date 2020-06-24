@@ -1,4 +1,4 @@
-﻿namespace AutomationFoundation.Runtime.Abstractions.Threading.Internal
+﻿namespace AutomationFoundation.Runtime.Threading.Internal
 {
     /// <summary>
     /// Identifies a mechanism which monitors a worker cache.

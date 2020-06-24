@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading;
 
-namespace AutomationFoundation.Runtime.Abstractions.Threading.Primitives
+namespace AutomationFoundation.Runtime.Threading.Primitives
 {
     /// <summary>
     /// Identifies a source supporting cancellation of an operation.

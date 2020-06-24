@@ -1,5 +1,4 @@
 ﻿using System.Threading;
-using AutomationFoundation.Runtime.Abstractions.Threading.Primitives;
 
 namespace AutomationFoundation.Runtime.Threading.Primitives
 {

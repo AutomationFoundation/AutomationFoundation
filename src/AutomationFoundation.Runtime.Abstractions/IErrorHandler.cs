@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace AutomationFoundation.Runtime.Abstractions
+namespace AutomationFoundation.Runtime
 {
     /// <summary>
     /// Identifies an object which handles errors which have occurred.

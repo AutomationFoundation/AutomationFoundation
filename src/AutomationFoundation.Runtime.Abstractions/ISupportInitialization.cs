@@ -1,6 +1,6 @@
 ﻿using System.Threading;
 
-namespace AutomationFoundation.Runtime.Abstractions
+namespace AutomationFoundation.Runtime
 {
     /// <summary>
     /// Identifies an object which supports initialization.

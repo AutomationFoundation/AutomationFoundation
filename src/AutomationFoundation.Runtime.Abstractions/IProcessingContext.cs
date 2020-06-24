@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Threading;
-using AutomationFoundation.Runtime.Abstractions;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace AutomationFoundation.Runtime

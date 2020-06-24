@@ -1,5 +1,4 @@
 ﻿using System.Runtime.ConstrainedExecution;
-using AutomationFoundation.Runtime.Abstractions.Synchronization;
 
 namespace AutomationFoundation.Runtime.Synchronization
 {

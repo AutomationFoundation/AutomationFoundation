@@ -1,4 +1,4 @@
-﻿namespace AutomationFoundation.Runtime.Abstractions.Synchronization
+﻿namespace AutomationFoundation.Runtime.Synchronization
 {
     /// <summary>
     /// Identifies an object used for synchronizing access to protected resources.

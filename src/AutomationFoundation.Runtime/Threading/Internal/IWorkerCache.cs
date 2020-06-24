@@ -1,6 +1,6 @@
-﻿using AutomationFoundation.Runtime.Abstractions.Threading.Primitives;
+﻿using AutomationFoundation.Runtime.Threading.Primitives;
 
-namespace AutomationFoundation.Runtime.Abstractions.Threading.Internal
+namespace AutomationFoundation.Runtime.Threading.Internal
 {
     /// <summary>
     /// Identifies a cache of workers.

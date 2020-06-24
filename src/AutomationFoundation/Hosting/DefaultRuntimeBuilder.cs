@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using AutomationFoundation.Runtime;
-using AutomationFoundation.Runtime.Abstractions;
-using AutomationFoundation.Runtime.Abstractions.Builders;
+using AutomationFoundation.Runtime.Builders;
 
 namespace AutomationFoundation.Hosting
 {

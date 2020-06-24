@@ -2,7 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using AutomationFoundation.Hosting.Builders;
-using AutomationFoundation.Runtime.Abstractions;
+using AutomationFoundation.Runtime;
 
 namespace AutomationFoundation.Hosting
 {

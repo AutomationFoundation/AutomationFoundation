@@ -1,6 +1,4 @@
-﻿using AutomationFoundation.Runtime.Threading.Primitives;
-
-namespace AutomationFoundation.Runtime.Abstractions.Threading.Primitives
+﻿namespace AutomationFoundation.Runtime.Threading.Primitives
 {
     /// <summary>
     /// Identifies a worker used by the runtime.

@@ -2,7 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace AutomationFoundation.Runtime.Abstractions
+namespace AutomationFoundation.Runtime
 {
     /// <summary>
     /// Identifies a runtime.

@@ -25,6 +25,7 @@ namespace ConsoleRunner
                         logging.SetMinimumLevel(LogLevel.Information);
                         logging.AddNLog();
                     });
+
                     services.AddAutofac();
                 })
                 .UseRunStrategy<CtrlCRuntimeHostRunAsyncStrategy>()

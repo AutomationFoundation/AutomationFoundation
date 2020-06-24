@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Threading.Tasks;
-using AutomationFoundation.Runtime.Abstractions.Threading.Primitives;
 
 namespace AutomationFoundation.Runtime.Threading.Primitives
 {

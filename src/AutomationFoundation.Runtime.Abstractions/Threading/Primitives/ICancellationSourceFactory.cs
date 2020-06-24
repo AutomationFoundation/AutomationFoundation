@@ -1,6 +1,6 @@
 ﻿using System.Threading;
 
-namespace AutomationFoundation.Runtime.Abstractions.Threading.Primitives
+namespace AutomationFoundation.Runtime.Threading.Primitives
 {
     /// <summary>
     /// Identifies a mechanism for creating cancellation sources.

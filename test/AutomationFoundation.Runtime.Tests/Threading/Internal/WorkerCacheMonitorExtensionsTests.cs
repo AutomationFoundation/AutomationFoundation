@@ -1,5 +1,4 @@
 ﻿using System;
-using AutomationFoundation.Runtime.Abstractions.Threading.Internal;
 using Moq;
 using NUnit.Framework;
 

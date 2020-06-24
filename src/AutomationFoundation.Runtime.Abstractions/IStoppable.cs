@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace AutomationFoundation.Runtime.Abstractions
+namespace AutomationFoundation.Runtime
 {
     /// <summary>
     /// Identifies an object which can be stopped.

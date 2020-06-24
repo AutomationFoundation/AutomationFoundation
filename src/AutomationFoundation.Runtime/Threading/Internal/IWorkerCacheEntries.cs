@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
-using AutomationFoundation.Runtime.Threading.Internal;
 
-namespace AutomationFoundation.Runtime.Abstractions.Threading.Internal
+namespace AutomationFoundation.Runtime.Threading.Internal
 {
     /// <summary>
     /// Identifies an mechanism which interacts with the entries within a cache.

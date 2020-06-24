@@ -1,7 +1,7 @@
 ﻿using System;
-using AutomationFoundation.Runtime.Abstractions.Threading.Primitives;
+using AutomationFoundation.Runtime.Threading.Primitives;
 
-namespace AutomationFoundation.Runtime.Abstractions.Threading
+namespace AutomationFoundation.Runtime.Threading
 {
     /// <summary>
     /// Identifies a pool of workers.

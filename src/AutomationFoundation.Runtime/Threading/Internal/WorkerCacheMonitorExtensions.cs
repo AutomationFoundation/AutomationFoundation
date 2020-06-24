@@ -1,5 +1,4 @@
 ﻿using System;
-using AutomationFoundation.Runtime.Abstractions.Threading.Internal;
 
 namespace AutomationFoundation.Runtime.Threading.Internal
 {

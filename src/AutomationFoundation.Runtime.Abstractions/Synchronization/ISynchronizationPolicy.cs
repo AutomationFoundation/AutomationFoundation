@@ -1,7 +1,7 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 
-namespace AutomationFoundation.Runtime.Abstractions.Synchronization
+namespace AutomationFoundation.Runtime.Synchronization
 {
     /// <summary>
     /// Identifies a synchronization policy which provides synchronized access to a protected resource.

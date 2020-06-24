@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
-using AutomationFoundation.Runtime.Abstractions;
+using AutomationFoundation.Runtime;
 using Moq;
 using NUnit.Framework;
 

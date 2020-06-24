@@ -2,8 +2,6 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Threading;
-using AutomationFoundation.Runtime.Abstractions.Threading.Internal;
-using AutomationFoundation.Runtime.Abstractions.Threading.Primitives;
 using AutomationFoundation.Runtime.Threading.Primitives;
 
 namespace AutomationFoundation.Runtime.Threading.Internal

@@ -1,4 +1,4 @@
-﻿using AutomationFoundation.Runtime.Abstractions.Builders;
+﻿using AutomationFoundation.Runtime.Builders;
 
 namespace AutomationFoundation.Hosting
 {

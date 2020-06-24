@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 
-namespace AutomationFoundation.Runtime.Abstractions.Threading.Primitives
+namespace AutomationFoundation.Runtime.Threading.Primitives
 {
     /// <summary>
     /// Identifies a mechanism which can perform work.

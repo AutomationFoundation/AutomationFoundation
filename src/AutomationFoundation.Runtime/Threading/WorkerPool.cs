@@ -1,7 +1,4 @@
 ﻿using System;
-using AutomationFoundation.Runtime.Abstractions.Threading;
-using AutomationFoundation.Runtime.Abstractions.Threading.Internal;
-using AutomationFoundation.Runtime.Abstractions.Threading.Primitives;
 using AutomationFoundation.Runtime.Threading.Internal;
 using AutomationFoundation.Runtime.Threading.Primitives;
 
