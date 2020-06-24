@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Threading;
+using System.Threading.Tasks;
 
 namespace AutomationFoundation.Runtime
 {
@@ -10,7 +11,8 @@ namespace AutomationFoundation.Runtime
         /// <summary>
         /// Starts the object asynchronously.
         /// </summary>
+        /// <param name="cancellationToken">Indicates when the start process has been aborted.</param>
         /// <returns>The asynchronous task.</returns>
-        Task StartAsync();
+        Task StartAsync(CancellationToken cancellationToken);
     }
 }

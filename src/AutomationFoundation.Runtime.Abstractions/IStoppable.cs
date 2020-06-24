@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Threading;
+using System.Threading.Tasks;
 
 namespace AutomationFoundation.Runtime
 {
@@ -10,13 +11,8 @@ namespace AutomationFoundation.Runtime
         /// <summary>
         /// Stops the object asynchronously.
         /// </summary>
+        /// <param name="cancellationToken">Indicates when the stop process should no longer be graceful.</param>
         /// <returns>The task to await.</returns>
-        Task StopAsync();
-
-        /// <summary>
-        /// Waits for the engine to stop.
-        /// </summary>
-        /// <returns>The task to await.</returns>
-        Task WaitForCompletionAsync();
+        Task StopAsync(CancellationToken cancellationToken);
     }
 }

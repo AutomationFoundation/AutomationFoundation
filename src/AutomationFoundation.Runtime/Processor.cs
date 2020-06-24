@@ -40,7 +40,10 @@ namespace AutomationFoundation.Runtime
             Dispose(false);
         }
 
-        /// <inheritdoc />
+        /// <summary>
+        /// Starts the processor.
+        /// </summary>
+        /// <param name="cancellationToken">The cancellation token which indicates when the start process has been aborted.</param>
         public async Task StartAsync(CancellationToken cancellationToken)
         {
             GuardMustNotBeDisposed();
@@ -87,7 +90,10 @@ namespace AutomationFoundation.Runtime
         /// <param name="cancellationToken">The cancellation token which indicates when the start process has been aborted.</param>
         protected abstract Task OnStartAsync(CancellationToken cancellationToken);
 
-        /// <inheritdoc />
+        /// <summary>
+        /// Stops the processor.
+        /// </summary>
+        /// <param name="cancellationToken">The cancellation token which indicates when the stop process should no longer be graceful.</param>
         public async Task StopAsync(CancellationToken cancellationToken)
         {
             GuardMustNotBeDisposed();
