@@ -1,6 +1,7 @@
 ﻿using System;
+using AutomationFoundation.Runtime;
 
-namespace AutomationFoundation.Runtime
+namespace AutomationFoundation
 {
     /// <summary>
     /// Identifies a builder for a runtime.

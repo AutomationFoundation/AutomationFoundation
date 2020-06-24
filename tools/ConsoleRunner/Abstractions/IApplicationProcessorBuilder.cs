@@ -1,4 +1,5 @@
-﻿using AutomationFoundation.Runtime;
+﻿using AutomationFoundation;
+using AutomationFoundation.Runtime;
 using ConsoleRunner.Model;
 
 namespace ConsoleRunner.Abstractions

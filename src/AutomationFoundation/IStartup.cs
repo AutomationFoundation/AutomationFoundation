@@ -1,6 +1,6 @@
-﻿using AutomationFoundation.Runtime;
+﻿using AutomationFoundation.Hosting;
 
-namespace AutomationFoundation.Hosting
+namespace AutomationFoundation
 {
     /// <summary>
     /// Identifies an object which assists with startup of the runtime.

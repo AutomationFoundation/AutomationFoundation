@@ -1,6 +1,6 @@
 ﻿using System;
+using AutomationFoundation;
 using AutomationFoundation.Hosting;
-using AutomationFoundation.Runtime;
 using ConsoleRunner.Abstractions;
 using ConsoleRunner.Abstractions.DataAccess;
 using ConsoleRunner.Infrastructure.WorkProcessors;

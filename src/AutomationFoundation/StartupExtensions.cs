@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Linq;
+using AutomationFoundation.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace AutomationFoundation.Hosting
+namespace AutomationFoundation
 {
     internal static class StartupExtensions
     {
