@@ -15,7 +15,7 @@ namespace AutomationFoundation.Hosting
         protected CancellationTokenSource CancellationSource { get; } = new CancellationTokenSource();
 
         /// <summary>
-        /// Finalizes an instance of the <see cref="CtrlCRuntimeHostRunAsyncStrategy"/> class.
+        /// Finalizes an instance of the <see cref="RuntimeHostRunAsyncStrategy"/> class.
         /// </summary>
         ~RuntimeHostRunAsyncStrategy()
         {
