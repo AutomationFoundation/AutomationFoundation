@@ -19,14 +19,14 @@ namespace AutomationFoundation.Runtime
         /// </summary>
         /// <param name="processor">The processor to add.</param>
         /// <returns>true if the processor was added, otherwise false.</returns>
-        bool Add(Processor processor);
+        bool Add(IProcessor processor);
 
         /// <summary>
         /// Removes the processor from the runtime.
         /// </summary>
         /// <param name="processor">The processor to remove.</param>
         /// <returns>true if the processor was removed, otherwise false.</returns>
-        bool Remove(Processor processor);
+        bool Remove(IProcessor processor);
 
         /// <summary>
         /// Starts the runtime.

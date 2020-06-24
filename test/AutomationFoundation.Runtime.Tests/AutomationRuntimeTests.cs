@@ -12,16 +12,16 @@ namespace AutomationFoundation.Runtime
     {
         private AutomationRuntime target;
         private CancellationTokenSource cancellationSource;
-        private Mock<Processor> processor1;
-        private Mock<Processor> processor2;
+        private Mock<IProcessor> processor1;
+        private Mock<IProcessor> processor2;
 
         [SetUp]
         public void Setup()
         {
             target = new AutomationRuntime();
             
-            processor1 = new Mock<Processor>();
-            processor2 = new Mock<Processor>();
+            processor1 = new Mock<IProcessor>();
+            processor2 = new Mock<IProcessor>();
             cancellationSource = new CancellationTokenSource();
         }
 

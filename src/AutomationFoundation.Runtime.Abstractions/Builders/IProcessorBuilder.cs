@@ -9,6 +9,6 @@
         /// Builds the processor.
         /// </summary>
         /// <returns>The new processor which was built.</returns>
-        Processor Build();
+        IProcessor Build();
     }
 }

@@ -8,7 +8,7 @@ namespace AutomationFoundation.Hosting
     internal class DefaultRuntimeBuilder : IRuntimeBuilder
     {
         private readonly IList<IProcessorBuilder> processorBuilders = new List<IProcessorBuilder>();
-        private readonly IList<Processor> processors = new List<Processor>();
+        private readonly IList<IProcessor> processors = new List<IProcessor>();
 
         public IServiceProvider ApplicationServices { get; }
 
@@ -17,7 +17,7 @@ namespace AutomationFoundation.Hosting
             ApplicationServices = applicationServices ?? throw new ArgumentNullException(nameof(applicationServices));
         }
 
-        public IRuntimeBuilder RegisterProcessor(Processor processor)
+        public IRuntimeBuilder RegisterProcessor(IProcessor processor)
         {
             if (processor == null)
             {

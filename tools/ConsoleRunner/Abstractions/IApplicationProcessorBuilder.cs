@@ -6,6 +6,6 @@ namespace ConsoleRunner.Abstractions
 {
     public interface IApplicationProcessorBuilder
     {
-        Processor Build(IRuntimeBuilder runtimeBuilder, AppProcessor config);
+        IProcessor Build(IRuntimeBuilder runtimeBuilder, AppProcessor config);
     }
 }
