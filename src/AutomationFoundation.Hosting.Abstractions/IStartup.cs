@@ -1,6 +1,6 @@
 ﻿using AutomationFoundation.Runtime.Abstractions.Builders;
 
-namespace AutomationFoundation.Hosting.Abstractions
+namespace AutomationFoundation.Hosting
 {
     /// <summary>
     /// Identifies an object which assists with startup of the runtime.

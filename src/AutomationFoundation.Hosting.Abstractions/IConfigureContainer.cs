@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 
-namespace AutomationFoundation.Hosting.Abstractions
+namespace AutomationFoundation.Hosting
 {
     /// <summary>
     /// Identifies an object which configures a container.

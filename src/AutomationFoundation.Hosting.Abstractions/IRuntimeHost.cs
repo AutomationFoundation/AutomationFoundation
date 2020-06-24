@@ -2,7 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace AutomationFoundation.Hosting.Abstractions
+namespace AutomationFoundation.Hosting
 {
     /// <summary>
     /// Identifies a host for a runtime.

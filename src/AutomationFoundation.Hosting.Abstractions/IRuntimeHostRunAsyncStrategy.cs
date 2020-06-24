@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace AutomationFoundation.Hosting.Abstractions
+namespace AutomationFoundation.Hosting
 {
     /// <summary>
     /// Identifies a strategy for running the <see cref="IRuntimeHost"/>.

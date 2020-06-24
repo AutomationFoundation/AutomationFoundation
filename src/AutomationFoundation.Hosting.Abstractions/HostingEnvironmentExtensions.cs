@@ -1,6 +1,4 @@
-﻿using AutomationFoundation.Hosting.Abstractions;
-
-namespace AutomationFoundation.Hosting
+﻿namespace AutomationFoundation.Hosting
 {
     /// <summary>
     /// Contains extension methods for the hosting environment.

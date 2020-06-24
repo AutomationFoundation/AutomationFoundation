@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace AutomationFoundation.Hosting.Abstractions
+namespace AutomationFoundation.Hosting
 {
     /// <summary>
     /// Identifies the hosting environment.
