@@ -4,7 +4,7 @@ using AutomationFoundation.Runtime.Builders;
 using Moq;
 using NUnit.Framework;
 
-namespace AutomationFoundation.Hosting
+namespace AutomationFoundation
 {
     [TestFixture]
     public class DefaultRuntimeHostBuilderTests

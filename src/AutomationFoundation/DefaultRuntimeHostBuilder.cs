@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using AutomationFoundation.Hosting;
 using AutomationFoundation.Hosting.Builders;
 using AutomationFoundation.Runtime.Builders;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace AutomationFoundation.Hosting
+namespace AutomationFoundation
 {
     /// <summary>
     /// Provides the default runtime host builder.

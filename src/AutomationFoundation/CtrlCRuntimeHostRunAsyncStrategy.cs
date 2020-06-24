@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Threading.Tasks;
+using AutomationFoundation.Hosting;
 using Microsoft.Extensions.Logging;
 
-namespace AutomationFoundation.Hosting
+namespace AutomationFoundation
 {
     /// <summary>
     /// Provides a run strategy which runs the host until CTRL+C has been pressed.

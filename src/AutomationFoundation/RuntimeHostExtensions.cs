@@ -1,9 +1,10 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
+using AutomationFoundation.Hosting;
 using AutomationFoundation.Hosting.Builders;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace AutomationFoundation.Hosting
+namespace AutomationFoundation
 {
     /// <summary>
     /// Contains extensions for the runtime host.

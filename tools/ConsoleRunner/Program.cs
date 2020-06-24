@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Autofac.Extensions.DependencyInjection;
-using AutomationFoundation.Hosting;
+using AutomationFoundation;
 using AutomationFoundation.Hosting.Builders;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;

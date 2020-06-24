@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Threading.Tasks;
+using AutomationFoundation.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Moq;
 using NUnit.Framework;
 
-namespace AutomationFoundation.Hosting
+namespace AutomationFoundation
 {
     [TestFixture]
     public class RuntimeHostExtensionsTests

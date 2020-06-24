@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
+using AutomationFoundation.Hosting;
 using AutomationFoundation.Interop;
 using AutomationFoundation.Interop.Primitives;
 using Microsoft.Extensions.Logging;
 using static AutomationFoundation.Interop.ConsoleApi;
 
-namespace AutomationFoundation.Hosting
+namespace AutomationFoundation
 {
     /// <summary>
     /// Provides a run strategy which runs the host until a TASKKILL event has been received.
