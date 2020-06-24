@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace AutomationFoundation.Hosting.Builders
+namespace AutomationFoundation.Hosting
 {
     /// <summary>
     /// Identifies a builder for a runtime host.

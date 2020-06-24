@@ -2,7 +2,6 @@
 using System.Threading;
 using System.Threading.Tasks;
 using AutomationFoundation.Hosting;
-using AutomationFoundation.Hosting.Builders;
 using AutomationFoundation.Runtime;
 
 namespace AutomationFoundation

@@ -1,5 +1,5 @@
 ﻿using System;
-using AutomationFoundation.Runtime.Builders;
+using AutomationFoundation.Runtime;
 
 namespace AutomationFoundation.Hosting.TestObjects
 {

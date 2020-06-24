@@ -1,4 +1,4 @@
-﻿namespace AutomationFoundation.Runtime.Builders
+﻿namespace AutomationFoundation.Runtime
 {
     /// <summary>
     /// Identifies a builder for processors.

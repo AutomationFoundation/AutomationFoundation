@@ -1,6 +1,5 @@
 ﻿using System;
 using AutomationFoundation.Hosting;
-using AutomationFoundation.Hosting.Builders;
 using Microsoft.Extensions.DependencyInjection;
 using Moq;
 using NUnit.Framework;

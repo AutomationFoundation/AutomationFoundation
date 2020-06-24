@@ -1,4 +1,4 @@
-﻿namespace AutomationFoundation.Hosting.Builders
+﻿namespace AutomationFoundation.Hosting
 {
     /// <summary>
     /// Identifies a mechanism which can build hosting environments.

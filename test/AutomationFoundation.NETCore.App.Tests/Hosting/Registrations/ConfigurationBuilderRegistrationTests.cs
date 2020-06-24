@@ -1,6 +1,6 @@
 ﻿using System;
 using AutomationFoundation.Hosting.Registrations;
-using AutomationFoundation.Runtime.Builders;
+using AutomationFoundation.Runtime;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Moq;

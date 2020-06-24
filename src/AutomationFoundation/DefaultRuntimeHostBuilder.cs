@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using AutomationFoundation.Hosting;
-using AutomationFoundation.Hosting.Builders;
-using AutomationFoundation.Runtime.Builders;
+using AutomationFoundation.Runtime;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace AutomationFoundation
