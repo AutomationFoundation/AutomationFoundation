@@ -14,14 +14,14 @@ namespace AutomationFoundation.Runtime
     public sealed class AutomationRuntime : IRuntime
     {
         private readonly SemaphoreSlim syncRoot = new SemaphoreSlim(1);
-        private readonly IList<IProcessor> processors = new List<IProcessor>();
+        private readonly IList<Processor> processors = new List<Processor>();
 
         private bool disposed;
 
         /// <summary>
         /// Gets the collection of processors.
         /// </summary>
-        public IEnumerable<IProcessor> Processors => new ReadOnlyCollection<IProcessor>(processors);
+        public IEnumerable<Processor> Processors => new ReadOnlyCollection<Processor>(processors);
 
         /// <inheritdoc />
         public bool IsRunning => processors.Any(o => o.State >= ProcessorState.Started);
@@ -35,7 +35,7 @@ namespace AutomationFoundation.Runtime
         }
 
         /// <inheritdoc />
-        public bool Add(IProcessor processor)
+        public bool Add(Processor processor)
         {
             if (processor == null)
             {
@@ -63,7 +63,7 @@ namespace AutomationFoundation.Runtime
         }
 
         /// <inheritdoc />
-        public bool Remove(IProcessor processor)
+        public bool Remove(Processor processor)
         {
             if (processor == null)
             {

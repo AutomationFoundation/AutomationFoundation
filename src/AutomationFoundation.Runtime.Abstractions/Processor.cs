@@ -7,16 +7,20 @@ namespace AutomationFoundation.Runtime
     /// <summary>
     /// Represents a processor. This class must be inherited.
     /// </summary>
-    public abstract class Processor : IProcessor
+    public abstract class Processor : IDisposable
     {
         private readonly SemaphoreSlim syncRoot = new SemaphoreSlim(1);
         private bool disposed;
 
-        /// <inheritdoc />
-        public string Name { get; }
+        /// <summary>
+        /// Gets the name.
+        /// </summary>
+        public virtual string Name { get; }
 
-        /// <inheritdoc />
-        public ProcessorState State { get; protected set; }
+        /// <summary>
+        /// Gets the processor state.
+        /// </summary>
+        public virtual ProcessorState State { get; protected set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Processor"/> class.
@@ -33,6 +37,13 @@ namespace AutomationFoundation.Runtime
         }
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="Processor"/> class.
+        /// </summary>
+        protected Processor()
+        {
+        }
+
+        /// <summary>
         /// Finalizes an instance of the <see cref="Processor"/> class.
         /// </summary>
         ~Processor()
@@ -40,8 +51,11 @@ namespace AutomationFoundation.Runtime
             Dispose(false);
         }
 
-        /// <inheritdoc />
-        public async Task StartAsync(CancellationToken cancellationToken)
+        /// <summary>
+        /// Starts the processor.
+        /// </summary>
+        /// <param name="cancellationToken">The cancellation token which indicates when the start process has been aborted.</param>
+        public virtual async Task StartAsync(CancellationToken cancellationToken)
         {
             GuardMustNotBeDisposed();
             GuardMustNotHaveEncounteredAnError();
@@ -87,8 +101,11 @@ namespace AutomationFoundation.Runtime
         /// <param name="cancellationToken">The cancellation token which indicates when the start process has been aborted.</param>
         protected abstract Task OnStartAsync(CancellationToken cancellationToken);
 
-        /// <inheritdoc />
-        public async Task StopAsync(CancellationToken cancellationToken)
+        /// <summary>
+        /// Stops the processor.
+        /// </summary>
+        /// <param name="cancellationToken">The cancellation token which indicates when the stop process should no longer be graceful.</param>
+        public virtual async Task StopAsync(CancellationToken cancellationToken)
         {
             GuardMustNotBeDisposed();
 

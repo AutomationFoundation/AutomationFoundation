@@ -63,7 +63,7 @@ namespace AutomationFoundation.Runtime
         public CancellationToken CancellationToken { get; set; }
 
         /// <inheritdoc />
-        public IProcessor Processor { get; set; }
+        public Processor Processor { get; set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ProcessingContext"/> class.

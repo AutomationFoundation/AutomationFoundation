@@ -16,7 +16,7 @@ namespace AutomationFoundation.Runtime.Builders
         /// Registers a processor with the builder.
         /// </summary>
         /// <param name="processor">The processor to register.</param>
-        IRuntimeBuilder RegisterProcessor(IProcessor processor);
+        IRuntimeBuilder RegisterProcessor(Processor processor);
 
         /// <summary>
         /// Builds the runtime.

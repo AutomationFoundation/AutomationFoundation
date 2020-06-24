@@ -27,6 +27,6 @@ namespace AutomationFoundation.Runtime
         /// <summary>
         /// Gets or sets the processor which is processing the data.
         /// </summary>
-        IProcessor Processor { get; set; }
+        Processor Processor { get; set; }
     }
 }
