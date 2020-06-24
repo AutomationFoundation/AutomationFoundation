@@ -1,23 +1,28 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
-using AutomationFoundation.Hosting.TestObjects;
+using AutomationFoundation.Hosting;
+using AutomationFoundation.TestObjects;
+using Microsoft.Extensions.Options;
 using Moq;
 using NUnit.Framework;
 
-namespace AutomationFoundation.Hosting
+namespace AutomationFoundation
 {
     [TestFixture]
     public class RuntimeHostRunAsyncStrategyTests
     {
         private Mock<IRuntimeHost> host;
         private TestableRuntimeHostRunAsyncStrategy target;
+        private RuntimeHostRunAsyncOptions options;
 
         [SetUp]
         public void Setup()
         {
+            options = new RuntimeHostRunAsyncOptions();
+            
             host = new Mock<IRuntimeHost>();
-            target = new TestableRuntimeHostRunAsyncStrategy();
+            target = new TestableRuntimeHostRunAsyncStrategy(new OptionsWrapper<RuntimeHostRunAsyncOptions>(options));
         }
 
         [TearDown]
@@ -31,7 +36,7 @@ namespace AutomationFoundation.Hosting
         {
             target.Cancel();
             
-            await target.RunAsync(host.Object, 1000, 1000);
+            await target.RunAsync(host.Object);
 
             Assert.True(target.CanceledWhileRunning);
         }
@@ -45,7 +50,7 @@ namespace AutomationFoundation.Hosting
                     await Task.Delay(Timeout.InfiniteTimeSpan, cancelToken);
                 }).Throws<OperationCanceledException>();
 
-            await target.RunAsync(host.Object, 100, 100);
+            await target.RunAsync(host.Object);
 
             host.Verify(o => o.StartAsync(It.IsAny<CancellationToken>()));
             host.Verify(o => o.StopAsync(It.IsAny<CancellationToken>()));
@@ -64,7 +69,7 @@ namespace AutomationFoundation.Hosting
 
             target.CancelAfter(TimeSpan.FromSeconds(1));
 
-            await target.RunAsync(host.Object, Timeout.Infinite, 100);
+            await target.RunAsync(host.Object);
 
             host.Verify(o => o.StartAsync(It.IsAny<CancellationToken>()));
             host.Verify(o => o.StopAsync(It.IsAny<CancellationToken>()));

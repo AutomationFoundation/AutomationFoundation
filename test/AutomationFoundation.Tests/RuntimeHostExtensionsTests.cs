@@ -34,7 +34,7 @@ namespace AutomationFoundation
 
             await target.RunAsync();
 
-            runStrategy.Verify(o => o.RunAsync(target, It.IsAny<int>(), It.IsAny<int>()));
+            runStrategy.Verify(o => o.RunAsync(target));
         }
 
         [Test]

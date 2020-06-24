@@ -1,12 +1,17 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Options;
 
-namespace AutomationFoundation.Hosting.TestObjects
+namespace AutomationFoundation.TestObjects
 {
     public class TestableRuntimeHostRunAsyncStrategy : RuntimeHostRunAsyncStrategy
     {
         public bool CanceledWhileRunning { get; private set; }
         public bool CanceledWhileStopping { get; private set; }
+
+        public TestableRuntimeHostRunAsyncStrategy(IOptions<RuntimeHostRunAsyncOptions> options) : base(options)
+        {
+        }
 
         protected override Task AttachToListenForExitAsync()
         {

@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
-using AutomationFoundation.Hosting;
 using AutomationFoundation.Interop;
 using AutomationFoundation.Interop.Primitives;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using static AutomationFoundation.Interop.ConsoleApi;
 
 namespace AutomationFoundation
@@ -12,19 +12,21 @@ namespace AutomationFoundation
     /// <summary>
     /// Provides a run strategy which runs the host until a TASKKILL event has been received.
     /// </summary>
-    public class TaskKillRunAsyncStrategy : RuntimeHostRunAsyncStrategy
+    public class TaskKillRuntimeHostRunAsyncStrategy : RuntimeHostRunAsyncStrategy
     {
         private readonly IKernel32 kernel32 = new Kernel32();
         private readonly ManualResetEventSlim waitHandle = new ManualResetEventSlim(false);
 
-        private readonly ILogger<TaskKillRunAsyncStrategy> logger;
+        private readonly ILogger<TaskKillRuntimeHostRunAsyncStrategy> logger;
         private readonly HandlerRoutine callback;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="TaskKillRunAsyncStrategy"/> class.
+        /// Initializes a new instance of the <see cref="TaskKillRuntimeHostRunAsyncStrategy"/> class.
         /// </summary>
         /// <param name="logger">The logger instance.</param>
-        public TaskKillRunAsyncStrategy(ILogger<TaskKillRunAsyncStrategy> logger)
+        /// <param name="options">The options.</param>
+        public TaskKillRuntimeHostRunAsyncStrategy(ILogger<TaskKillRuntimeHostRunAsyncStrategy> logger, IOptions<TaskKillRuntimeHostRunAsyncOptions> options) 
+            : base(options)
         {
             this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
             callback = OnCtrlMessageReceived;

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
-using AutomationFoundation.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 
 namespace AutomationFoundation
 {
@@ -16,7 +16,9 @@ namespace AutomationFoundation
         /// Initializes a new instance of the <see cref="CtrlCRuntimeHostRunAsyncStrategy"/> class.
         /// </summary>
         /// <param name="logger">The logger instance.</param>
-        public CtrlCRuntimeHostRunAsyncStrategy(ILogger<CtrlCRuntimeHostRunAsyncStrategy> logger)
+        /// <param name="options">The options.</param>
+        public CtrlCRuntimeHostRunAsyncStrategy(ILogger<CtrlCRuntimeHostRunAsyncStrategy> logger, IOptions<CtrlCRuntimeHostRunAsyncOptions> options)
+            : base(options)
         {
             this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
@@ -24,16 +26,34 @@ namespace AutomationFoundation
         /// <inheritdoc />
         protected override Task AttachToListenForExitAsync()
         {
-            Console.CancelKeyPress += (sender, e) =>
-            {
-                logger.LogInformation("Stopping the application, please be patient as this may take some time...");
-
-                CancellationSource.Cancel();
-                e.Cancel = true; // Termination will occur when the host stops running.
-            };
+            AttachToCtrlCKeyPressEvent();
 
             logger.LogInformation("Press CTRL+C to stop the application...");
             return Task.CompletedTask;
+        }
+
+        /// <summary>
+        /// Attaches the strategy to the key press event.
+        /// </summary>
+        protected virtual void AttachToCtrlCKeyPressEvent()
+        {
+            Console.CancelKeyPress += async (sender, e) =>
+            {
+                e.Cancel = await OnCancelKeyPressed();
+            };
+        }
+
+        /// <summary>
+        /// Occurs when the CTRL+C keys are pressed.
+        /// </summary>
+        /// <returns>A boolean indicating whether the event should be canceled.</returns>
+        protected virtual Task<bool> OnCancelKeyPressed()
+        {
+            logger.LogInformation("Stopping the application, please be patient as this may take some time...");
+
+            CancellationSource.Cancel();
+
+            return Task.FromResult(true); // Termination will occur when the host stops running.
         }
 
         /// <inheritdoc />

@@ -10,9 +10,8 @@ namespace ConsoleRunner
 {
     public static class Program
     {
-        private static IRuntimeHostBuilder CreateRuntimeHostBuilder()
-        {
-            return RuntimeHost.CreateDefaultBuilder()
+        private static IRuntimeHostBuilder CreateRuntimeHostBuilder() =>
+            RuntimeHost.CreateDefaultBuilder()
                 .ConfigureHostingEnvironment(environment =>
                 {
                     environment.SetEnvironmentName("DEV");
@@ -29,14 +28,13 @@ namespace ConsoleRunner
                 })
                 .UseRunStrategy<CtrlCRuntimeHostRunAsyncStrategy>()
                 .UseStartup<Startup>();
-        }
 
         public static async Task Main()
         {
             try
             {
                 using var host = CreateRuntimeHostBuilder().Build();
-                await host.RunAsync(shutdownTimeoutMs: 30000);
+                await host.RunAsync();
             }
             catch (Exception)
             {

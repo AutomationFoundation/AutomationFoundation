@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
+using AutomationFoundation.Hosting;
+using Microsoft.Extensions.Options;
 
-namespace AutomationFoundation.Hosting
+namespace AutomationFoundation
 {
     /// <summary>
     /// Provides a base asynchronous run strategy for the runtime.
@@ -15,10 +17,24 @@ namespace AutomationFoundation.Hosting
         protected CancellationTokenSource CancellationSource { get; } = new CancellationTokenSource();
 
         /// <summary>
+        /// Gets the options.
+        /// </summary>
+        public RuntimeHostRunAsyncOptions Options { get; }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="RuntimeHostRunAsyncStrategy"/> class.
+        /// </summary>
+        /// <param name="options">The options.</param>
+        protected RuntimeHostRunAsyncStrategy(IOptions<RuntimeHostRunAsyncOptions> options)
+        {
+            Options = options?.Value ?? throw new ArgumentNullException(nameof(options));
+        }
+
+        /// <summary>
         /// Finalizes an instance of the <see cref="RuntimeHostRunAsyncStrategy"/> class.
         /// </summary>
         ~RuntimeHostRunAsyncStrategy()
-        {
+        { 
             Dispose(false);
         }
 
@@ -42,11 +58,11 @@ namespace AutomationFoundation.Hosting
         }
 
         /// <inheritdoc />
-        public async Task RunAsync(IRuntimeHost host, int startupTimeoutMs, int shutdownTimeoutMs)
+        public async Task RunAsync(IRuntimeHost host)
         {
             await AttachToListenForExitAsync();
 
-            await RunCoreAsync(host, startupTimeoutMs, shutdownTimeoutMs);
+            await RunCoreAsync(host);
 
             await OnStoppedAsync();
         }
@@ -63,11 +79,11 @@ namespace AutomationFoundation.Hosting
         /// <returns>The task to await.</returns>
         protected abstract Task OnStoppedAsync();
 
-        private async Task RunCoreAsync(IRuntimeHost host, int startupTimeoutMs, int shutdownTimeoutMs)
+        private async Task RunCoreAsync(IRuntimeHost host)
         {
             try
             {
-                await RunUntilSignaledAsync(host, startupTimeoutMs);
+                await RunUntilSignaledAsync(host);
             }
             catch (OperationCanceledException)
             {
@@ -76,7 +92,7 @@ namespace AutomationFoundation.Hosting
             }
             finally
             {
-                await StopTheRuntimeHostAsync(host, shutdownTimeoutMs);
+                await StopTheRuntimeHostAsync(host);
             }
         }
 
@@ -93,15 +109,22 @@ namespace AutomationFoundation.Hosting
         /// Runs the host until signaled to terminate.
         /// </summary>
         /// <param name="host">The host to run.</param>
-        /// <param name="startupTimeoutMs">The timeout (in milliseconds) upon which startup will be aborted.</param>
         /// <returns>The task to await.</returns>
-        protected virtual async Task RunUntilSignaledAsync(IRuntimeHost host, int startupTimeoutMs)
+        protected virtual async Task RunUntilSignaledAsync(IRuntimeHost host)
         {
             using var startupCancellationSource = CancellationTokenSource.CreateLinkedTokenSource(CancellationSource.Token);
-
-            startupCancellationSource.CancelAfter(startupTimeoutMs);
+            startupCancellationSource.CancelAfter(Options.StartupTimeoutMs);
 
             await host.StartAsync(startupCancellationSource.Token);
+            await DelayUntilSignaledAsync();
+        }
+
+        /// <summary>
+        /// Delays until the strategy has been signaled for cancellation.
+        /// </summary>
+        /// <returns>The task to await.</returns>
+        protected virtual async Task DelayUntilSignaledAsync()
+        {
             await Task.Delay(Timeout.InfiniteTimeSpan, CancellationSource.Token);
         }
 
@@ -109,13 +132,12 @@ namespace AutomationFoundation.Hosting
         /// Stops the runtime host.
         /// </summary>
         /// <param name="host">The host to stop.</param>
-        /// <param name="shutdownTimeoutMs">The timeout (in milliseconds) upon which shutdown will no longer be graceful, and shall be forced.</param>
         /// <returns>The task to await.</returns>
-        protected virtual async Task StopTheRuntimeHostAsync(IRuntimeHost host, int shutdownTimeoutMs)
+        protected virtual async Task StopTheRuntimeHostAsync(IRuntimeHost host)
         {
             try
             {
-                using var shutdownCancellationSource = new CancellationTokenSource(shutdownTimeoutMs);
+                using var shutdownCancellationSource = new CancellationTokenSource(Options.ShutdownTimeoutMs);
                 await host.StopAsync(shutdownCancellationSource.Token);
             }
             catch (OperationCanceledException)

@@ -15,7 +15,7 @@ namespace AutomationFoundation
 
         private Action<IHostingEnvironmentBuilder> hostingEnvironmentConfigurationCallback;
         private bool startupHasBeenConfigured;
-        private Type runStrategy;
+        private bool runStrategyHasBeenConfigured;
 
         /// <inheritdoc />
         public IRuntimeHostBuilder ConfigureHostingEnvironment(Action<IHostingEnvironmentBuilder> callback)
@@ -39,13 +39,25 @@ namespace AutomationFoundation
         /// <inheritdoc />
         public IRuntimeHostBuilder UseRunStrategy<TStrategy>() where TStrategy : IRuntimeHostRunAsyncStrategy
         {
-            runStrategy = typeof(TStrategy);
+            if (runStrategyHasBeenConfigured)
+            {
+                throw new NotSupportedException("The run strategy has already been configured.");
+            }
+
+            callbacks.Add(services => services.AddScoped(typeof(IRuntimeHostRunAsyncStrategy), typeof(TStrategy)));
+            runStrategyHasBeenConfigured = true;
+
             return this;
         }
 
         /// <inheritdoc />
         public IRuntimeHostBuilder UseStartup<TStartup>() where TStartup : IStartup
         {
+            if (startupHasBeenConfigured)
+            {
+                throw new NotSupportedException("The startup has already been configured.");
+            }
+
             callbacks.Add(services => services.AddScoped(typeof(IStartup), typeof(TStartup)));
             startupHasBeenConfigured = true;
 
@@ -172,11 +184,6 @@ namespace AutomationFoundation
             foreach (var callback in callbacks)
             {
                 callback(serviceCollection);
-            }
-
-            if (runStrategy != null)
-            {
-                serviceCollection.AddScoped(typeof(IRuntimeHostRunAsyncStrategy), runStrategy);
             }
         }
 
