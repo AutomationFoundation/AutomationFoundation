@@ -9,7 +9,7 @@ namespace AutomationFoundation.Hosting
     /// <summary>
     /// Provides the default runtime host builder.
     /// </summary>
-    public class DefaultRuntimeHostBuilder : IRuntimeHostBuilder
+    internal class DefaultRuntimeHostBuilder : IRuntimeHostBuilder
     {
         private readonly IList<Action<IServiceCollection>> callbacks = new List<Action<IServiceCollection>>();
 

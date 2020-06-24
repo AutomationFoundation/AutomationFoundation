@@ -1,6 +1,6 @@
 ﻿using System;
+using AutomationFoundation.Hosting.TestObjects;
 using AutomationFoundation.Runtime.Builders;
-using AutomationFoundation.TestObjects;
 using Moq;
 using NUnit.Framework;
 

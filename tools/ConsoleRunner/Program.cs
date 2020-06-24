@@ -13,7 +13,7 @@ namespace ConsoleRunner
     {
         private static IRuntimeHostBuilder CreateRuntimeHostBuilder()
         {
-            return RuntimeHost.CreateBuilder<DefaultRuntimeHostBuilder>()
+            return RuntimeHost.CreateDefaultBuilder()
                 .ConfigureHostingEnvironment(environment =>
                 {
                     environment.SetEnvironmentName("DEV");

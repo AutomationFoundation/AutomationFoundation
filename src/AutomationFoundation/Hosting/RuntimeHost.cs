@@ -74,11 +74,20 @@ namespace AutomationFoundation.Hosting
         /// <summary>
         /// Create a runtime host builder.
         /// </summary>
-        /// <returns>The runtime host builder.</returns>
+        /// <returns>The builder instance.</returns>
         public static TBuilder CreateBuilder<TBuilder>()
             where TBuilder : IRuntimeHostBuilder, new()
         {
             return new TBuilder();
+        }
+
+        /// <summary>
+        /// Creates a default runtime host builder.
+        /// </summary>
+        /// <returns>The builder instance.</returns>
+        public static IRuntimeHostBuilder CreateDefaultBuilder()
+        {
+            return CreateBuilder<DefaultRuntimeHostBuilder>();
         }
     }
 }

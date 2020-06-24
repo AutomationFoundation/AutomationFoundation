@@ -1,11 +1,10 @@
 ﻿using System;
-using AutomationFoundation.Hosting;
 using AutomationFoundation.Runtime.Builders;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace AutomationFoundation.TestObjects
+namespace AutomationFoundation.Hosting.TestObjects
 {
-    public class TestableRuntimeHostBuilder : DefaultRuntimeHostBuilder
+    internal class TestableRuntimeHostBuilder : DefaultRuntimeHostBuilder
     {
         private readonly Func<IServiceProvider, IStartup> startupResolver;
         private readonly Func<IStartup, IServiceCollection, IServiceProvider> applicationServicesResolver;

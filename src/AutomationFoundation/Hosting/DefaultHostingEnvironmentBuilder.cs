@@ -6,7 +6,7 @@ namespace AutomationFoundation.Hosting
     /// <summary>
     /// Provides a default builder for hosting environments.
     /// </summary>
-    public class DefaultHostingEnvironmentBuilder : IHostingEnvironmentBuilder
+    internal class DefaultHostingEnvironmentBuilder : IHostingEnvironmentBuilder
     {
         /// <summary>
         /// Defines the name of the environment variable which holds the environment name.
