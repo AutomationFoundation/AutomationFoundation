@@ -1,5 +1,8 @@
 ﻿namespace AutomationFoundation.Interop
 {
+    /// <summary>
+    /// Defines the constants within the ConsoleApi.h included with the Windows SDK.
+    /// </summary>
     internal static class ConsoleApi
     {
         /// <summary>

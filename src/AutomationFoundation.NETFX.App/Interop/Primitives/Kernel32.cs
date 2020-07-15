@@ -1,4 +1,6 @@
-﻿namespace AutomationFoundation.Interop.Primitives
+﻿using static AutomationFoundation.Interop.NativeMethods;
+
+namespace AutomationFoundation.Interop.Primitives
 {
     internal class Kernel32 : IKernel32
     {

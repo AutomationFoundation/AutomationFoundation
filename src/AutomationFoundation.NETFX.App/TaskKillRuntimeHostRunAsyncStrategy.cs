@@ -6,6 +6,7 @@ using AutomationFoundation.Interop.Primitives;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using static AutomationFoundation.Interop.ConsoleApi;
+using static AutomationFoundation.Interop.NativeMethods;
 
 namespace AutomationFoundation
 {

@@ -1,12 +1,7 @@
-﻿namespace AutomationFoundation.Interop
-{
-    /// <summary>
-    /// A console process uses this function to handle control signals received by the process. When the signal is received, the system creates a new thread in the process to execute the function.
-    /// </summary>
-    /// <param name="dwCtrlType">The type of control signal received by the handler.</param>
-    /// <returns></returns>
-    internal delegate bool HandlerRoutine(int dwCtrlType);
+﻿using static AutomationFoundation.Interop.NativeMethods;
 
+namespace AutomationFoundation.Interop
+{
     /// <summary>
     /// Identifies methods on the Kernel32.dll within the operating system.
     /// </summary>

@@ -1,4 +1,5 @@
 ﻿using System.Runtime.InteropServices;
+using static AutomationFoundation.Interop.NativeMethods;
 
 namespace AutomationFoundation.Interop.Primitives
 {
