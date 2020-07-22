@@ -33,10 +33,14 @@ namespace ConsoleRunner
             try
             {
                 using var host = CreateRuntimeHostBuilder().Build();
-#if DEBUG
+#if !DEBUG
                 await host.RunUntilCtrlCPressedAsync();
 #else
-                await host.RunUntilSigTermAsync();
+                #if NETFRAMEWORK
+                    await host.RunUntilTaskKillAsync();
+                #elif NETCOREAPP
+                    await host.RunUntilSigTermAsync();
+                #endif
 #endif
             }
             catch (Exception ex)
