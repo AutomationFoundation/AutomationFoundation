@@ -13,7 +13,7 @@ namespace AutomationFoundation
     /// <summary>
     /// Provides a run strategy which runs the host until a TASKKILL event has been received.
     /// </summary>
-    public class TaskKillRuntimeHostRunAsyncStrategy : RuntimeHostRunAsyncStrategy
+    internal class TaskKillRuntimeHostRunAsyncStrategy : RuntimeHostRunAsyncStrategy
     {
         private readonly IKernel32 kernel32 = new Kernel32();
         private readonly ManualResetEventSlim waitHandle = new ManualResetEventSlim(false);
@@ -27,6 +27,16 @@ namespace AutomationFoundation
         /// <param name="logger">The logger instance.</param>
         /// <param name="options">The options.</param>
         public TaskKillRuntimeHostRunAsyncStrategy(ILogger<TaskKillRuntimeHostRunAsyncStrategy> logger, IOptions<TaskKillRuntimeHostRunAsyncOptions> options) 
+            : this(logger, options?.Value)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TaskKillRuntimeHostRunAsyncStrategy"/> class.
+        /// </summary>
+        /// <param name="logger">The logger instance.</param>
+        /// <param name="options">The options.</param>
+        public TaskKillRuntimeHostRunAsyncStrategy(ILogger<TaskKillRuntimeHostRunAsyncStrategy> logger, TaskKillRuntimeHostRunAsyncOptions options) 
             : base(options)
         {
             this.logger = logger ?? throw new ArgumentNullException(nameof(logger));

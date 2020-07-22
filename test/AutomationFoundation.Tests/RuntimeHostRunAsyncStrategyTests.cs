@@ -3,7 +3,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using AutomationFoundation.Hosting;
 using AutomationFoundation.TestObjects;
-using Microsoft.Extensions.Options;
 using Moq;
 using NUnit.Framework;
 
@@ -22,7 +21,7 @@ namespace AutomationFoundation
             options = new RuntimeHostRunAsyncOptions();
             
             host = new Mock<IRuntimeHost>();
-            target = new TestableRuntimeHostRunAsyncStrategy(new OptionsWrapper<RuntimeHostRunAsyncOptions>(options));
+            target = new TestableRuntimeHostRunAsyncStrategy(options);
         }
 
         [TearDown]

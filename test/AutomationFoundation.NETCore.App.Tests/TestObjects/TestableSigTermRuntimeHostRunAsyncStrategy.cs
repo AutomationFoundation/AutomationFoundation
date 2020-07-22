@@ -4,7 +4,7 @@ using Microsoft.Extensions.Options;
 
 namespace AutomationFoundation.NETCore.App.TestObjects
 {
-    public class TestableSigTermRuntimeHostRunAsyncStrategy : SigTermRuntimeHostRunAsyncStrategy
+    internal class TestableSigTermRuntimeHostRunAsyncStrategy : SigTermRuntimeHostRunAsyncStrategy
     {
         public bool AttachedToProcessExitEvent { get; private set; }
         public bool Stopped { get; private set; }        

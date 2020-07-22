@@ -1,11 +1,10 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
 namespace AutomationFoundation.TestObjects
 {
-    public class TestableCtrlCRuntimeHostRunAsyncStrategy : CtrlCRuntimeHostRunAsyncStrategy
+    internal class TestableCtrlCRuntimeHostRunAsyncStrategy : CtrlCRuntimeHostRunAsyncStrategy
     {
         public bool AttachedToCtrlCKeyPressEvent { get; private set; }
         public bool Stopped { get; private set; }        

@@ -2,7 +2,6 @@
 using System.Threading;
 using System.Threading.Tasks;
 using AutomationFoundation.Hosting;
-using Microsoft.Extensions.Options;
 
 namespace AutomationFoundation
 {
@@ -25,9 +24,9 @@ namespace AutomationFoundation
         /// Initializes a new instance of the <see cref="RuntimeHostRunAsyncStrategy"/> class.
         /// </summary>
         /// <param name="options">The options.</param>
-        protected RuntimeHostRunAsyncStrategy(IOptions<RuntimeHostRunAsyncOptions> options)
+        protected RuntimeHostRunAsyncStrategy(RuntimeHostRunAsyncOptions options)
         {
-            Options = options?.Value ?? throw new ArgumentNullException(nameof(options));
+            Options = options ?? throw new ArgumentNullException(nameof(options));
         }
 
         /// <summary>

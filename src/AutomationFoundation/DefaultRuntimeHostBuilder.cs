@@ -15,7 +15,6 @@ namespace AutomationFoundation
 
         private Action<IHostingEnvironmentBuilder> hostingEnvironmentConfigurationCallback;
         private bool startupHasBeenConfigured;
-        private bool runStrategyHasBeenConfigured;
 
         /// <inheritdoc />
         public IRuntimeHostBuilder ConfigureHostingEnvironment(Action<IHostingEnvironmentBuilder> callback)
@@ -33,20 +32,6 @@ namespace AutomationFoundation
             }
 
             callbacks.Add(callback);
-            return this;
-        }
-
-        /// <inheritdoc />
-        public IRuntimeHostBuilder UseRunStrategy<TStrategy>() where TStrategy : IRuntimeHostRunAsyncStrategy
-        {
-            if (runStrategyHasBeenConfigured)
-            {
-                throw new NotSupportedException("The run strategy has already been configured.");
-            }
-
-            callbacks.Add(services => services.AddScoped(typeof(IRuntimeHostRunAsyncStrategy), typeof(TStrategy)));
-            runStrategyHasBeenConfigured = true;
-
             return this;
         }
 
