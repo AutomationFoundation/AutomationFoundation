@@ -39,8 +39,10 @@ namespace ConsoleRunner
                 await host.RunUntilSigTermAsync();
 #endif
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                await Console.Error.WriteLineAsync(ex.ToString());
+
                 Environment.ExitCode = -1;
             }
         }

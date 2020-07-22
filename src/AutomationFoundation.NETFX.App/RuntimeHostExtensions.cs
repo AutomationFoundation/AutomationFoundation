@@ -20,7 +20,7 @@ namespace AutomationFoundation
         {
             using var strategy = new TaskKillRuntimeHostRunAsyncStrategy(
                 host.ApplicationServices.GetRequiredService<ILogger<TaskKillRuntimeHostRunAsyncStrategy>>(),
-                options);
+                options ?? new TaskKillRuntimeHostRunAsyncOptions());
 
             await strategy.RunAsync(host);
         }

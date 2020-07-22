@@ -20,7 +20,7 @@ namespace AutomationFoundation
         {
             using var strategy = new CtrlCRuntimeHostRunAsyncStrategy(
                 host.ApplicationServices.GetRequiredService<ILogger<CtrlCRuntimeHostRunAsyncStrategy>>(),
-                options);
+                options ?? new CtrlCRuntimeHostRunAsyncOptions());
 
             await strategy.RunAsync(host);
         }

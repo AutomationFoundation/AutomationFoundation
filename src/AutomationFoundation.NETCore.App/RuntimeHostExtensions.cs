@@ -20,7 +20,7 @@ namespace AutomationFoundation
         {
             using var strategy = new SigTermRuntimeHostRunAsyncStrategy(
                 host.ApplicationServices.GetRequiredService<ILogger<SigTermRuntimeHostRunAsyncStrategy>>(),
-                options);
+                options ?? new SigTermRuntimeHostRunAsyncOptions());
 
             await strategy.RunAsync(host);
         }
