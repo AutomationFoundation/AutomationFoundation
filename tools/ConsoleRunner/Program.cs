@@ -33,7 +33,7 @@ namespace ConsoleRunner
             try
             {
                 using var host = CreateRuntimeHostBuilder().Build();
-#if !DEBUG
+#if DEBUG
                 await host.RunUntilCtrlCPressedAsync();
 #else
                 #if NETFRAMEWORK
