@@ -8,7 +8,7 @@ namespace AutomationFoundation
     /// <summary>
     /// Provides a base asynchronous run strategy for the runtime.
     /// </summary>
-    public abstract class RuntimeHostRunAsyncStrategy : IRuntimeHostRunAsyncStrategy, IDisposable
+    public abstract class RuntimeHostRunAsyncStrategy : IDisposable
     {
         /// <summary>
         /// Gets the cancellation source used to stop the runtime.
