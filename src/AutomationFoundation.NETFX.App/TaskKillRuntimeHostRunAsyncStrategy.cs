@@ -15,9 +15,9 @@ namespace AutomationFoundation
     /// </summary>
     public class TaskKillRuntimeHostRunAsyncStrategy : RuntimeHostRunAsyncStrategy
     {
-        private readonly IKernel32 kernel32 = new Kernel32();
         private readonly ManualResetEventSlim waitHandle = new ManualResetEventSlim(false);
-
+        
+        private readonly IKernel32 kernel32;
         private readonly ILogger<TaskKillRuntimeHostRunAsyncStrategy> logger;
         private readonly HandlerRoutine callback;
 
@@ -27,9 +27,22 @@ namespace AutomationFoundation
         /// <param name="logger">The logger instance.</param>
         /// <param name="options">The options.</param>
         public TaskKillRuntimeHostRunAsyncStrategy(ILogger<TaskKillRuntimeHostRunAsyncStrategy> logger, IOptions<TaskKillRuntimeHostRunAsyncOptions> options) 
-            : base(options)
+            : this(new Kernel32(), logger,options)
         {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TaskKillRuntimeHostRunAsyncStrategy"/> class.
+        /// </summary>
+        /// <param name="kernel32">The kernel instance.</param>
+        /// <param name="logger">The logger instance.</param>
+        /// <param name="options">The options.</param>
+        internal TaskKillRuntimeHostRunAsyncStrategy(IKernel32 kernel32, ILogger<TaskKillRuntimeHostRunAsyncStrategy> logger, IOptions<TaskKillRuntimeHostRunAsyncOptions> options) :
+            base(options)
+        {
+            this.kernel32 = kernel32 ?? throw new ArgumentNullException(nameof(kernel32));
             this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
+
             callback = OnCtrlMessageReceived;
         }
 
