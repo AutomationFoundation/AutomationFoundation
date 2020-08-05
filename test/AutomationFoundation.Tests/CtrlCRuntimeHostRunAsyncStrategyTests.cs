@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using AutomationFoundation.TestObjects;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -33,6 +34,12 @@ namespace AutomationFoundation
         public void Finish()
         {
             target?.Dispose();
+        }
+
+        [Test]
+        public void ThrowsAnExceptionWhenLoggerIsNull()
+        {
+            Assert.Throws<ArgumentNullException>(() => _ = new CtrlCRuntimeHostRunAsyncStrategy(null, optionsWrapper.Object));
         }
 
         [Test]
