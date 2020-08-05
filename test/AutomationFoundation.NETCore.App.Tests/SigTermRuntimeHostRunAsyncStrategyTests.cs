@@ -1,5 +1,4 @@
 ﻿using System.Threading.Tasks;
-using AutomationFoundation.NETCore.App.TestObjects;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Moq;
