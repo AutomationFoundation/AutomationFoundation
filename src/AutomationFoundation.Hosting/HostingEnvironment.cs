@@ -20,7 +20,13 @@ namespace AutomationFoundation.Hosting
         public virtual string EnvironmentName { get; }
 
         /// <inheritdoc />
-        public bool IsEnvironment(string environmentName, StringComparison comparisonType = StringComparison.CurrentCultureIgnoreCase)
+        public bool IsEnvironment(string environmentName)
+        {
+            return IsEnvironment(environmentName, StringComparison.CurrentCultureIgnoreCase);
+        }
+
+        /// <inheritdoc />
+        public bool IsEnvironment(string environmentName, StringComparison comparisonType)
         {
             if (string.IsNullOrWhiteSpace(environmentName))
             {
