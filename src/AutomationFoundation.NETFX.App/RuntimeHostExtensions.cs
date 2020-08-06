@@ -11,16 +11,16 @@ namespace AutomationFoundation
     public static class RuntimeHostExtensions
     {
         /// <summary>
-        /// Runs until signaled to stop by pressing CTRL+C on the console.
+        /// Runs until signaled to stop by TASKKILL received.
         /// </summary>
         /// <param name="host">The host.</param>
         /// <param name="options">Optional. The options to use.</param>
         /// <returns>The task to await.</returns>
-        public static async Task RunUntilCtrlCPressedAsync(this IRuntimeHost host, CtrlCRuntimeHostRunAsyncOptions options = null)
+        public static async Task RunUntilTaskKillAsync(this IRuntimeHost host, TaskKillRuntimeHostRunAsyncOptions options = null)
         {
-            using var strategy = new CtrlCRuntimeHostRunAsyncStrategy(
-                host.ApplicationServices.GetRequiredService<ILogger<CtrlCRuntimeHostRunAsyncStrategy>>(),
-                options ?? new CtrlCRuntimeHostRunAsyncOptions());
+            using var strategy = new TaskKillRuntimeHostRunAsyncStrategy(
+                host.ApplicationServices.GetRequiredService<ILogger<TaskKillRuntimeHostRunAsyncStrategy>>(),
+                options ?? new TaskKillRuntimeHostRunAsyncOptions());
 
             await strategy.RunAsync(host);
         }

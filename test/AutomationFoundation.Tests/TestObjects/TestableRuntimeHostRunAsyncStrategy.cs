@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Options;
 
 namespace AutomationFoundation.TestObjects
 {
@@ -9,7 +8,8 @@ namespace AutomationFoundation.TestObjects
         public bool CanceledWhileRunning { get; private set; }
         public bool CanceledWhileStopping { get; private set; }
 
-        public TestableRuntimeHostRunAsyncStrategy(IOptions<RuntimeHostRunAsyncOptions> options) : base(options)
+        public TestableRuntimeHostRunAsyncStrategy(RuntimeHostRunAsyncOptions options) 
+            : base(options)
         {
         }
 

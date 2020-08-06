@@ -9,7 +9,7 @@ namespace AutomationFoundation
     /// <summary>
     /// Provides a run strategy which runs the host until a SIGTERM event has been received.
     /// </summary>
-    public class SigTermRuntimeHostRunAsyncStrategy : RuntimeHostRunAsyncStrategy
+    internal class SigTermRuntimeHostRunAsyncStrategy : RuntimeHostRunAsyncStrategy
     {
         private readonly ManualResetEventSlim waitHandle = new ManualResetEventSlim(false);
         private readonly ILogger<SigTermRuntimeHostRunAsyncStrategy> logger;
@@ -20,6 +20,16 @@ namespace AutomationFoundation
         /// <param name="logger">The logger instance.</param>
         /// <param name="options">The options.</param>
         public SigTermRuntimeHostRunAsyncStrategy(ILogger<SigTermRuntimeHostRunAsyncStrategy> logger, IOptions<SigTermRuntimeHostRunAsyncOptions> options)
+            : this(logger, options?.Value)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SigTermRuntimeHostRunAsyncStrategy"/> class.
+        /// </summary>
+        /// <param name="logger">The logger instance.</param>
+        /// <param name="options">The options.</param>
+        public SigTermRuntimeHostRunAsyncStrategy(ILogger<SigTermRuntimeHostRunAsyncStrategy> logger, SigTermRuntimeHostRunAsyncOptions options)
             : base(options)
         {
             this.logger = logger ?? throw new ArgumentNullException(nameof(logger));

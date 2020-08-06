@@ -11,16 +11,16 @@ namespace AutomationFoundation
     public static class RuntimeHostExtensions
     {
         /// <summary>
-        /// Runs until signaled to stop by pressing CTRL+C on the console.
+        /// Runs until signaled to stop by SIGTERM received.
         /// </summary>
         /// <param name="host">The host.</param>
         /// <param name="options">Optional. The options to use.</param>
         /// <returns>The task to await.</returns>
-        public static async Task RunUntilCtrlCPressedAsync(this IRuntimeHost host, CtrlCRuntimeHostRunAsyncOptions options = null)
+        public static async Task RunUntilSigTermAsync(this IRuntimeHost host, SigTermRuntimeHostRunAsyncOptions options = null)
         {
-            using var strategy = new CtrlCRuntimeHostRunAsyncStrategy(
-                host.ApplicationServices.GetRequiredService<ILogger<CtrlCRuntimeHostRunAsyncStrategy>>(),
-                options ?? new CtrlCRuntimeHostRunAsyncOptions());
+            using var strategy = new SigTermRuntimeHostRunAsyncStrategy(
+                host.ApplicationServices.GetRequiredService<ILogger<SigTermRuntimeHostRunAsyncStrategy>>(),
+                options ?? new SigTermRuntimeHostRunAsyncOptions());
 
             await strategy.RunAsync(host);
         }

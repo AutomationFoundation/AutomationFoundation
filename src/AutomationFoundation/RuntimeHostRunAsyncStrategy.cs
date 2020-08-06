@@ -2,14 +2,13 @@
 using System.Threading;
 using System.Threading.Tasks;
 using AutomationFoundation.Hosting;
-using Microsoft.Extensions.Options;
 
 namespace AutomationFoundation
 {
     /// <summary>
     /// Provides a base asynchronous run strategy for the runtime.
     /// </summary>
-    public abstract class RuntimeHostRunAsyncStrategy : IRuntimeHostRunAsyncStrategy, IDisposable
+    public abstract class RuntimeHostRunAsyncStrategy : IDisposable
     {
         /// <summary>
         /// Gets the cancellation source used to stop the runtime.
@@ -25,9 +24,9 @@ namespace AutomationFoundation
         /// Initializes a new instance of the <see cref="RuntimeHostRunAsyncStrategy"/> class.
         /// </summary>
         /// <param name="options">The options.</param>
-        protected RuntimeHostRunAsyncStrategy(IOptions<RuntimeHostRunAsyncOptions> options)
+        protected RuntimeHostRunAsyncStrategy(RuntimeHostRunAsyncOptions options)
         {
-            Options = options?.Value ?? throw new ArgumentNullException(nameof(options));
+            Options = options ?? throw new ArgumentNullException(nameof(options));
         }
 
         /// <summary>

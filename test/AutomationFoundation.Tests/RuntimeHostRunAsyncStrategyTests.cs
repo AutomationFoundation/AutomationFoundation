@@ -3,7 +3,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using AutomationFoundation.Hosting;
 using AutomationFoundation.TestObjects;
-using Microsoft.Extensions.Options;
 using Moq;
 using NUnit.Framework;
 
@@ -22,7 +21,7 @@ namespace AutomationFoundation
             options = new RuntimeHostRunAsyncOptions();
             
             host = new Mock<IRuntimeHost>();
-            target = new TestableRuntimeHostRunAsyncStrategy(new OptionsWrapper<RuntimeHostRunAsyncOptions>(options));
+            target = new TestableRuntimeHostRunAsyncStrategy(options);
         }
 
         [TearDown]
@@ -35,15 +34,6 @@ namespace AutomationFoundation
         public void ThrowsAnExceptionWhenOptionsIsNull()
         {
             Assert.Throws<ArgumentNullException>(() => _ = new TestableRuntimeHostRunAsyncStrategy(null));
-        }
-
-        [Test]
-        public void ThrowsAnExceptionWhenOptionsWrapperValueIsNull()
-        {
-            var optionsWrapper = new Mock<IOptions<RuntimeHostRunAsyncOptions>>();
-            optionsWrapper.Setup(o => o.Value).Returns((RuntimeHostRunAsyncOptions) null);
-
-            Assert.Throws<ArgumentNullException>(() => _ = new TestableRuntimeHostRunAsyncStrategy(optionsWrapper.Object));
         }
 
         [Test]

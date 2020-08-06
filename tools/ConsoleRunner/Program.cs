@@ -26,7 +26,6 @@ namespace ConsoleRunner
 
                     services.AddAutofac();
                 })
-                .UseRunStrategy<CtrlCRuntimeHostRunAsyncStrategy>()
                 .UseStartup<Startup>();
 
         public static async Task Main()
@@ -34,10 +33,20 @@ namespace ConsoleRunner
             try
             {
                 using var host = CreateRuntimeHostBuilder().Build();
-                await host.RunAsync();
+#if DEBUG
+                await host.RunUntilCtrlCPressedAsync();
+#else
+                #if NETFRAMEWORK
+                    await host.RunUntilTaskKillAsync();
+                #elif NETCOREAPP
+                    await host.RunUntilSigTermAsync();
+                #endif
+#endif
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                await Console.Error.WriteLineAsync(ex.ToString());
+
                 Environment.ExitCode = -1;
             }
         }

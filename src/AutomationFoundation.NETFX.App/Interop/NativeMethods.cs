@@ -1,6 +1,6 @@
 ﻿namespace AutomationFoundation.Interop
 {
-    internal class NativeMethods
+    internal static class NativeMethods
     {
         /// <summary>
         /// A console process uses this function to handle control signals received by the process. When the signal is received, the system creates a new thread in the process to execute the function.

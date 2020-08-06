@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using AutomationFoundation.Interop;
 using AutomationFoundation.Interop.Primitives;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using static AutomationFoundation.Interop.ConsoleApi;
 using static AutomationFoundation.Interop.NativeMethods;
 
@@ -13,7 +12,7 @@ namespace AutomationFoundation
     /// <summary>
     /// Provides a run strategy which runs the host until a TASKKILL event has been received.
     /// </summary>
-    public class TaskKillRuntimeHostRunAsyncStrategy : RuntimeHostRunAsyncStrategy
+    internal class TaskKillRuntimeHostRunAsyncStrategy : RuntimeHostRunAsyncStrategy
     {
         private readonly ManualResetEventSlim waitHandle = new ManualResetEventSlim(false);
         
@@ -26,7 +25,7 @@ namespace AutomationFoundation
         /// </summary>
         /// <param name="logger">The logger instance.</param>
         /// <param name="options">The options.</param>
-        public TaskKillRuntimeHostRunAsyncStrategy(ILogger<TaskKillRuntimeHostRunAsyncStrategy> logger, IOptions<TaskKillRuntimeHostRunAsyncOptions> options) 
+        public TaskKillRuntimeHostRunAsyncStrategy(ILogger<TaskKillRuntimeHostRunAsyncStrategy> logger, TaskKillRuntimeHostRunAsyncOptions options) 
             : this(new Kernel32(), logger, options)
         {
         }
@@ -37,8 +36,8 @@ namespace AutomationFoundation
         /// <param name="kernel32">The kernel instance.</param>
         /// <param name="logger">The logger instance.</param>
         /// <param name="options">The options.</param>
-        internal TaskKillRuntimeHostRunAsyncStrategy(IKernel32 kernel32, ILogger<TaskKillRuntimeHostRunAsyncStrategy> logger, IOptions<TaskKillRuntimeHostRunAsyncOptions> options) :
-            base(options)
+        public TaskKillRuntimeHostRunAsyncStrategy(IKernel32 kernel32, ILogger<TaskKillRuntimeHostRunAsyncStrategy> logger, TaskKillRuntimeHostRunAsyncOptions options) 
+            : base(options)
         {
             this.kernel32 = kernel32 ?? throw new ArgumentNullException(nameof(kernel32));
             this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
