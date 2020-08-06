@@ -2,7 +2,6 @@
 using AutomationFoundation.Hosting;
 using AutomationFoundation.Interop;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using Moq;
 using NUnit.Framework;
 using static AutomationFoundation.Interop.ConsoleApi;
@@ -15,7 +14,7 @@ namespace AutomationFoundation.NETFX.App
         private TestableTaskKillRuntimeHostRunAsyncStrategy target;
         private Mock<IKernel32> kernel32;
         private Mock<ILogger<TaskKillRuntimeHostRunAsyncStrategy>> logger;
-        private Mock<IOptions<TaskKillRuntimeHostRunAsyncOptions>> options;
+        private TaskKillRuntimeHostRunAsyncOptions options;
 
         private Mock<IRuntimeHost> host;
 
@@ -26,11 +25,9 @@ namespace AutomationFoundation.NETFX.App
 
             kernel32 = new Mock<IKernel32>();
             logger = new Mock<ILogger<TaskKillRuntimeHostRunAsyncStrategy>>();
+            options = new TaskKillRuntimeHostRunAsyncOptions();
 
-            options = new Mock<IOptions<TaskKillRuntimeHostRunAsyncOptions>>();
-            options.Setup(o => o.Value).Returns(new TaskKillRuntimeHostRunAsyncOptions());
-
-            target = new TestableTaskKillRuntimeHostRunAsyncStrategy(kernel32.Object, logger.Object, options.Object);
+            target = new TestableTaskKillRuntimeHostRunAsyncStrategy(kernel32.Object, logger.Object, options);
         }
 
         [TearDown]

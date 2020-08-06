@@ -1,7 +1,6 @@
 ﻿using System.Threading.Tasks;
 using AutomationFoundation.Interop;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 
 namespace AutomationFoundation.NETFX.App
 {
@@ -10,7 +9,7 @@ namespace AutomationFoundation.NETFX.App
         public bool WaitedUntilTerminated { get; private set; }
         public bool WaitedUntilSignaled { get; private set; }
 
-        internal TestableTaskKillRuntimeHostRunAsyncStrategy(IKernel32 kernel32, ILogger<TaskKillRuntimeHostRunAsyncStrategy> logger, IOptions<TaskKillRuntimeHostRunAsyncOptions> options) :
+        internal TestableTaskKillRuntimeHostRunAsyncStrategy(IKernel32 kernel32, ILogger<TaskKillRuntimeHostRunAsyncStrategy> logger, TaskKillRuntimeHostRunAsyncOptions options) :
             base(kernel32, logger, options)
         {
         }
