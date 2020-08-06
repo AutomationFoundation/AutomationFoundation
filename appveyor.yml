@@ -31,7 +31,7 @@ nuget:
 
 before_build:
   - cmd: secure-file.exe -decrypt Winnster.snk.enc -secret %snk_passphrase% -salt %snk_salt%
-  - cmd: dotnet sonarscanner begin /k:"AutomationFoundation" /v:"%APPVEYOR_BUILD_VERSION%-%semver_suffix%" /d:"sonar.branch.name=%APPVEYOR_REPO_BRANCH%" /d:"sonar.host.url=https://sonarcloud.io" /o:"winnster" /d:"sonar.login=%sonarcloud_token%" /d:"sonar.cs.nunit.reportsPaths=**/TestResults.xml" /d:"sonar.cs.opencover.reportsPaths=**/coverage.opencover.xml" /d:"sonar.exclusions=**\Primitives\**,**\tools\**"
+  - cmd: dotnet sonarscanner begin /k:"AutomationFoundation" /v:"%APPVEYOR_BUILD_VERSION%-%semver_suffix%" /d:"sonar.branch.name=%APPVEYOR_REPO_BRANCH%" /d:"sonar.host.url=https://sonarcloud.io" /o:"winnster" /d:"sonar.login=%sonarcloud_token%" /d:"sonar.cs.nunit.reportsPaths=**/TestResults.xml" /d:"sonar.cs.opencover.reportsPaths=**/coverage.opencover.xml" /d:"sonar.exclusions=**\Interop\**,**\Primitives\**,**\tools\**"
   - cmd: nuget restore
 
 build_script:

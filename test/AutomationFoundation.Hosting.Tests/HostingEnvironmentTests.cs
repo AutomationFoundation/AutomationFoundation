@@ -7,6 +7,13 @@ namespace AutomationFoundation.Hosting
     public class HostingEnvironmentTests
     {
         [Test]
+        public void SetsTheEnvironmentName()
+        {
+            var target = new HostingEnvironment("Test");
+            Assert.AreEqual("Test", target.EnvironmentName);
+        }
+
+        [Test]
         public void ThrowsAnExceptionWhenEnvironmentNameIsNull()
         {
             var target = new HostingEnvironment("Environment");

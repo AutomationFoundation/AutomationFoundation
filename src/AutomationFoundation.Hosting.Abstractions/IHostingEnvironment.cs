@@ -11,9 +11,16 @@ namespace AutomationFoundation.Hosting
         /// Determines whether the environment is the environment name specified.
         /// </summary>
         /// <param name="environmentName">The environment name to validate.</param>
+        /// <returns>true if the environment name matches the environment, otherwise false.</returns>
+        bool IsEnvironment(string environmentName);
+
+        /// <summary>
+        /// Determines whether the environment is the environment name specified.
+        /// </summary>
+        /// <param name="environmentName">The environment name to validate.</param>
         /// <param name="comparisonType">Optional. The type of comparison to make on the environment name.</param>
         /// <returns>true if the environment name matches the environment, otherwise false.</returns>
-        bool IsEnvironment(string environmentName, StringComparison comparisonType = StringComparison.CurrentCultureIgnoreCase);
+        bool IsEnvironment(string environmentName, StringComparison comparisonType);
 
         /// <summary>
         /// Gets the environment name.

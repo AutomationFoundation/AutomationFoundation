@@ -2,7 +2,7 @@
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
-namespace AutomationFoundation.NETCore.App.TestObjects
+namespace AutomationFoundation.NETCore.App
 {
     internal class TestableSigTermRuntimeHostRunAsyncStrategy : SigTermRuntimeHostRunAsyncStrategy
     {
