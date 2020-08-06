@@ -1,5 +1,5 @@
-﻿using System.Threading.Tasks;
-using AutomationFoundation.NETCore.App.TestObjects;
+﻿using System;
+using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Moq;
@@ -33,6 +33,12 @@ namespace AutomationFoundation.NETCore.App
         public void Finish()
         {
             target?.Dispose();
+        }
+
+        [Test]
+        public void ThrowsAnExceptionWhenLoggerIsNull()
+        {
+            Assert.Throws<ArgumentNullException>(() => _ = new SigTermRuntimeHostRunAsyncStrategy(null, optionsWrapper.Object));
         }
 
         [Test]

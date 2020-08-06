@@ -45,6 +45,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{E4B8A09D-B03
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{C99171AB-782E-42BB-B7D1-2ECB5D4C0BBC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutomationFoundation.NETFX.App.Tests", "test\AutomationFoundation.NETFX.App.Tests\AutomationFoundation.NETFX.App.Tests.csproj", "{5383248B-E591-44DA-83EF-223A9AFA9602}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -99,6 +101,10 @@ Global
 		{87B0748F-A884-4039-B20B-F1747856C3A4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{87B0748F-A884-4039-B20B-F1747856C3A4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{87B0748F-A884-4039-B20B-F1747856C3A4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5383248B-E591-44DA-83EF-223A9AFA9602}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5383248B-E591-44DA-83EF-223A9AFA9602}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5383248B-E591-44DA-83EF-223A9AFA9602}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5383248B-E591-44DA-83EF-223A9AFA9602}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -119,6 +125,7 @@ Global
 		{653B8C71-9E3D-4521-A8DE-904B24DB477E} = {FCA4596F-9EC1-4086-8CA1-6F70D0716F49}
 		{E4B8A09D-B03F-4883-BE33-49D6F367795A} = {D0129F07-1B9D-46B4-A42A-2000C2F3DBDC}
 		{C99171AB-782E-42BB-B7D1-2ECB5D4C0BBC} = {D0129F07-1B9D-46B4-A42A-2000C2F3DBDC}
+		{5383248B-E591-44DA-83EF-223A9AFA9602} = {C99171AB-782E-42BB-B7D1-2ECB5D4C0BBC}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {A5E424F8-8EDD-4829-B7A0-49D3AA7A5AE9}
