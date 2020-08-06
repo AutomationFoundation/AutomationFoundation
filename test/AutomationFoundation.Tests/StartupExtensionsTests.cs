@@ -1,5 +1,6 @@
 ﻿using System;
 using AutomationFoundation.Hosting;
+using AutomationFoundation.TestObjects;
 using Microsoft.Extensions.DependencyInjection;
 using Moq;
 using NUnit.Framework;
@@ -63,6 +64,26 @@ namespace AutomationFoundation
             configureContainer.Verify(o => o.ConfigureContainer(containerBuilder));
             factory.Verify(o => o.CreateServiceProvider(containerBuilder));
             factory.Verify();
+        }
+
+        [Test]
+        public void RunsTheStartupAsExpected()
+        {            
+            var containerBuilder = new object();
+            var expected = new Mock<IServiceProvider>();
+
+            var factory = new Mock<IServiceProviderFactory<object>>();
+            factory.Setup(o => o.CreateBuilder(services)).Returns(containerBuilder).Verifiable();
+            factory.Setup(o => o.CreateServiceProvider(containerBuilder)).Returns(expected.Object);
+         
+            services.AddTransient(sp => factory.Object);
+
+            var target = new TestableStartup();
+            var serviceProvider = target.TryConfigureContainer(services);
+
+            Assert.True(target.ConfiguredContainer);
+            Assert.True(target.ConfiguredServices);
+            Assert.AreEqual(expected.Object, serviceProvider);
         }
     }
 }
