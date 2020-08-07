@@ -37,6 +37,20 @@ namespace AutomationFoundation
         }
 
         [Test]
+        public void ThrowsAnExceptionWhenOptionsWrapperIsNull()
+        {
+            Assert.Throws<ArgumentNullException>(() => _ = new CtrlCRuntimeHostRunAsyncStrategy(logger.Object, (IOptions<CtrlCRuntimeHostRunAsyncOptions>)null));
+        }
+
+        [Test]
+        public void ThrowsAnExceptionWhenOptionsWrapperValueIsNull()
+        {
+            optionsWrapper.Setup(o => o.Value).Returns((CtrlCRuntimeHostRunAsyncOptions) null);
+
+            Assert.Throws<ArgumentNullException>(() => _ = new CtrlCRuntimeHostRunAsyncStrategy(logger.Object, (IOptions<CtrlCRuntimeHostRunAsyncOptions>)null));
+        }
+
+        [Test]
         public void ThrowsAnExceptionWhenLoggerIsNull()
         {
             Assert.Throws<ArgumentNullException>(() => _ = new CtrlCRuntimeHostRunAsyncStrategy(null, optionsWrapper.Object));
