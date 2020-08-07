@@ -105,7 +105,7 @@ namespace AutomationFoundation.Runtime
         [Test]
         public async Task ChangeToAnErrorStateWhenExceptionThrownDuringStop()
         {
-            target.SetupCallbacks(onStopCallback: () => throw new Exception("This is a test exception"));
+            target.SetupCallbacks(stopCallback: () => throw new Exception("This is a test exception"));
             await target.StartAsync(CancellationToken.None);
 
             Assert.ThrowsAsync<Exception>(async () => await target.StopAsync(CancellationToken.None));
@@ -134,7 +134,7 @@ namespace AutomationFoundation.Runtime
         {
             var tested = false;
 
-            target.SetupCallbacks(onStopCallback: () =>
+            target.SetupCallbacks(stopCallback: () =>
             {
                 Assert.AreEqual(ProcessorState.Stopping, target.State);
                 tested = true;
@@ -176,11 +176,19 @@ namespace AutomationFoundation.Runtime
         {
             var called = false;
 
-            target.SetupCallbacks(onDispose: () => called = true);
+            target.SetupCallbacks(disposeCallback: () => called = true);
 
             target.Dispose();
 
             Assert.IsTrue(called);
+        }
+
+        [Test]
+        public void MustThrowAnExceptionWhenSimulatedCapabilityExecutedAfterDispose()
+        {
+            target.Dispose();
+
+            Assert.Throws<ObjectDisposedException>(() => target.SimulatedCustomCapability());
         }
     }
 }

@@ -8,12 +8,7 @@ namespace AutomationFoundation.Runtime.TestObjects
     {
         private Action onStartCallback;
         private Action onStopCallback;
-        private Action onDispose;
-
-        public StubProcessor()
-            : this(Guid.NewGuid().ToString())
-        {
-        }
+        private Action onDisposeCallback;
 
         public StubProcessor(string name)
             : base(name)
@@ -34,20 +29,25 @@ namespace AutomationFoundation.Runtime.TestObjects
 
         protected override void Dispose(bool disposing)
         {
-            onDispose?.Invoke();
+            onDisposeCallback?.Invoke();
             base.Dispose(disposing);
         }
 
-        public void SetupCallbacks(Action onStartCallback = null, Action onStopCallback = null, Action onDispose = null)
+        public void SetupCallbacks(Action startCallback = null, Action stopCallback = null, Action disposeCallback = null)
         {
-            this.onStartCallback = onStartCallback;
-            this.onStopCallback = onStopCallback;
-            this.onDispose = onDispose;
+            onStartCallback = startCallback;
+            onStopCallback = stopCallback;
+            onDisposeCallback = disposeCallback;
         }
 
         public void SetState(ProcessorState value)
         {
             State = value;
+        }
+
+        public void SimulatedCustomCapability()
+        {
+            GuardMustNotBeDisposed();
         }
     }
 }

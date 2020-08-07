@@ -29,19 +29,19 @@ namespace AutomationFoundation.Hosting
         [Test]
         public void ThrowsAnExceptionWhenRuntimeIsNull()
         {
-            Assert.Throws<ArgumentNullException>(() => new RuntimeHost(null, environment.Object, services.Object));
+            Assert.Throws<ArgumentNullException>(() => _ = new RuntimeHost(null, environment.Object, services.Object));
         }
 
         [Test]
         public void ThrowsAnExceptionWhenEnvironmentIsNull()
         {
-            Assert.Throws<ArgumentNullException>(() => new RuntimeHost(runtime.Object, null, services.Object));
+            Assert.Throws<ArgumentNullException>(() => _ = new RuntimeHost(runtime.Object, null, services.Object));
         }
 
         [Test]
         public void DoesNotThrowsAnExceptionWhenServicesAreNull()
         {
-            Assert.DoesNotThrow(() => new RuntimeHost(runtime.Object, environment.Object, null));
+            Assert.DoesNotThrow(() => _ = new RuntimeHost(runtime.Object, environment.Object, null));
         }
 
         [Test]
@@ -50,6 +50,24 @@ namespace AutomationFoundation.Hosting
             await target.StartAsync();
 
             runtime.Verify(o => o.StartAsync(It.IsAny<CancellationToken>()), Times.Once);
+        }
+
+        [Test]
+        public async Task StartsTheRuntimeWithTheCancellationTokenProvided()
+        {
+            var cancellationToken = new CancellationToken(true);
+            await target.StartAsync(cancellationToken);
+
+            runtime.Verify(o => o.StartAsync(cancellationToken));
+        }
+
+        [Test]
+        public async Task StopsTheRuntimeWithTheCancellationTokenProvided()
+        {
+            var cancellationToken = new CancellationToken(true);
+            await target.StopAsync(cancellationToken);
+
+            runtime.Verify(o => o.StopAsync(cancellationToken));
         }
 
         [Test]
@@ -78,6 +96,13 @@ namespace AutomationFoundation.Hosting
             target.Dispose();
 
             runtime.Verify(o => o.Dispose());
+        }
+
+        [Test]
+        public void MustNotReturnNull()
+        {
+            var result = RuntimeHost.CreateDefaultBuilder();
+            Assert.IsNotNull(result);
         }
     }
 }
