@@ -42,6 +42,21 @@ namespace AutomationFoundation.NETCore.App
         }
 
         [Test]
+        public void ThrowsAnExceptionWhenOptionsWrapperIsNull()
+        {
+            Assert.Throws<ArgumentNullException>(() => _ = new SigTermRuntimeHostRunAsyncStrategy(logger.Object, (IOptions<SigTermRuntimeHostRunAsyncOptions>)null));
+        }
+
+        [Test]
+        public void ThrowsAnExceptionWhenOptionsWrapperValueIsNull()
+        {
+            optionsWrapper.Setup(o => o.Value).Returns((SigTermRuntimeHostRunAsyncOptions) null);
+
+            Assert.Throws<ArgumentNullException>(() => _ = new SigTermRuntimeHostRunAsyncStrategy(logger.Object, (IOptions<SigTermRuntimeHostRunAsyncOptions>)null));
+        }
+
+
+        [Test]
         public async Task FlagForCancellationWhenKeyPressed()
         {
             await target.SimulateProcessExitedAsync();
