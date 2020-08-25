@@ -13,9 +13,11 @@ environment:
   snk_salt:
     secure: tIuRlNokDRTBkah55IRfeATr4WWOEfQOLDqUjrDMMcPEmgq4yOTHzQFKEky67G9rk51D2VvdMFsTcDQrecDonA==
   semver_suffix: preview
+  github_token:
+    secure: znqLAqC1gUZtlVY6m6JBqkg0jZI2JUZbntH6E/rDojnWPVjFkZ75gD88x26wb7zQ
 
 init:
-  - cmd: nuget sources add -name "github.org" -source "https://nuget.pkg.github.com/winnster/index.json"
+  - cmd: nuget sources add -name "github.org" -source "https://nuget.pkg.github.com/winnster/index.json" -password %github_token%
 
 install:
   - cmd: choco install secure-file --ignore-checksums
@@ -54,7 +56,5 @@ artifacts:
 deploy:
   provider: NuGet
   server: https://nuget.pkg.github.com/winnster/index.json
-  api_key:
-    secure: znqLAqC1gUZtlVY6m6JBqkg0jZI2JUZbntH6E/rDojnWPVjFkZ75gD88x26wb7zQ
   skip_symbols: true
   artifact: /.*\.nupkg/
