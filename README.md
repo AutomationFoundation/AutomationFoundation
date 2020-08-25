@@ -2,7 +2,7 @@
 
 | Branch | Build Status | Quality Gate | Coverage |
 | ------ | ------------ | ------------ | -------- |
-| master | [![Build Status](https://ci.appveyor.com/api/projects/status/hjeka0n8bqs34a9o?svg=true)](https://ci.appveyor.com/project/winnster/automationfoundation) | [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=AutomationFoundation&metric=alert_status)](https://sonarcloud.io/dashboard?id=AutomationFoundation) | [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=AutomationFoundation&metric=coverage)](https://sonarcloud.io/dashboard?id=AutomationFoundation) |
+| master | [![Build Status](https://ci.appveyor.com/api/projects/status/hjeka0n8bqs34a9o/branch/master?svg=true)](https://ci.appveyor.com/project/winnster/automationfoundation) | [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=AutomationFoundation&metric=alert_status)](https://sonarcloud.io/dashboard?id=AutomationFoundation) | [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=AutomationFoundation&metric=coverage)](https://sonarcloud.io/dashboard?id=AutomationFoundation) |
 | develop | [![Build Status](https://ci.appveyor.com/api/projects/status/hjeka0n8bqs34a9o/branch/develop?svg=true)](https://ci.appveyor.com/project/winnster/automationfoundation/branch/develop) | N/A | N/A |
 
 ## Purpose
