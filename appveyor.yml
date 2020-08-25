@@ -15,7 +15,7 @@ environment:
   semver_suffix: preview
 
 init:
-  - cmd: nuget sources add -name "myget.org" -source "https://www.myget.org/F/winnster/api/v3/index.json"
+  - cmd: nuget sources add -name "github.org" -source "https://nuget.pkg.github.com/winnster/index.json"
 
 install:
   - cmd: choco install secure-file --ignore-checksums
@@ -53,10 +53,8 @@ artifacts:
 
 deploy:
   provider: NuGet
-  server: https://www.myget.org/F/winnster/api/v2/package
+  server: https://nuget.pkg.github.com/winnster/index.json
   api_key:
-    secure: j1UnxyPBIzKNE91vJAVHOdoAumEAruRWZYres7ahOLY99HcGHtztXDu+ckZ6g6Mr
+    secure: znqLAqC1gUZtlVY6m6JBqkg0jZI2JUZbntH6E/rDojnWPVjFkZ75gD88x26wb7zQ
   skip_symbols: true
   artifact: /.*\.nupkg/
-  on:
-    branch: master
