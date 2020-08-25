@@ -18,7 +18,7 @@ environment:
 
 init:
   - cmd: nuget sources add -name "github.org" -source "https://nuget.pkg.github.com/winnster/index.json"
-  - cmd: nuget setapikey %github_token% -source "https://nuget.pkg.github.com/winnster/index.json"
+  - cmd: nuget setapikey "%github_token%" -source "https://nuget.pkg.github.com/winnster/index.json" -verbosity:quiet
 
 install:
   - cmd: choco install secure-file --ignore-checksums
