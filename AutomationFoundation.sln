@@ -7,6 +7,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
 		appveyor.yml = appveyor.yml
+		README.md = README.md
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "2. Core", "2. Core", "{FCA4596F-9EC1-4086-8CA1-6F70D0716F49}"
@@ -45,7 +46,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{E4B8A09D-B03
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{C99171AB-782E-42BB-B7D1-2ECB5D4C0BBC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutomationFoundation.NETFX.App.Tests", "test\AutomationFoundation.NETFX.App.Tests\AutomationFoundation.NETFX.App.Tests.csproj", "{5383248B-E591-44DA-83EF-223A9AFA9602}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AutomationFoundation.NETFX.App.Tests", "test\AutomationFoundation.NETFX.App.Tests\AutomationFoundation.NETFX.App.Tests.csproj", "{5383248B-E591-44DA-83EF-223A9AFA9602}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
