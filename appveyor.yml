@@ -17,8 +17,7 @@ environment:
     secure: znqLAqC1gUZtlVY6m6JBqkg0jZI2JUZbntH6E/rDojnWPVjFkZ75gD88x26wb7zQ
 
 init:
-  - cmd: nuget sources add -name "github.org" -source "https://nuget.pkg.github.com/winnster/index.json"
-  - cmd: nuget setapikey "%github_token%" -source "https://nuget.pkg.github.com/winnster/index.json" -verbosity quiet
+  - ps: dotnet nuget add source "https://nuget.pkg.github.com/winnster/index.json" -n github -u winnster -p "%github_token%" --store-password-in-clear-text
 
 install:
   - cmd: choco install secure-file --ignore-checksums
@@ -48,14 +47,11 @@ after_test:
 
 artifacts:
   - path: '**\*.nupkg'
-    name: NuGet
+    name: Packages
   - path: '**\TestResults.xml'
     name: Test Results
   - path: '**\coverage.opencover.xml'
     name: Coverage Results
 
-deploy:
-  provider: NuGet
-  server: https://nuget.pkg.github.com/winnster/index.json
-  skip_symbols: true
-  artifact: /.*\.nupkg/
+deploy_script:
+  - ps: dotnet nuget push "**\*.nupkg" --source github
