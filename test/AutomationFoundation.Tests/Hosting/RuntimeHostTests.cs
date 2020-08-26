@@ -14,7 +14,7 @@ namespace AutomationFoundation.Hosting
         private Mock<IHostingEnvironment> environment;
         private Mock<IServiceProvider> services;
 
-        private RuntimeHost target;
+        private RuntimeHostBase target;
 
         [SetUp]
         public void Setup()
@@ -23,25 +23,25 @@ namespace AutomationFoundation.Hosting
             environment = new Mock<IHostingEnvironment>();
             services = new Mock<IServiceProvider>();
 
-            target = new RuntimeHost(runtime.Object, environment.Object, services.Object);
+            target = new RuntimeHostBase(runtime.Object, environment.Object, services.Object);
         }
 
         [Test]
         public void ThrowsAnExceptionWhenRuntimeIsNull()
         {
-            Assert.Throws<ArgumentNullException>(() => _ = new RuntimeHost(null, environment.Object, services.Object));
+            Assert.Throws<ArgumentNullException>(() => _ = new RuntimeHostBase(null, environment.Object, services.Object));
         }
 
         [Test]
         public void ThrowsAnExceptionWhenEnvironmentIsNull()
         {
-            Assert.Throws<ArgumentNullException>(() => _ = new RuntimeHost(runtime.Object, null, services.Object));
+            Assert.Throws<ArgumentNullException>(() => _ = new RuntimeHostBase(runtime.Object, null, services.Object));
         }
 
         [Test]
         public void DoesNotThrowsAnExceptionWhenServicesAreNull()
         {
-            Assert.DoesNotThrow(() => _ = new RuntimeHost(runtime.Object, environment.Object, null));
+            Assert.DoesNotThrow(() => _ = new RuntimeHostBase(runtime.Object, environment.Object, null));
         }
 
         [Test]
@@ -101,7 +101,7 @@ namespace AutomationFoundation.Hosting
         [Test]
         public void MustNotReturnNull()
         {
-            var result = RuntimeHost.CreateDefaultBuilder();
+            var result = RuntimeHostBase.CreateDefaultBuilder();
             Assert.IsNotNull(result);
         }
     }

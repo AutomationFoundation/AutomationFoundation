@@ -4,7 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace AutomationFoundation.Hosting.TestObjects
 {
-    internal class TestableRuntimeHostBuilder : DefaultRuntimeHostBuilder
+    internal class TestableRuntimeHostBuilder : RuntimeHostBuilder
     {
         private readonly Func<IServiceProvider, IStartup> startupResolver;
         private readonly Func<IStartup, IServiceCollection, IServiceProvider> applicationServicesResolver;
@@ -47,6 +47,11 @@ namespace AutomationFoundation.Hosting.TestObjects
             }
 
             return base.CreateRuntimeBuilder(applicationServices);
+        }
+
+        protected override IRuntimeHost CreateRuntimeHost(IRuntime runtime, IHostingEnvironment environment, IServiceProvider applicationServices)
+        {
+            throw new NotImplementedException();
         }
 
         protected override IServiceCollection CreateServiceCollection()

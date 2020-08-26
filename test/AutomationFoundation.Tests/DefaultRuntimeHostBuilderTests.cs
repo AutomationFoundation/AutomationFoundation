@@ -12,14 +12,14 @@ namespace AutomationFoundation
         [Test]
         public void ThrowsAnExceptionWhenTheCallbackIsNullWhileConfiguringThe0Environment()
         {
-            var target = new DefaultRuntimeHostBuilder();
+            var target = new RuntimeHostBuilder();
             Assert.Throws<ArgumentNullException>(() => target.ConfigureHostingEnvironment(null));
         }
 
         [Test]
         public void ThrowAnExceptionWhenStartupHasNotBeenConfigured()
         {
-            var target = new DefaultRuntimeHostBuilder();
+            var target = new RuntimeHostBuilder();
             var ex = Assert.Throws<BuildException>(() => target.Build());
 
             Assert.AreEqual("The startup must be configured.", ex.Message);
@@ -28,14 +28,14 @@ namespace AutomationFoundation
         [Test]
         public void ThrowsAnExceptionWhenCallbackIsNull()
         {
-            var target = new DefaultRuntimeHostBuilder();
+            var target = new RuntimeHostBuilder();
             Assert.Throws<ArgumentNullException>(() => target.ConfigureServices(null));
         }
 
         [Test]
         public void ThrowsAnExceptionWhenStartupInstanceIsNull()
         {
-            var target = new DefaultRuntimeHostBuilder();
+            var target = new RuntimeHostBuilder();
             Assert.Throws<ArgumentNullException>(() => target.UseStartup(null));
         }
 
@@ -78,7 +78,7 @@ namespace AutomationFoundation
         {
             var called = false;
 
-            var target = new DefaultRuntimeHostBuilder();
+            var target = new RuntimeHostBuilder();
             target.ConfigureServices(services => { called = true; });
             target.UseStartup(new StubStartup());
 
@@ -91,7 +91,7 @@ namespace AutomationFoundation
         {
             var called = false;
 
-            var target = new DefaultRuntimeHostBuilder();
+            var target = new RuntimeHostBuilder();
             target.UseStartup(new StubStartup(_ => called = true));
 
             Assert.IsNotNull(target.Build());

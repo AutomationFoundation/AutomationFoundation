@@ -7,9 +7,9 @@ using AutomationFoundation.Runtime;
 namespace AutomationFoundation
 {
     /// <summary>
-    /// Provides a host for the runtime.
+    /// Provides an abstract host for the runtime.
     /// </summary>
-    public class RuntimeHost : IRuntimeHost
+    public abstract class RuntimeHostBase : IRuntimeHost
     {
         private readonly IRuntime runtime;
 
@@ -20,12 +20,12 @@ namespace AutomationFoundation
         public IHostingEnvironment Environment { get; }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="RuntimeHost"/> class.
+        /// Initializes a new instance of the <see cref="RuntimeHostBase"/> class.
         /// </summary>
         /// <param name="runtime">The runtime to host.</param>
         /// <param name="environment">The hosting environment.</param>
         /// <param name="applicationServices">The application services available.</param>
-        public RuntimeHost(IRuntime runtime, IHostingEnvironment environment, IServiceProvider applicationServices)
+        protected RuntimeHostBase(IRuntime runtime, IHostingEnvironment environment, IServiceProvider applicationServices)
         {
             this.runtime = runtime ?? throw new ArgumentNullException(nameof(runtime));
             Environment = environment ?? throw new ArgumentNullException(nameof(environment));
@@ -33,9 +33,9 @@ namespace AutomationFoundation
         }
 
         /// <summary>
-        /// Finalizes an instance of the <see cref="RuntimeHost"/> class.
+        /// Finalizes an instance of the <see cref="RuntimeHostBase"/> class.
         /// </summary>
-        ~RuntimeHost()
+        ~RuntimeHostBase()
         {
             Dispose(false);
         }
@@ -69,15 +69,6 @@ namespace AutomationFoundation
         public async Task StopAsync(CancellationToken cancellationToken = default)
         {
             await runtime.StopAsync(cancellationToken);
-        }
-
-        /// <summary>
-        /// Creates a default runtime host builder.
-        /// </summary>
-        /// <returns>The builder instance.</returns>
-        public static IRuntimeHostBuilder CreateDefaultBuilder()
-        {
-            return new DefaultRuntimeHostBuilder();
         }
     }
 }

@@ -9,7 +9,7 @@ namespace AutomationFoundation
     /// <summary>
     /// Provides the default runtime host builder.
     /// </summary>
-    internal class DefaultRuntimeHostBuilder : IRuntimeHostBuilder
+    public abstract class RuntimeHostBuilder : IRuntimeHostBuilder
     {
         private readonly IList<Action<IServiceCollection>> callbacks = new List<Action<IServiceCollection>>();
 
@@ -102,16 +102,23 @@ namespace AutomationFoundation
                     throw new BuildException("The runtime could not be built.");
                 }
 
-                return new RuntimeHost(
-                    runtime,
-                    hostingEnvironment,
-                    applicationServices);
+                return CreateRuntimeHost(runtime, hostingEnvironment, applicationServices);
             }
             finally
             {
                 (sp as IDisposable)?.Dispose();
             }
         }
+
+        /// <summary>
+        /// Creates the runtime host.
+        /// </summary>
+        /// <param name="runtime">The runtime instance.</param>
+        /// <param name="environment">The hosting environment.</param>
+        /// <param name="applicationServices">The application services.</param>
+        /// <returns></returns>
+        protected abstract IRuntimeHost CreateRuntimeHost(IRuntime runtime, IHostingEnvironment environment,
+            IServiceProvider applicationServices);
 
         /// <summary>
         /// Creates the service collection.
