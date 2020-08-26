@@ -2,7 +2,7 @@
 using AutomationFoundation.Hosting.Registrations;
 using Microsoft.Extensions.Configuration;
 
-namespace AutomationFoundation.Hosting
+namespace AutomationFoundation
 {
     /// <summary>
     /// Contains extension methods for the runtime host builder.
