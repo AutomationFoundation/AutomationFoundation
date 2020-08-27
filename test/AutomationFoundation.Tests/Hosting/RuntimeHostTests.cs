@@ -97,12 +97,5 @@ namespace AutomationFoundation.Hosting
 
             runtime.Verify(o => o.Dispose());
         }
-
-        [Test]
-        public void MustNotReturnNull()
-        {
-            var result = RuntimeHostBase.CreateDefaultBuilder();
-            Assert.IsNotNull(result);
-        }
     }
 }

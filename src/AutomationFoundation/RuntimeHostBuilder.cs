@@ -12,6 +12,7 @@ namespace AutomationFoundation
     public abstract class RuntimeHostBuilder : IRuntimeHostBuilder
     {
         private readonly IList<Action<IServiceCollection>> callbacks = new List<Action<IServiceCollection>>();
+        private readonly IList<Action<IServiceProvider, IServiceCollection>> lateCallbacks = new List<Action<IServiceProvider, IServiceCollection>>();
 
         private Action<IHostingEnvironmentBuilder> hostingEnvironmentConfigurationCallback;
         private bool startupHasBeenConfigured;
@@ -34,6 +35,19 @@ namespace AutomationFoundation
             callbacks.Add(callback);
             return this;
         }
+
+        /// <inheritdoc />
+        public IRuntimeHostBuilder ConfigureServices(Action<IServiceProvider, IServiceCollection> callback)
+        {
+            if (callback == null)
+            {
+                throw new ArgumentNullException(nameof(callback));
+            }
+
+            lateCallbacks.Add(callback);
+            return this;
+        }
+
 
         /// <inheritdoc />
         public IRuntimeHostBuilder UseStartup<TStartup>() where TStartup : IStartup
@@ -78,6 +92,7 @@ namespace AutomationFoundation
             try
             {
                 sp = BuildServiceProvider(services);
+                ConfigureServiceCollection(sp, services);
 
                 var startup = ResolveStartupInstance(sp);
                 if (startup == null)
@@ -134,7 +149,7 @@ namespace AutomationFoundation
         /// </summary>
         /// <param name="services">The service collection from which to build the provider.</param>
         /// <returns>The service provider.</returns>
-        protected virtual IServiceProvider BuildServiceProvider(IServiceCollection services)
+        private static IServiceProvider BuildServiceProvider(IServiceCollection services)
         {
             if (services == null)
             {
@@ -148,7 +163,7 @@ namespace AutomationFoundation
         /// Configures the environment.
         /// </summary>
         /// <param name="serviceCollection">The service collection to configure.</param>
-        protected virtual void ConfigureHostingEnvironmentImpl(IServiceCollection serviceCollection)
+        private void ConfigureHostingEnvironmentImpl(IServiceCollection serviceCollection)
         {
             var builder = new DefaultHostingEnvironmentBuilder();
             hostingEnvironmentConfigurationCallback?.Invoke(builder);
@@ -166,7 +181,7 @@ namespace AutomationFoundation
         /// Configures the service collection used for dependency injection.
         /// </summary>
         /// <param name="serviceCollection">The service collection to configure.</param>
-        protected virtual void ConfigureServiceCollection(IServiceCollection serviceCollection)
+        private void ConfigureServiceCollection(IServiceCollection serviceCollection)
         {
             if (serviceCollection == null)
             {
@@ -176,6 +191,24 @@ namespace AutomationFoundation
             foreach (var callback in callbacks)
             {
                 callback(serviceCollection);
+            }
+        }
+
+        /// <summary>
+        /// Configures the service collection used for dependency injection.
+        /// </summary>
+        /// <param name="serviceProvider">The services.</param>
+        /// <param name="serviceCollection">The service collection to configure.</param>
+        private void ConfigureServiceCollection(IServiceProvider serviceProvider, IServiceCollection serviceCollection)
+        {
+            if (serviceCollection == null)
+            {
+                throw new ArgumentNullException(nameof(serviceCollection));
+            }
+
+            foreach (var callback in lateCallbacks)
+            {
+                callback(serviceProvider, serviceCollection);
             }
         }
 
@@ -233,7 +266,7 @@ namespace AutomationFoundation
         /// Ensures the startup has been configured.
         /// </summary>
         /// <exception cref="BuildException">The startup has not been configured.</exception>
-        protected void GuardStartupMustBeConfigured()
+        private void GuardStartupMustBeConfigured()
         {
             if (!startupHasBeenConfigured)
             {

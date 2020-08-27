@@ -12,6 +12,7 @@ namespace AutomationFoundation.NETCore.App.Hosting.Registrations
     public class ConfigurationBuilderRegistrationTests
     {
         private Mock<IConfigurationBuilder> builder;
+        private Mock<IServiceProvider> serviceProvider;
         private Mock<IServiceCollection> services;
 
         private ConfigurationBuilderRegistration target;
@@ -21,47 +22,48 @@ namespace AutomationFoundation.NETCore.App.Hosting.Registrations
         {
             builder = new Mock<IConfigurationBuilder>();
             services = new Mock<IServiceCollection>();
+            serviceProvider = new Mock<IServiceProvider>();
 
-            target = new ConfigurationBuilderRegistration(builder.Object, services.Object, _ => { });
+            target = new ConfigurationBuilderRegistration(builder.Object, serviceProvider.Object, services.Object, (_1, _2) => { });
         }
 
         [Test]
         public void ThrowsAnExceptionWhenBuilderIsNullForConstructor()
         {
             Assert.Throws<ArgumentNullException>(() =>
-                _ = new ConfigurationBuilderRegistration(null, services.Object, _ => { }));
+                _ = new ConfigurationBuilderRegistration(null, serviceProvider.Object, services.Object, (_1, _2) => { }));
         }
 
         [Test]
         public void ThrowsAnExceptionWhenServicesIsNullForConstructor()
         {
             Assert.Throws<ArgumentNullException>(() =>
-                _ = new ConfigurationBuilderRegistration(builder.Object, null, _ => { }));
+                _ = new ConfigurationBuilderRegistration(builder.Object, serviceProvider.Object, null, (_1, _2) => { }));
         }
 
         [Test]
         public void ThrowsAnExceptionWhenCallbackIsNullForConstructor()
         {
-            Assert.Throws<ArgumentNullException>(() => _ = new ConfigurationBuilderRegistration(builder.Object, services.Object, null));
+            Assert.Throws<ArgumentNullException>(() => _ = new ConfigurationBuilderRegistration(builder.Object, serviceProvider.Object, services.Object, null));
         }
 
         [Test]
         public void ThrowsExceptionWhenServicesIsNull()
         {
-            Assert.Throws<ArgumentNullException>(() => ConfigurationBuilderRegistration.OnConfigureServicesCallback(null, c => { }));
+            Assert.Throws<ArgumentNullException>(() => ConfigurationBuilderRegistration.OnConfigureServicesCallback(serviceProvider.Object, null, (_1, _2) => { }));
         }
 
         [Test]
         public void ThrowsExceptionWhenCallbackIsNull()
         {
-            Assert.Throws<ArgumentNullException>(() => ConfigurationBuilderRegistration.OnConfigureServicesCallback(new Mock<IServiceCollection>().Object, null));
+            Assert.Throws<ArgumentNullException>(() => ConfigurationBuilderRegistration.OnConfigureServicesCallback(serviceProvider.Object, new Mock<IServiceCollection>().Object, null));
         }
 
         [Test]
         public void ExecutesTheCallbackAsExpected()
         {
             var called = false;
-            ConfigurationBuilderRegistration.OnConfigureServicesCallback(services.Object, c => { called = true; });
+            ConfigurationBuilderRegistration.OnConfigureServicesCallback(serviceProvider.Object, services.Object, (_1, _2) => { called = true; });
 
             Assert.True(called);
         }

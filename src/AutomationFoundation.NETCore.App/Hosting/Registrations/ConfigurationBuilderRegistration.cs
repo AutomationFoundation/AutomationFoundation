@@ -12,17 +12,20 @@ namespace AutomationFoundation.Hosting.Registrations
     {
         private readonly IConfigurationBuilder builder;
         private readonly IServiceCollection services;
-        private readonly Action<IConfigurationBuilder> callback;
+        private readonly IHostingEnvironment hostingEnvironment;
+        private readonly Action<IHostingEnvironment, IConfigurationBuilder> callback;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ConfigurationBuilderRegistration"/> class.
         /// </summary>
         /// <param name="builder">The builder to use when building the configuration.</param>
+        /// <param name="hostingEnvironment">The hosting environment.</param>
         /// <param name="services">The collection of services.</param>
         /// <param name="callback">The callback to execute which will contain the application specific logic to execute.</param>
-        public ConfigurationBuilderRegistration(IConfigurationBuilder builder, IServiceCollection services, Action<IConfigurationBuilder> callback)
+        public ConfigurationBuilderRegistration(IConfigurationBuilder builder, IHostingEnvironment hostingEnvironment, IServiceCollection services, Action<IHostingEnvironment, IConfigurationBuilder> callback)
         {
             this.builder = builder ?? throw new ArgumentNullException(nameof(builder));
+            this.hostingEnvironment = hostingEnvironment ?? throw new ArgumentNullException(nameof(hostingEnvironment));
             this.services = services ?? throw new ArgumentNullException(nameof(services));
             this.callback = callback ?? throw new ArgumentNullException(nameof(callback));
         }
@@ -32,7 +35,7 @@ namespace AutomationFoundation.Hosting.Registrations
         /// </summary>
         public void Register()
         {
-            callback(builder);
+            callback(hostingEnvironment, builder);
 
             var configuration = builder.Build();
             if (configuration == null)
@@ -46,9 +49,10 @@ namespace AutomationFoundation.Hosting.Registrations
         /// <summary>
         /// Callback which is executed when the service collection is being built.
         /// </summary>
+        /// <param name="hostingEnvironment">The hosting environment.</param>
         /// <param name="services">The collection of services.</param>
         /// <param name="callback">The callback to execute which will contain the application specific logic to execute.</param>
-        public static void OnConfigureServicesCallback(IServiceCollection services, Action<IConfigurationBuilder> callback)
+        public static void OnConfigureServicesCallback(IHostingEnvironment hostingEnvironment, IServiceCollection services, Action<IHostingEnvironment, IConfigurationBuilder> callback)
         {
             if (services == null)
             {
@@ -61,6 +65,7 @@ namespace AutomationFoundation.Hosting.Registrations
 
             new ConfigurationBuilderRegistration(
                 new ConfigurationBuilder(),
+                hostingEnvironment,
                 services,
                 callback).Register();
         }

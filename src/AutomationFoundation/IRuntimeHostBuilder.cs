@@ -22,6 +22,13 @@ namespace AutomationFoundation
         /// <param name="callback">The callback which will configure the services.</param>
         /// <returns>The current runtime host builder instance.</returns>
         IRuntimeHostBuilder ConfigureServices(Action<IServiceCollection> callback);
+                       
+        /// <summary>
+        /// Configures the services.
+        /// </summary>
+        /// <param name="callback">The callback which will configure the services.</param>
+        /// <returns>The current runtime host builder instance.</returns>
+        IRuntimeHostBuilder ConfigureServices(Action<IServiceProvider, IServiceCollection> callback);
 
         /// <summary>
         /// Identifies the startup type which should be used.

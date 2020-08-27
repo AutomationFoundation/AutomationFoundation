@@ -1,6 +1,7 @@
 ﻿using System;
 using AutomationFoundation.Hosting.TestObjects;
 using AutomationFoundation.Runtime;
+using Microsoft.Extensions.DependencyInjection;
 using Moq;
 using NUnit.Framework;
 
@@ -9,17 +10,23 @@ namespace AutomationFoundation
     [TestFixture]
     public class DefaultRuntimeHostBuilderTests
     {
+        private TestableRuntimeHostBuilder target;
+
+        [SetUp]
+        public void Init()
+        {
+            target = new TestableRuntimeHostBuilder();;
+        }
+
         [Test]
         public void ThrowsAnExceptionWhenTheCallbackIsNullWhileConfiguringThe0Environment()
         {
-            var target = new RuntimeHostBuilder();
             Assert.Throws<ArgumentNullException>(() => target.ConfigureHostingEnvironment(null));
         }
 
         [Test]
         public void ThrowAnExceptionWhenStartupHasNotBeenConfigured()
         {
-            var target = new RuntimeHostBuilder();
             var ex = Assert.Throws<BuildException>(() => target.Build());
 
             Assert.AreEqual("The startup must be configured.", ex.Message);
@@ -28,14 +35,12 @@ namespace AutomationFoundation
         [Test]
         public void ThrowsAnExceptionWhenCallbackIsNull()
         {
-            var target = new RuntimeHostBuilder();
-            Assert.Throws<ArgumentNullException>(() => target.ConfigureServices(null));
+            Assert.Throws<ArgumentNullException>(() => target.ConfigureServices((Action<IServiceCollection>)null));
         }
 
         [Test]
         public void ThrowsAnExceptionWhenStartupInstanceIsNull()
         {
-            var target = new RuntimeHostBuilder();
             Assert.Throws<ArgumentNullException>(() => target.UseStartup(null));
         }
 
@@ -78,7 +83,6 @@ namespace AutomationFoundation
         {
             var called = false;
 
-            var target = new RuntimeHostBuilder();
             target.ConfigureServices(services => { called = true; });
             target.UseStartup(new StubStartup());
 

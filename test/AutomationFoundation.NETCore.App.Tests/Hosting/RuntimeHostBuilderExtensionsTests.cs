@@ -1,5 +1,5 @@
 ﻿using System;
-using AutomationFoundation.Hosting;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Moq;
 using NUnit.Framework;
@@ -22,7 +22,7 @@ namespace AutomationFoundation.NETCore.App.Hosting
             var runtimeHostBuilder = new Mock<IRuntimeHostBuilder>();
 
             Assert.Throws<ArgumentNullException>(() => runtimeHostBuilder.Object
-                .ConfigureAppConfiguration(null));
+                .ConfigureAppConfiguration((Action<IConfigurationBuilder>)null));
         }
         
         [Test]
