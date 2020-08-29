@@ -1,20 +1,22 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
+using AutomationFoundation.Hosting;
 using AutomationFoundation.Runtime;
+using AutomationFoundation.TestObjects;
 using Moq;
 using NUnit.Framework;
 
-namespace AutomationFoundation.Hosting
+namespace AutomationFoundation
 {
     [TestFixture]
-    public class RuntimeHostTests
+    public class RuntimeHostBaseTests
     {
         private Mock<IRuntime> runtime;
         private Mock<IHostingEnvironment> environment;
         private Mock<IServiceProvider> services;
 
-        private RuntimeHostBase target;
+        private TestableRuntimeHost target;
 
         [SetUp]
         public void Setup()
@@ -23,25 +25,25 @@ namespace AutomationFoundation.Hosting
             environment = new Mock<IHostingEnvironment>();
             services = new Mock<IServiceProvider>();
 
-            target = new RuntimeHostBase(runtime.Object, environment.Object, services.Object);
+            target = new TestableRuntimeHost(runtime.Object, environment.Object, services.Object);
         }
 
         [Test]
         public void ThrowsAnExceptionWhenRuntimeIsNull()
         {
-            Assert.Throws<ArgumentNullException>(() => _ = new RuntimeHostBase(null, environment.Object, services.Object));
+            Assert.Throws<ArgumentNullException>(() => _ = new TestableRuntimeHost(null, environment.Object, services.Object));
         }
 
         [Test]
         public void ThrowsAnExceptionWhenEnvironmentIsNull()
         {
-            Assert.Throws<ArgumentNullException>(() => _ = new RuntimeHostBase(runtime.Object, null, services.Object));
+            Assert.Throws<ArgumentNullException>(() => _ = new TestableRuntimeHost(runtime.Object, null, services.Object));
         }
 
         [Test]
         public void DoesNotThrowsAnExceptionWhenServicesAreNull()
         {
-            Assert.DoesNotThrow(() => _ = new RuntimeHostBase(runtime.Object, environment.Object, null));
+            Assert.DoesNotThrow(() => _ = new TestableRuntimeHost(runtime.Object, environment.Object, null));
         }
 
         [Test]

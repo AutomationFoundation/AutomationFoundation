@@ -1,6 +1,6 @@
 ﻿using System;
 using AutomationFoundation.Hosting;
-using AutomationFoundation.Hosting.Registrations;
+using AutomationFoundation.Runtime;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -39,13 +39,19 @@ namespace AutomationFoundation
                 throw new ArgumentNullException(nameof(callback));
             }
 
-            builder.ConfigureServices((sp, services) =>
-                ConfigurationBuilderRegistration.OnConfigureServicesCallback(
-                    sp.GetRequiredService<IHostingEnvironment>(), 
-                    services, 
-                    callback));
+            return builder.ConfigureServices((sp, services) =>
+            {
+                var configBuilder = new ConfigurationBuilder();
+                callback(sp.GetService<IHostingEnvironment>(), configBuilder);
 
-            return builder;
+                var configuration = configBuilder.Build();
+                if (configuration == null)
+                {
+                    throw new BuildException("The configuration was not built as expected.");
+                }
+
+                services.AddSingleton<IConfiguration>(_ => configuration);
+            });
         }
     }
 }

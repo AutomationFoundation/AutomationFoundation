@@ -6,7 +6,7 @@ using Moq;
 using NUnit.Framework;
 using static AutomationFoundation.Interop.ConsoleApi;
 
-namespace AutomationFoundation.NETFX.App
+namespace AutomationFoundation
 {
     [TestFixture]
     public class TaskKillRuntimeHostRunAsyncStrategyTests

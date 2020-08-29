@@ -1,29 +1,28 @@
 ﻿using System;
+using AutomationFoundation.Hosting;
 using AutomationFoundation.Runtime;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace AutomationFoundation.Hosting.TestObjects
+namespace AutomationFoundation.TestObjects
 {
     internal class TestableRuntimeHostBuilder : RuntimeHostBuilder
     {
-        private readonly Func<IServiceProvider, IStartup> startupResolver;
-        private readonly Func<IStartup, IServiceCollection, IServiceProvider> applicationServicesResolver;
-        private readonly Func<IServiceProvider, IRuntimeBuilder> runtimeBuilderResolver;
         private readonly Func<IServiceCollection> serviceCollection;
 
-        public TestableRuntimeHostBuilder(Func<IServiceProvider, IStartup> startupResolver = null, Func<IStartup, IServiceCollection, IServiceProvider> applicationServicesResolver = null, Func<IServiceProvider, IRuntimeBuilder> runtimeBuilderResolver = null, Func<IServiceCollection> serviceCollection = null)
+        public Func<IServiceProvider, IStartup> StartupResolver { get; set; }
+        public Func<IStartup, IServiceCollection, IServiceProvider> ApplicationServicesResolver { get; set; }
+        public Func<IServiceProvider, IRuntimeBuilder> RuntimeBuilderResolver { get; set; }
+
+        public TestableRuntimeHostBuilder(Func<IServiceCollection> serviceCollection = null)
         {
-            this.startupResolver = startupResolver;
-            this.applicationServicesResolver = applicationServicesResolver;
-            this.runtimeBuilderResolver = runtimeBuilderResolver;
             this.serviceCollection = serviceCollection;
         }
 
         protected override IStartup ResolveStartupInstance(IServiceProvider serviceProvider)
         {
-            if (startupResolver != null)
+            if (StartupResolver != null)
             {
-                return startupResolver(serviceProvider);
+                return StartupResolver(serviceProvider);
             }
 
             return base.ResolveStartupInstance(serviceProvider);
@@ -31,9 +30,9 @@ namespace AutomationFoundation.Hosting.TestObjects
 
         protected override IServiceProvider ConfigureApplicationServices(IStartup startup, IServiceCollection serviceCollection)
         {
-            if (applicationServicesResolver != null)
+            if (ApplicationServicesResolver != null)
             {
-                return applicationServicesResolver(startup, serviceCollection);
+                return ApplicationServicesResolver(startup, serviceCollection);
             }
 
             return base.ConfigureApplicationServices(startup, serviceCollection);
@@ -41,9 +40,9 @@ namespace AutomationFoundation.Hosting.TestObjects
 
         protected override IRuntimeBuilder CreateRuntimeBuilder(IServiceProvider applicationServices)
         {
-            if (runtimeBuilderResolver != null)
+            if (RuntimeBuilderResolver != null)
             {
-                return runtimeBuilderResolver(applicationServices);
+                return RuntimeBuilderResolver(applicationServices);
             }
 
             return base.CreateRuntimeBuilder(applicationServices);

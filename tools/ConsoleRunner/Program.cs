@@ -42,11 +42,7 @@ namespace ConsoleRunner
 #if DEBUG
                 await host.RunUntilCtrlCPressedAsync();
 #else
-                #if NETFRAMEWORK
-                    await host.RunUntilTaskKillAsync();
-                #elif NETCOREAPP
-                    await host.RunUntilSigTermAsync();
-                #endif
+                await host.RunUntilSigTermAsync();
 #endif
             }
             catch (Exception ex)

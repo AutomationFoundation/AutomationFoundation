@@ -5,7 +5,7 @@ using Microsoft.Extensions.Options;
 using Moq;
 using NUnit.Framework;
 
-namespace AutomationFoundation.NETCore.App
+namespace AutomationFoundation
 {
     [TestFixture]
     public class SigTermRuntimeHostRunAsyncStrategyTests
