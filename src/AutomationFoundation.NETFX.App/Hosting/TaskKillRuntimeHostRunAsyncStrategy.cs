@@ -7,7 +7,7 @@ using Microsoft.Extensions.Logging;
 using static AutomationFoundation.Interop.ConsoleApi;
 using static AutomationFoundation.Interop.NativeMethods;
 
-namespace AutomationFoundation
+namespace AutomationFoundation.Hosting
 {
     /// <summary>
     /// Provides a run strategy which runs the host until a TASKKILL event has been received.

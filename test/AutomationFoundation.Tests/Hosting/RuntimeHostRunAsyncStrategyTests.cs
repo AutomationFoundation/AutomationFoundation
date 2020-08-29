@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
-using AutomationFoundation.Hosting;
-using AutomationFoundation.TestObjects;
+using AutomationFoundation.Hosting.TestObjects;
 using Moq;
 using NUnit.Framework;
 
-namespace AutomationFoundation
+namespace AutomationFoundation.Hosting
 {
     [TestFixture]
     public class RuntimeHostRunAsyncStrategyTests

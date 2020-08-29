@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
-using AutomationFoundation.Hosting;
 using AutomationFoundation.Runtime;
 
-namespace AutomationFoundation
+namespace AutomationFoundation.Hosting
 {
     /// <summary>
     /// Provides an abstract host for the runtime.

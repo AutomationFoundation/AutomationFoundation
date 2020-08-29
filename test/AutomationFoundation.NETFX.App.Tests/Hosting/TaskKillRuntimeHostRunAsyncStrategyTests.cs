@@ -1,12 +1,11 @@
 ﻿using System.Threading.Tasks;
-using AutomationFoundation.Hosting;
 using AutomationFoundation.Interop;
 using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
 using static AutomationFoundation.Interop.ConsoleApi;
 
-namespace AutomationFoundation
+namespace AutomationFoundation.Hosting
 {
     [TestFixture]
     public class TaskKillRuntimeHostRunAsyncStrategyTests

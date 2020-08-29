@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
-using AutomationFoundation.Hosting;
 
-namespace AutomationFoundation
+namespace AutomationFoundation.Hosting
 {
     /// <summary>
     /// Provides a base asynchronous run strategy for the runtime.

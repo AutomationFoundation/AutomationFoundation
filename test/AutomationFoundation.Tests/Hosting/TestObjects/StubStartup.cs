@@ -1,5 +1,4 @@
 ﻿using System;
-using AutomationFoundation.Runtime;
 
 namespace AutomationFoundation.Hosting.TestObjects
 {

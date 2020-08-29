@@ -2,7 +2,7 @@
 using AutomationFoundation.Interop;
 using Microsoft.Extensions.Logging;
 
-namespace AutomationFoundation
+namespace AutomationFoundation.Hosting
 {
     internal class TestableTaskKillRuntimeHostRunAsyncStrategy : TaskKillRuntimeHostRunAsyncStrategy
     {

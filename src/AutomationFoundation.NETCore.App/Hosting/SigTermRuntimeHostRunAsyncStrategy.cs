@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
-namespace AutomationFoundation
+namespace AutomationFoundation.Hosting
 {
     /// <summary>
     /// Provides a run strategy which runs the host until a SIGTERM event has been received.

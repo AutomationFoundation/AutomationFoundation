@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Threading.Tasks;
-using AutomationFoundation.TestObjects;
+using AutomationFoundation.Hosting.TestObjects;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Moq;
 using NUnit.Framework;
 
-namespace AutomationFoundation
+namespace AutomationFoundation.Hosting
 {
     [TestFixture]
     public class CtrlCRuntimeHostRunAsyncStrategyTests
