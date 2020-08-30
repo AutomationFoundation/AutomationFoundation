@@ -18,6 +18,7 @@ environment:
 
 init:
   - ps: dotnet nuget add source "https://nuget.pkg.github.com/winnster/index.json" -n github -u winnster -p "$env:github_token" --store-password-in-clear-text
+  - ps: echo $env:github_token
 
 install:
   - cmd: choco install secure-file --ignore-checksums
