@@ -6,7 +6,6 @@
     <VersionPrefix>0.0.0</VersionPrefix>
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/winnster/AutomationFoundation</RepositoryUrl>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <Description>Contains the hosting abstractions for the Automation Foundation framework.</Description>
     <RootNamespace>AutomationFoundation.Hosting</RootNamespace>
