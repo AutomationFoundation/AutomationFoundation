@@ -56,3 +56,5 @@ deploy:
     secure: znqLAqC1gUZtlVY6m6JBqkg0jZI2JUZbntH6E/rDojnWPVjFkZ75gD88x26wb7zQ
   artifact: /.*\.nupkg/
   skip_symbols: true
+  on:
+    branch: develop
