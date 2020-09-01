@@ -1,6 +1,7 @@
 ﻿using System;
+using AutomationFoundation.Hosting;
 
-namespace AutomationFoundation.Hosting.TestObjects
+namespace AutomationFoundation.TestObjects
 {
     public class StubStartup : IStartup
     {

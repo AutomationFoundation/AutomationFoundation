@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Autofac.Extensions.DependencyInjection;
 using AutomationFoundation;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using NLog.Extensions.Logging;
@@ -15,6 +16,11 @@ namespace ConsoleRunner
                 .ConfigureHostingEnvironment(environment =>
                 {
                     environment.SetEnvironmentName("DEV");
+                })
+                .ConfigureAppConfiguration((environment, config) =>
+                {
+                    config.AddJsonFile("appSettings.json");
+                    config.AddJsonFile($"appSettings.{environment.EnvironmentName}.json", true);
                 })
                 .ConfigureServices(services =>
                 {
@@ -36,11 +42,7 @@ namespace ConsoleRunner
 #if DEBUG
                 await host.RunUntilCtrlCPressedAsync();
 #else
-                #if NETFRAMEWORK
-                    await host.RunUntilTaskKillAsync();
-                #elif NETCOREAPP
-                    await host.RunUntilSigTermAsync();
-                #endif
+                await host.RunUntilSigTermAsync();
 #endif
             }
             catch (Exception ex)

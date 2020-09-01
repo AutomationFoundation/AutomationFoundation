@@ -1,17 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
-using AutomationFoundation.Hosting;
 using AutomationFoundation.Runtime;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace AutomationFoundation
+namespace AutomationFoundation.Hosting
 {
     /// <summary>
     /// Provides the default runtime host builder.
     /// </summary>
-    internal class DefaultRuntimeHostBuilder : IRuntimeHostBuilder
+    public abstract class RuntimeHostBuilder : IRuntimeHostBuilder
     {
         private readonly IList<Action<IServiceCollection>> callbacks = new List<Action<IServiceCollection>>();
+        private readonly IList<Action<IServiceProvider, IServiceCollection>> lateCallbacks = new List<Action<IServiceProvider, IServiceCollection>>();
 
         private Action<IHostingEnvironmentBuilder> hostingEnvironmentConfigurationCallback;
         private bool startupHasBeenConfigured;
@@ -34,6 +34,19 @@ namespace AutomationFoundation
             callbacks.Add(callback);
             return this;
         }
+
+        /// <inheritdoc />
+        public IRuntimeHostBuilder ConfigureServices(Action<IServiceProvider, IServiceCollection> callback)
+        {
+            if (callback == null)
+            {
+                throw new ArgumentNullException(nameof(callback));
+            }
+
+            lateCallbacks.Add(callback);
+            return this;
+        }
+
 
         /// <inheritdoc />
         public IRuntimeHostBuilder UseStartup<TStartup>() where TStartup : IStartup
@@ -78,6 +91,7 @@ namespace AutomationFoundation
             try
             {
                 sp = BuildServiceProvider(services);
+                ConfigureServiceCollection(sp, services);
 
                 var startup = ResolveStartupInstance(sp);
                 if (startup == null)
@@ -102,16 +116,23 @@ namespace AutomationFoundation
                     throw new BuildException("The runtime could not be built.");
                 }
 
-                return new RuntimeHost(
-                    runtime,
-                    hostingEnvironment,
-                    applicationServices);
+                return CreateRuntimeHost(runtime, hostingEnvironment, applicationServices);
             }
             finally
             {
                 (sp as IDisposable)?.Dispose();
             }
         }
+
+        /// <summary>
+        /// Creates the runtime host.
+        /// </summary>
+        /// <param name="runtime">The runtime instance.</param>
+        /// <param name="environment">The hosting environment.</param>
+        /// <param name="applicationServices">The application services.</param>
+        /// <returns></returns>
+        protected abstract IRuntimeHost CreateRuntimeHost(IRuntime runtime, IHostingEnvironment environment,
+            IServiceProvider applicationServices);
 
         /// <summary>
         /// Creates the service collection.
@@ -127,7 +148,7 @@ namespace AutomationFoundation
         /// </summary>
         /// <param name="services">The service collection from which to build the provider.</param>
         /// <returns>The service provider.</returns>
-        protected virtual IServiceProvider BuildServiceProvider(IServiceCollection services)
+        private static IServiceProvider BuildServiceProvider(IServiceCollection services)
         {
             if (services == null)
             {
@@ -141,7 +162,7 @@ namespace AutomationFoundation
         /// Configures the environment.
         /// </summary>
         /// <param name="serviceCollection">The service collection to configure.</param>
-        protected virtual void ConfigureHostingEnvironmentImpl(IServiceCollection serviceCollection)
+        private void ConfigureHostingEnvironmentImpl(IServiceCollection serviceCollection)
         {
             var builder = new DefaultHostingEnvironmentBuilder();
             hostingEnvironmentConfigurationCallback?.Invoke(builder);
@@ -159,7 +180,7 @@ namespace AutomationFoundation
         /// Configures the service collection used for dependency injection.
         /// </summary>
         /// <param name="serviceCollection">The service collection to configure.</param>
-        protected virtual void ConfigureServiceCollection(IServiceCollection serviceCollection)
+        private void ConfigureServiceCollection(IServiceCollection serviceCollection)
         {
             if (serviceCollection == null)
             {
@@ -169,6 +190,24 @@ namespace AutomationFoundation
             foreach (var callback in callbacks)
             {
                 callback(serviceCollection);
+            }
+        }
+
+        /// <summary>
+        /// Configures the service collection used for dependency injection.
+        /// </summary>
+        /// <param name="serviceProvider">The services.</param>
+        /// <param name="serviceCollection">The service collection to configure.</param>
+        private void ConfigureServiceCollection(IServiceProvider serviceProvider, IServiceCollection serviceCollection)
+        {
+            if (serviceCollection == null)
+            {
+                throw new ArgumentNullException(nameof(serviceCollection));
+            }
+
+            foreach (var callback in lateCallbacks)
+            {
+                callback(serviceProvider, serviceCollection);
             }
         }
 
@@ -226,7 +265,7 @@ namespace AutomationFoundation
         /// Ensures the startup has been configured.
         /// </summary>
         /// <exception cref="BuildException">The startup has not been configured.</exception>
-        protected void GuardStartupMustBeConfigured()
+        private void GuardStartupMustBeConfigured()
         {
             if (!startupHasBeenConfigured)
             {

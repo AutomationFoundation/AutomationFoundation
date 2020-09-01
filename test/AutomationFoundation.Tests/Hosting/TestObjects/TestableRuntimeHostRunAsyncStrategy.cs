@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 
-namespace AutomationFoundation.TestObjects
+namespace AutomationFoundation.Hosting.TestObjects
 {
     public class TestableRuntimeHostRunAsyncStrategy : RuntimeHostRunAsyncStrategy
     {

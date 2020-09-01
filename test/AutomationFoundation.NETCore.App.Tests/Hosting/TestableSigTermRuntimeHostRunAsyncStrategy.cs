@@ -2,22 +2,22 @@
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
-namespace AutomationFoundation.TestObjects
+namespace AutomationFoundation.Hosting
 {
-    internal class TestableCtrlCRuntimeHostRunAsyncStrategy : CtrlCRuntimeHostRunAsyncStrategy
+    internal class TestableSigTermRuntimeHostRunAsyncStrategy : SigTermRuntimeHostRunAsyncStrategy
     {
-        public bool AttachedToCtrlCKeyPressEvent { get; private set; }
+        public bool AttachedToProcessExitEvent { get; private set; }
         public bool Stopped { get; private set; }        
         public bool FlaggedForCancellation => CancellationSource.IsCancellationRequested;
 
-        public TestableCtrlCRuntimeHostRunAsyncStrategy(ILogger<CtrlCRuntimeHostRunAsyncStrategy> logger, IOptions<CtrlCRuntimeHostRunAsyncOptions> options) 
+        public TestableSigTermRuntimeHostRunAsyncStrategy(ILogger<SigTermRuntimeHostRunAsyncStrategy> logger, IOptions<SigTermRuntimeHostRunAsyncOptions> options) 
             : base(logger, options)
         {
         }
 
-        public async Task<bool> SimulateCtrlCKeyPressedAsync()
-        {
-            return await OnCancelKeyPressed();
+        public async Task SimulateProcessExitedAsync()
+        { 
+            await OnProcessExitedAsync();
         }
 
         public async Task SimulateBeingStoppingAsync()
@@ -30,9 +30,9 @@ namespace AutomationFoundation.TestObjects
             await base.AttachToListenForExitAsync();
         }
 
-        protected override void AttachToCtrlCKeyPressEvent()
+        protected override void AttachToProcessExitEvent()
         {
-            AttachedToCtrlCKeyPressEvent = true;
+            AttachedToProcessExitEvent = true;
         }
 
         protected override Task OnStoppedAsync()
