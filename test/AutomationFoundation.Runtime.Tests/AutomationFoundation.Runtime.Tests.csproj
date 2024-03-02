@@ -1,5 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <Import Project="../../.build/netcoreapp+netfx.props" />
+  <Import Project="../../.build/unittest.props" />
 
   <PropertyGroup>
     <RootNamespace>AutomationFoundation.Runtime</RootNamespace>    
