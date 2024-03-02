@@ -1,0 +1,15 @@
+{
+    "configurations": [
+        {
+            "name": "C#: ConsoleRunner",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "build",
+            "program": "${workspaceFolder}/tools/ConsoleRunner/bin/Debug/netcoreapp3.0/ConsoleRunner.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/tools/ConsoleRunner",
+            "console": "externalTerminal",
+            "stopAtEntry": false
+        }
+    ]
+}

@@ -8,7 +8,7 @@
         <PackageVersion>$(Version)</PackageVersion>
         <InformationalVersion>$(Version)</InformationalVersion>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
-        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+        <GeneratePackageOnBuild Condition=" '$(Configuration)' == 'Release'">true</GeneratePackageOnBuild>
 
         <Authors>Winnster.io</Authors>
         <RepositoryUrl>https://github.com/winnster/AutomationFoundation</RepositoryUrl>
