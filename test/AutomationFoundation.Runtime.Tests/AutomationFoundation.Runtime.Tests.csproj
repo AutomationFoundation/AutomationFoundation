@@ -1,12 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="../../.build/netcoreapp+netfx.props" />
 
   <PropertyGroup>
-    <TargetFrameworks>netcoreapp3.0;net472</TargetFrameworks>
-    <RootNamespace>AutomationFoundation.Runtime</RootNamespace>
-    <SignAssembly>true</SignAssembly>
-    <AssemblyOriginatorKeyFile>..\..\Public.snk</AssemblyOriginatorKeyFile>
-    <DelaySign>false</DelaySign>
-    <LangVersion>8.0</LangVersion>
+    <RootNamespace>AutomationFoundation.Runtime</RootNamespace>    
   </PropertyGroup>
 
   <ItemGroup>

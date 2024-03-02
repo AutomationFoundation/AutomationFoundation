@@ -1,0 +1,7 @@
+<Project>
+    <Import Project="common.props" />
+
+    <PropertyGroup>
+        <TargetFramework>net472</TargetFramework>
+    </PropertyGroup>
+</Project>

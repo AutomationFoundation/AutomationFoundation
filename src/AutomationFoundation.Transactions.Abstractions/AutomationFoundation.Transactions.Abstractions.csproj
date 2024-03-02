@@ -1,16 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="../../.build/netstandard.props" />
 
-  <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
-    <Product>AutomationFoundation.Transactions.Abstractions</Product>
-    <Version>0.0.0</Version>
-    <PackageVersion>$(Version)</PackageVersion>
-    <InformationalVersion>$(Version)</InformationalVersion>
-    <Authors>Winnster.io</Authors>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <RepositoryType>git</RepositoryType>
-    <RepositoryUrl>https://github.com/winnster/AutomationFoundation</RepositoryUrl>
+  <PropertyGroup>    
     <PackageTags>automation,automationfoundation,transactions</PackageTags>
     <Description>Contains the abstractions for transactions used within the Automation Foundation framework.</Description>
   </PropertyGroup>

@@ -1,15 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="../../.build/netcoreapp.props" />
 
-  <PropertyGroup>
-    <TargetFramework>netcoreapp3.0</TargetFramework>
-    <Authors>Winnster.io</Authors>
-    <Version>0.0.0</Version>
-    <PackageVersion>$(Version)</PackageVersion>
-    <InformationalVersion>$(Version)</InformationalVersion>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <RepositoryType>git</RepositoryType>
-    <RepositoryUrl>https://github.com/winnster/AutomationFoundation</RepositoryUrl>
+  <PropertyGroup>    
     <PackageTags>automation,automationfoundation,runtime</PackageTags>
     <Description>Contains adapters for Entity Framework Core interoperability with the Automation Foundation framework.</Description>
   </PropertyGroup>

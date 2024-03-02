@@ -1,16 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="../../.build/netstandard.props" />
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
     <RootNamespace>AutomationFoundation.Runtime</RootNamespace>
-    <Version>0.0.0</Version>
-    <PackageVersion>$(Version)</PackageVersion>
-    <InformationalVersion>$(Version)</InformationalVersion>
-    <Authors>Winnster.io</Authors>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <RepositoryType>git</RepositoryType>
-    <PackageTags>automation,automationfoundation,runtime</PackageTags>
     <RepositoryUrl>https://github.com/winnster/AutomationFoundation</RepositoryUrl>
     <Description>Contains the runtime abstractions for the Automation Foundation framework.</Description>
   </PropertyGroup>

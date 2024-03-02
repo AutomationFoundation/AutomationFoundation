@@ -1,15 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="../../.build/netstandard.props" />
 
-  <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
-    <Authors>Winnster.io</Authors>
-    <Version>0.0.0</Version>
-    <PackageVersion>$(Version)</PackageVersion>
-    <InformationalVersion>$(Version)</InformationalVersion>
-    <RepositoryType>git</RepositoryType>
-    <RepositoryUrl>https://github.com/winnster/AutomationFoundation</RepositoryUrl>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+  <PropertyGroup>    
     <Description>Contains the hosting abstractions for the Automation Foundation framework.</Description>
     <RootNamespace>AutomationFoundation.Hosting</RootNamespace>
   </PropertyGroup>

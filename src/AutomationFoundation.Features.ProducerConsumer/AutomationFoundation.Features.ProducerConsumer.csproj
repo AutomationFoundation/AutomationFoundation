@@ -1,20 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="../../.build/netstandard.props" />
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
-    <RootNamespace>AutomationFoundation.Features.ProducerConsumer</RootNamespace>
-    <Product>AutomationFoundation.Features.ProducerConsumer</Product>
-    <Version>1.0.0</Version>
-    <PackageVersion>$(Version)</PackageVersion>
-    <InformationalVersion>$(Version)</InformationalVersion>
-    <Authors>Winnster.io</Authors>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <PackageProjectUrl></PackageProjectUrl>
-    <PackageLicenseUrl></PackageLicenseUrl>
-    <AssemblyName>AutomationFoundation.Features.ProducerConsumer</AssemblyName>
-    <RepositoryType>git</RepositoryType>
-    <RepositoryUrl>https://github.com/winnster/AutomationFoundation</RepositoryUrl>
     <PackageTags>automation,automationfoundation,producer,consumer,producerconsumer</PackageTags>
     <Description>Contains the producer/consumer implementation for the Automation Foundation runtime.</Description>
   </PropertyGroup>

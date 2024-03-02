@@ -1,0 +1,21 @@
+<Project>
+    <PropertyGroup>
+        <SignAssembly>true</SignAssembly>
+        <AssemblyOriginatorKeyFile>..\..\Public.snk</AssemblyOriginatorKeyFile>
+        <DelaySign>false</DelaySign>
+
+        <Version>0.0.0</Version>
+        <PackageVersion>$(Version)</PackageVersion>
+        <InformationalVersion>$(Version)</InformationalVersion>
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
+        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+
+        <Authors>Winnster.io</Authors>
+        <RepositoryUrl>https://github.com/winnster/AutomationFoundation</RepositoryUrl>
+        <RepositoryType>git</RepositoryType>
+    </PropertyGroup>
+
+    <PropertyGroup>
+        <LangVersion>8.0</LangVersion>
+    </PropertyGroup>
+</Project>
