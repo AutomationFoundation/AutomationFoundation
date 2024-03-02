@@ -1,6 +1,5 @@
-﻿    namespace ConsoleRunner
+﻿namespace ConsoleRunner;
+
+internal partial class Startup
 {
-    internal partial class Startup
-    {
-    }
 }

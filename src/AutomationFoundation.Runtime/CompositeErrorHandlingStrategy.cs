@@ -1,94 +1,93 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace AutomationFoundation.Runtime
+namespace AutomationFoundation.Runtime;
+
+/// <summary>
+/// Provides a composite strategy for error handling across multiple strategies. 
+/// </summary>
+public class CompositeErrorHandlingStrategy : ICompositeErrorHandlingStrategy
 {
+    private readonly IList<IErrorHandlingStrategy> strategies = new List<IErrorHandlingStrategy>();
+
     /// <summary>
-    /// Provides a composite strategy for error handling across multiple strategies. 
+    /// Creates a <see cref="CompositeErrorHandlingStrategy"/> from the strategies provided.
     /// </summary>
-    public class CompositeErrorHandlingStrategy : ICompositeErrorHandlingStrategy
+    /// <param name="strategies">The strategies to add to the composite result.</param>
+    /// <returns>A <see cref="CompositeErrorHandlingStrategy"/> instance.</returns>
+    public static CompositeErrorHandlingStrategy Create(params IErrorHandlingStrategy[] strategies)
     {
-        private readonly IList<IErrorHandlingStrategy> strategies = new List<IErrorHandlingStrategy>();
-
-        /// <summary>
-        /// Creates a <see cref="CompositeErrorHandlingStrategy"/> from the strategies provided.
-        /// </summary>
-        /// <param name="strategies">The strategies to add to the composite result.</param>
-        /// <returns>A <see cref="CompositeErrorHandlingStrategy"/> instance.</returns>
-        public static CompositeErrorHandlingStrategy Create(params IErrorHandlingStrategy[] strategies)
+        if (strategies == null)
         {
-            if (strategies == null)
-            {
-                throw new ArgumentNullException(nameof(strategies));
-            }
-
-            return Create((IEnumerable<IErrorHandlingStrategy>)strategies);
+            throw new ArgumentNullException(nameof(strategies));
         }
 
-        /// <summary>
-        /// Creates a <see cref="CompositeErrorHandlingStrategy"/> from the strategies provided.
-        /// </summary>
-        /// <param name="strategies">The strategies to add to the composite result.</param>
-        /// <returns>A <see cref="CompositeErrorHandlingStrategy"/> instance.</returns>
-        public static CompositeErrorHandlingStrategy Create(IEnumerable<IErrorHandlingStrategy> strategies)
+        return Create((IEnumerable<IErrorHandlingStrategy>)strategies);
+    }
+
+    /// <summary>
+    /// Creates a <see cref="CompositeErrorHandlingStrategy"/> from the strategies provided.
+    /// </summary>
+    /// <param name="strategies">The strategies to add to the composite result.</param>
+    /// <returns>A <see cref="CompositeErrorHandlingStrategy"/> instance.</returns>
+    public static CompositeErrorHandlingStrategy Create(IEnumerable<IErrorHandlingStrategy> strategies)
+    {
+        if (strategies == null)
         {
-            if (strategies == null)
-            {
-                throw new ArgumentNullException(nameof(strategies));
-            }
-
-            var result = new CompositeErrorHandlingStrategy();
-
-            foreach (var strategy in strategies)
-            {
-                result.AddStrategy(strategy);
-            }
-
-            return result;
+            throw new ArgumentNullException(nameof(strategies));
         }
 
-        /// <inheritdoc />
-        public void Handle(ErrorHandlingContext context)
-        {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+        var result = new CompositeErrorHandlingStrategy();
 
-            foreach (var strategy in strategies)
-            {
-                strategy.Handle(context);
-            }
+        foreach (var strategy in strategies)
+        {
+            result.AddStrategy(strategy);
         }
 
-        /// <inheritdoc />
-        public void AddStrategy(IErrorHandlingStrategy strategy)
-        {
-            if (strategy == null)
-            {
-                throw new ArgumentNullException(nameof(strategy));
-            }
-            else if (strategies.Contains(strategy))
-            {
-                throw new ArgumentException("The strategy has already been added to the composite strategy.");
-            }
+        return result;
+    }
 
-            strategies.Add(strategy);
+    /// <inheritdoc />
+    public void Handle(ErrorHandlingContext context)
+    {
+        if (context == null)
+        {
+            throw new ArgumentNullException(nameof(context));
         }
 
-        /// <inheritdoc />
-        public void RemoveStrategy(IErrorHandlingStrategy strategy)
+        foreach (var strategy in strategies)
         {
-            if (strategy == null)
-            {
-                throw new ArgumentNullException(nameof(strategy));
-            }
-            else if (!strategies.Contains(strategy))
-            {
-                throw new ArgumentException("The strategy does not exist within the composite strategy.");
-            }
-
-            strategies.Remove(strategy);
+            strategy.Handle(context);
         }
+    }
+
+    /// <inheritdoc />
+    public void AddStrategy(IErrorHandlingStrategy strategy)
+    {
+        if (strategy == null)
+        {
+            throw new ArgumentNullException(nameof(strategy));
+        }
+        else if (strategies.Contains(strategy))
+        {
+            throw new ArgumentException("The strategy has already been added to the composite strategy.");
+        }
+
+        strategies.Add(strategy);
+    }
+
+    /// <inheritdoc />
+    public void RemoveStrategy(IErrorHandlingStrategy strategy)
+    {
+        if (strategy == null)
+        {
+            throw new ArgumentNullException(nameof(strategy));
+        }
+        else if (!strategies.Contains(strategy))
+        {
+            throw new ArgumentException("The strategy does not exist within the composite strategy.");
+        }
+
+        strategies.Remove(strategy);
     }
 }

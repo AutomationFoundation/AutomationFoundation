@@ -5,34 +5,33 @@ using Microsoft.Extensions.DependencyInjection;
 using Moq;
 using NUnit.Framework;
 
-namespace AutomationFoundation.NETCore.App.Hosting
+namespace AutomationFoundation.NETCore.App.Hosting;
+
+[TestFixture]
+public class RuntimeHostBuilderExtensionsTests
 {
-    [TestFixture]
-    public class RuntimeHostBuilderExtensionsTests
+    [Test]
+    public void ThrowAnExceptionWhenTheBuilderIsNull()
     {
-        [Test]
-        public void ThrowAnExceptionWhenTheBuilderIsNull()
-        {
-            Assert.Throws<ArgumentNullException>(() => RuntimeHostBuilderExtensions
-                .ConfigureAppConfiguration(null, b => { }));
-        }
+        Assert.Throws<ArgumentNullException>(() => RuntimeHostBuilderExtensions
+            .ConfigureAppConfiguration(null, b => { }));
+    }
 
-        [Test]
-        public void ThrowAnExceptionWhenCallbackIsNull()
-        {
-            var runtimeHostBuilder = new Mock<IRuntimeHostBuilder>();
+    [Test]
+    public void ThrowAnExceptionWhenCallbackIsNull()
+    {
+        var runtimeHostBuilder = new Mock<IRuntimeHostBuilder>();
 
-            Assert.Throws<ArgumentNullException>(() => runtimeHostBuilder.Object
-                .ConfigureAppConfiguration(null));
-        }
-        
-        [Test]
-        public void RegisterTheConfigurationServiceCallbackAsExpected()
-        {
-            var target = new Mock<IRuntimeHostBuilder>();
-            target.Object.ConfigureAppConfiguration(services => { });
+        Assert.Throws<ArgumentNullException>(() => runtimeHostBuilder.Object
+            .ConfigureAppConfiguration(null));
+    }
 
-            target.Verify(o => o.ConfigureServices(It.IsAny<Action<IServiceCollection>>()), Times.Once);
-        }
+    [Test]
+    public void RegisterTheConfigurationServiceCallbackAsExpected()
+    {
+        var target = new Mock<IRuntimeHostBuilder>();
+        target.Object.ConfigureAppConfiguration(services => { });
+
+        target.Verify(o => o.ConfigureServices(It.IsAny<Action<IServiceCollection>>()), Times.Once);
     }
 }

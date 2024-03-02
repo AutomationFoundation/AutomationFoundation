@@ -6,6 +6,8 @@ using AutomationFoundation.Features.ProducerConsumer.Engines.Configuration;
 using AutomationFoundation.Runtime.Abstractions;
 using AutomationFoundation.Runtime.Abstractions.Threading.Primitives;
 
+/* Unmerged change from project 'AutomationFoundation.Features.ProducerConsumer.Tests(net472)'
+Before:
 namespace AutomationFoundation.Features.ProducerConsumer.Engines.TestObjects
 {
     public class TestableScheduledProducerEngine : ScheduledProducerEngine<object>
@@ -28,5 +30,50 @@ namespace AutomationFoundation.Features.ProducerConsumer.Engines.TestObjects
         {
             delayCallback = callback ?? throw new ArgumentNullException(nameof(callback));
         }
+After:
+namespace AutomationFoundation.Features.ProducerConsumer.Engines.TestObjects;
+
+public class TestableScheduledProducerEngine : ScheduledProducerEngine<object>
+{
+    private Action delayCallback;
+
+    public TestableScheduledProducerEngine(IProducerExecutionStrategy<object> executionStrategy, ICancellationSourceFactory cancellationSourceFactory, IErrorHandler errorHandler, IScheduler scheduler, ScheduledEngineOptions options) 
+        : base(executionStrategy, cancellationSourceFactory, errorHandler, scheduler, options)
+    {
+    }
+
+    protected override Task DelayAsync(TimeSpan delay, CancellationToken cancellationToken)
+    {
+        delayCallback?.Invoke();
+
+        return base.DelayAsync(delay, cancellationToken);
+    }
+
+    public void SetDelayCallback(Action callback)
+    {
+        delayCallback = callback ?? throw new ArgumentNullException(nameof(callback));
+*/
+
+namespace AutomationFoundation.Features.ProducerConsumer.Engines.TestObjects;
+
+public class TestableScheduledProducerEngine : ScheduledProducerEngine<object>
+{
+    private Action delayCallback;
+
+    public TestableScheduledProducerEngine(IProducerExecutionStrategy<object> executionStrategy, ICancellationSourceFactory cancellationSourceFactory, IErrorHandler errorHandler, IScheduler scheduler, ScheduledEngineOptions options)
+        : base(executionStrategy, cancellationSourceFactory, errorHandler, scheduler, options)
+    {
+    }
+
+    protected override Task DelayAsync(TimeSpan delay, CancellationToken cancellationToken)
+    {
+        delayCallback?.Invoke();
+
+        return base.DelayAsync(delay, cancellationToken);
+    }
+
+    public void SetDelayCallback(Action callback)
+    {
+        delayCallback = callback ?? throw new ArgumentNullException(nameof(callback));
     }
 }

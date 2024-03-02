@@ -1,13 +1,12 @@
-﻿namespace AutomationFoundation.Runtime.Abstractions.Synchronization
+﻿namespace AutomationFoundation.Runtime.Abstractions.Synchronization;
+
+/// <summary>
+/// Identifies an object used for synchronizing access to protected resources.
+/// </summary>
+public interface ISynchronizationLock
 {
     /// <summary>
-    /// Identifies an object used for synchronizing access to protected resources.
+    /// Releases the lock on the resource.
     /// </summary>
-    public interface ISynchronizationLock
-    {
-        /// <summary>
-        /// Releases the lock on the resource.
-        /// </summary>
-        void Release();
-    }
+    void Release();
 }

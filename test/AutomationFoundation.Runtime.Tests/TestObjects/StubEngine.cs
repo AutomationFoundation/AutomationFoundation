@@ -1,10 +1,9 @@
-﻿namespace AutomationFoundation.Runtime.TestObjects
+﻿namespace AutomationFoundation.Runtime.TestObjects;
+
+public class StubEngine : Engine
 {
-    public class StubEngine : Engine
+    public void ThisShouldCauseAnExceptionAfterDispose()
     {
-        public void ThisShouldCauseAnExceptionAfterDispose()
-        {
-            GuardMustNotBeDisposed();
-        }
+        GuardMustNotBeDisposed();
     }
 }

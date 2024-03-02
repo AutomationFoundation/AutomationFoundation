@@ -1,26 +1,25 @@
 ﻿using System;
 using System.Data.Entity;
 
-namespace AutomationFoundation.Extensions.EntityFramework.Primitives
+namespace AutomationFoundation.Extensions.EntityFramework.Primitives;
+
+/// <summary>
+/// Identifies an Entity Framework compatible database transaction.
+/// </summary>
+internal interface IDbContextTransaction : IDisposable
 {
     /// <summary>
-    /// Identifies an Entity Framework compatible database transaction.
+    /// Gets the underlying database context transaction.
     /// </summary>
-    internal interface IDbContextTransaction : IDisposable
-    {
-        /// <summary>
-        /// Gets the underlying database context transaction.
-        /// </summary>
-        DbContextTransaction UnderlyingTransaction { get; }
+    DbContextTransaction UnderlyingTransaction { get; }
 
-        /// <summary>
-        /// Commits the transactions.
-        /// </summary>
-        void Commit();
+    /// <summary>
+    /// Commits the transactions.
+    /// </summary>
+    void Commit();
 
-        /// <summary>
-        /// Rolls the transaction back to the original state.
-        /// </summary>
-        void Rollback();
-    }
+    /// <summary>
+    /// Rolls the transaction back to the original state.
+    /// </summary>
+    void Rollback();
 }

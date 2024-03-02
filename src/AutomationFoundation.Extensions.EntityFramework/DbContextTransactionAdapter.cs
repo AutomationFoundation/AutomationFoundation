@@ -5,75 +5,74 @@ using System.Threading.Tasks;
 using AutomationFoundation.Extensions.EntityFramework.Primitives;
 using AutomationFoundation.Transactions.Abstractions;
 
-namespace AutomationFoundation.Extensions.EntityFramework
+namespace AutomationFoundation.Extensions.EntityFramework;
+
+/// <summary>
+/// Provides an adapter for a <see cref="DbContextTransaction"/> transaction.
+/// </summary>
+public sealed class DbContextTransactionAdapter : BaseTransactionAdapter<DbContextTransaction>
 {
+    private readonly IDbContextTransaction transaction;
+
     /// <summary>
-    /// Provides an adapter for a <see cref="DbContextTransaction"/> transaction.
+    /// Initializes an instance of the <see cref="DbContextTransactionAdapter"/> class.
     /// </summary>
-    public sealed class DbContextTransactionAdapter : BaseTransactionAdapter<DbContextTransaction>
+    /// <param name="transaction">The transaction which is being adapted.</param>
+    /// <param name="ownsTransaction">Optional. Identifies whether the adapter will take ownership of the transaction.</param>
+    public DbContextTransactionAdapter(DbContextTransaction transaction, bool ownsTransaction = true)
+        : this(new DbContextTransactionWrapper(transaction), ownsTransaction)
     {
-        private readonly IDbContextTransaction transaction;
+    }
 
-        /// <summary>
-        /// Initializes an instance of the <see cref="DbContextTransactionAdapter"/> class.
-        /// </summary>
-        /// <param name="transaction">The transaction which is being adapted.</param>
-        /// <param name="ownsTransaction">Optional. Identifies whether the adapter will take ownership of the transaction.</param>
-        public DbContextTransactionAdapter(DbContextTransaction transaction, bool ownsTransaction = true)
-            : this(new DbContextTransactionWrapper(transaction), ownsTransaction)
-        {
-        }
+    /// <summary>
+    /// Initializes an instance of the <see cref="DbContextTransactionAdapter"/> class.
+    /// </summary>
+    /// <param name="transaction">The transaction which is being adapted.</param>
+    /// <param name="ownsTransaction">Optional. Identifies whether the adapter will take ownership of the transaction.</param>
+    internal DbContextTransactionAdapter(IDbContextTransaction transaction, bool ownsTransaction = true)
+        : base(ownsTransaction)
+    {
+        this.transaction = transaction ?? throw new ArgumentNullException(nameof(transaction));
+    }
 
-        /// <summary>
-        /// Initializes an instance of the <see cref="DbContextTransactionAdapter"/> class.
-        /// </summary>
-        /// <param name="transaction">The transaction which is being adapted.</param>
-        /// <param name="ownsTransaction">Optional. Identifies whether the adapter will take ownership of the transaction.</param>
-        internal DbContextTransactionAdapter(IDbContextTransaction transaction, bool ownsTransaction = true)
-            : base(ownsTransaction)
-        {
-            this.transaction = transaction ?? throw new ArgumentNullException(nameof(transaction));
-        }
+    /// <inheritdoc />
+    public override DbContextTransaction UnderlyingTransaction => transaction.UnderlyingTransaction;
 
-        /// <inheritdoc />
-        public override DbContextTransaction UnderlyingTransaction => transaction.UnderlyingTransaction;
+    /// <inheritdoc />
+    public override void Rollback()
+    {
+        GuardMustNotBeDisposed();
 
-        /// <inheritdoc />
-        public override void Rollback()
-        {
-            GuardMustNotBeDisposed();
+        transaction.Rollback();
+    }
 
-            transaction.Rollback();
-        }
+    /// <inheritdoc />
+    public override Task RollbackAsync(CancellationToken cancellationToken)
+    {
+        Rollback();
 
-        /// <inheritdoc />
-        public override Task RollbackAsync(CancellationToken cancellationToken)
-        {
-            Rollback();
+        return Task.CompletedTask;
+    }
 
-            return Task.CompletedTask;
-        }
+    /// <inheritdoc />
+    public override void Commit()
+    {
+        GuardMustNotBeDisposed();
 
-        /// <inheritdoc />
-        public override void Commit()
-        {
-            GuardMustNotBeDisposed();
+        transaction.Commit();
+    }
 
-            transaction.Commit();
-        }
+    /// <inheritdoc />
+    public override Task CommitAsync(CancellationToken cancellationToken)
+    {
+        Commit();
 
-        /// <inheritdoc />
-        public override Task CommitAsync(CancellationToken cancellationToken)
-        {
-            Commit();
+        return Task.CompletedTask;
+    }
 
-            return Task.CompletedTask;
-        }
-
-        /// <inheritdoc />
-        protected override void ReleaseUnderlyingTransaction()
-        {
-            transaction.Dispose();
-        }
+    /// <inheritdoc />
+    protected override void ReleaseUnderlyingTransaction()
+    {
+        transaction.Dispose();
     }
 }

@@ -1,16 +1,15 @@
 ﻿using System.Threading.Tasks;
 
-namespace AutomationFoundation.Runtime.Abstractions
+namespace AutomationFoundation.Runtime.Abstractions;
+
+/// <summary>
+/// Identifies an object which can be started.
+/// </summary>
+public interface IStartable
 {
     /// <summary>
-    /// Identifies an object which can be started.
+    /// Starts the object asynchronously.
     /// </summary>
-    public interface IStartable
-    {
-        /// <summary>
-        /// Starts the object asynchronously.
-        /// </summary>
-        /// <returns>The asynchronous task.</returns>
-        Task StartAsync();
-    }
+    /// <returns>The asynchronous task.</returns>
+    Task StartAsync();
 }

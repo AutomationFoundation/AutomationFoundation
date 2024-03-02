@@ -1,26 +1,25 @@
 ﻿using NUnit.Framework;
 
-namespace AutomationFoundation.Runtime.Builders
+namespace AutomationFoundation.Runtime.Builders;
+
+[TestFixture]
+public class BuildExceptionTests
 {
-    [TestFixture]
-    public class BuildExceptionTests
+    [Test]
+    public void ReturnsTheMessage()
     {
-        [Test]
-        public void ReturnsTheMessage()
-        {
-            var expected = "An exception occurred.";
+        var expected = "An exception occurred.";
 
-            var target = new BuildException(expected);
-            Assert.AreEqual(expected, target.Message);
-        }
+        var target = new BuildException(expected);
+        Assert.AreEqual(expected, target.Message);
+    }
 
-        [Test]
-        public void ReturnsTheException()
-        {
-            var expected = new BuildException();
+    [Test]
+    public void ReturnsTheException()
+    {
+        var expected = new BuildException();
 
-            var target = new BuildException("An exception occurred.", expected);
-            Assert.AreEqual(expected, target.InnerException);
-        }
+        var target = new BuildException("An exception occurred.", expected);
+        Assert.AreEqual(expected, target.InnerException);
     }
 }

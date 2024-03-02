@@ -4,83 +4,82 @@ using AutomationFoundation.Runtime;
 using AutomationFoundation.Runtime.Abstractions;
 using AutomationFoundation.Runtime.Abstractions.Builders;
 
-namespace AutomationFoundation.Hosting
+namespace AutomationFoundation.Hosting;
+
+internal class DefaultRuntimeBuilder : IRuntimeBuilder
 {
-    internal class DefaultRuntimeBuilder : IRuntimeBuilder
+    private readonly IList<IProcessorBuilder> processorBuilders = new List<IProcessorBuilder>();
+    private readonly IList<IProcessor> processors = new List<IProcessor>();
+
+    public IServiceProvider ApplicationServices { get; }
+
+    public DefaultRuntimeBuilder(IServiceProvider applicationServices)
     {
-        private readonly IList<IProcessorBuilder> processorBuilders = new List<IProcessorBuilder>();
-        private readonly IList<IProcessor> processors = new List<IProcessor>();
+        ApplicationServices = applicationServices ?? throw new ArgumentNullException(nameof(applicationServices));
+    }
 
-        public IServiceProvider ApplicationServices { get; }
-
-        public DefaultRuntimeBuilder(IServiceProvider applicationServices)
+    public IRuntimeBuilder RegisterProcessor(IProcessor processor)
+    {
+        if (processor == null)
         {
-            ApplicationServices = applicationServices ?? throw new ArgumentNullException(nameof(applicationServices));
+            throw new ArgumentNullException(nameof(processor));
         }
 
-        public IRuntimeBuilder RegisterProcessor(IProcessor processor)
+        if (processors.Contains(processor))
         {
-            if (processor == null)
-            {
-                throw new ArgumentNullException(nameof(processor));
-            }
-
-            if (processors.Contains(processor))
-            {
-                throw new ArgumentException("The processor has already been added.", nameof(processor));
-            }
-
-            processors.Add(processor);
-            return this;
+            throw new ArgumentException("The processor has already been added.", nameof(processor));
         }
 
-        public IRuntimeBuilder RegisterProcessor(IProcessorBuilder builder)
+        processors.Add(processor);
+        return this;
+    }
+
+    public IRuntimeBuilder RegisterProcessor(IProcessorBuilder builder)
+    {
+        if (builder == null)
         {
-            if (builder == null)
-            {
-                throw new ArgumentNullException(nameof(builder));
-            }
-
-            if (processorBuilders.Contains(builder))
-            {
-                throw new ArgumentException("The builder has already been added.", nameof(builder));
-            }
-
-            processorBuilders.Add(builder);
-            return this;
+            throw new ArgumentNullException(nameof(builder));
         }
 
-        public IRuntime Build()
+        if (processorBuilders.Contains(builder))
         {
-            AutomationRuntime runtime = null;
+            throw new ArgumentException("The builder has already been added.", nameof(builder));
+        }
 
-            try
+        processorBuilders.Add(builder);
+        return this;
+    }
+
+    public IRuntime Build()
+    {
+        AutomationRuntime runtime = null;
+
+        try
+        {
+            runtime = new AutomationRuntime();
+
+            foreach (var processorBuilder in processorBuilders)
             {
-                runtime = new AutomationRuntime();
-
-                foreach (var processorBuilder in processorBuilders)
+                var processor = processorBuilder.Build();
+                if (processor == null)
                 {
-                    var processor = processorBuilder.Build();
-                    if (processor == null)
-                    {
-                        throw new InvalidOperationException("The processor was not built.");
-                    }
-
-                    runtime.Add(processor);
+                    throw new InvalidOperationException("The processor was not built.");
                 }
 
-                foreach (var processor in processors)
-                {
-                    runtime.Add(processor);
-                }
+                runtime.Add(processor);
+            }
 
-                return runtime;
-            }
-            catch (Exception)
+            foreach (var processor in processors)
             {
-                runtime?.Dispose();
-                throw;
+                runtime.Add(processor);
             }
+
+            return runtime;
+        }
+        catch (Exception)
+        {
+            runtime?.Dispose();
+            throw;
         }
     }
 }

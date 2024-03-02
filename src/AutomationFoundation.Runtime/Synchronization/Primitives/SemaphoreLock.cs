@@ -1,28 +1,27 @@
 ﻿using System;
 using System.Threading;
 
-namespace AutomationFoundation.Runtime.Synchronization.Primitives
+namespace AutomationFoundation.Runtime.Synchronization.Primitives;
+
+/// <summary>
+/// Provides a resource lock using a semaphore.
+/// </summary>
+public class SemaphoreLock : SynchronizationLock
 {
+    private readonly SemaphoreSlim semaphore;
+
     /// <summary>
-    /// Provides a resource lock using a semaphore.
+    /// Initializes a new instance of the <see cref="SemaphoreLock"/> class.
     /// </summary>
-    public class SemaphoreLock : SynchronizationLock
+    /// <param name="semaphore">The semaphore which owns the lock.</param>
+    public SemaphoreLock(SemaphoreSlim semaphore)
     {
-        private readonly SemaphoreSlim semaphore;
+        this.semaphore = semaphore ?? throw new ArgumentNullException(nameof(semaphore));
+    }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="SemaphoreLock"/> class.
-        /// </summary>
-        /// <param name="semaphore">The semaphore which owns the lock.</param>
-        public SemaphoreLock(SemaphoreSlim semaphore)
-        {
-            this.semaphore = semaphore ?? throw new ArgumentNullException(nameof(semaphore));
-        }
-
-        /// <inheritdoc />
-        protected override void ReleaseLock()
-        {
-            semaphore.Release();
-        }
+    /// <inheritdoc />
+    protected override void ReleaseLock()
+    {
+        semaphore.Release();
     }
 }

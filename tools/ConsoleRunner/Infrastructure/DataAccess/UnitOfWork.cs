@@ -1,30 +1,29 @@
 ﻿using System;
 using ConsoleRunner.Abstractions.DataAccess;
 
-namespace ConsoleRunner.Infrastructure.DataAccess
+namespace ConsoleRunner.Infrastructure.DataAccess;
+
+public class UnitOfWork : IUnitOfWork, IDisposable
 {
-    public class UnitOfWork : IUnitOfWork, IDisposable
+    public IAppProcessorsRepository AppProcessors { get; } = new AppProcessorsRepository();
+
+    ~UnitOfWork()
     {
-        public IAppProcessorsRepository AppProcessors { get; } = new AppProcessorsRepository();
+        Dispose(false);
+    }
 
-        ~UnitOfWork()
-        {
-            Dispose(false);
-        }
+    public void SaveChanges()
+    {
+        // This method intentionally left blank.
+    }
 
-        public void SaveChanges()
-        {
-            // This method intentionally left blank.
-        }
+    public void Dispose()
+    {
+        Dispose(true);
+        GC.SuppressFinalize(this);
+    }
 
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
-
-        protected virtual void Dispose(bool disposing)
-        {
-        }
+    protected virtual void Dispose(bool disposing)
+    {
     }
 }

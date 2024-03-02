@@ -1,24 +1,23 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 
-namespace AutomationFoundation.Transactions.Abstractions
+namespace AutomationFoundation.Transactions.Abstractions;
+
+/// <summary>
+/// Identifies an object which supports transactions.
+/// </summary>
+public interface ISupportTransaction
 {
     /// <summary>
-    /// Identifies an object which supports transactions.
+    /// Begins a transaction.
     /// </summary>
-    public interface ISupportTransaction
-    {
-        /// <summary>
-        /// Begins a transaction.
-        /// </summary>
-        /// <returns>The transaction which was started.</returns>
-        ITransaction BeginTransaction();
+    /// <returns>The transaction which was started.</returns>
+    ITransaction BeginTransaction();
 
-        /// <summary>
-        /// Begins a transaction.
-        /// </summary>
-        /// <param name="cancellationToken">The cancellation token to monitor for cancellation requests.</param>
-        /// <returns>The transaction which was started.</returns>
-        Task<ITransaction> BeginTransactionAsync(CancellationToken cancellationToken);
-    }
+    /// <summary>
+    /// Begins a transaction.
+    /// </summary>
+    /// <param name="cancellationToken">The cancellation token to monitor for cancellation requests.</param>
+    /// <returns>The transaction which was started.</returns>
+    Task<ITransaction> BeginTransactionAsync(CancellationToken cancellationToken);
 }

@@ -1,25 +1,24 @@
 ﻿using System;
 using AutomationFoundation.Runtime.Abstractions.Threading.Internal;
 
-namespace AutomationFoundation.Runtime.Threading.Internal
+namespace AutomationFoundation.Runtime.Threading.Internal;
+
+/// <summary>
+/// Contains extension methods for the <see cref="IWorkerCacheMonitor"/> interface.
+/// </summary>
+internal static class WorkerCacheMonitorExtensions
 {
     /// <summary>
-    /// Contains extension methods for the <see cref="IWorkerCacheMonitor"/> interface.
+    /// Disposes of the object.
     /// </summary>
-    internal static class WorkerCacheMonitorExtensions
+    /// <param name="cacheMonitor">The cache monitor instance to dispose.</param>
+    public static void DisposeIfNecessary(this IWorkerCacheMonitor cacheMonitor)
     {
-        /// <summary>
-        /// Disposes of the object.
-        /// </summary>
-        /// <param name="cacheMonitor">The cache monitor instance to dispose.</param>
-        public static void DisposeIfNecessary(this IWorkerCacheMonitor cacheMonitor)
+        if (cacheMonitor == null)
         {
-            if (cacheMonitor == null)
-            {
-                throw new ArgumentNullException(nameof(cacheMonitor));
-            }
-
-            (cacheMonitor as IDisposable)?.Dispose();
+            throw new ArgumentNullException(nameof(cacheMonitor));
         }
+
+        (cacheMonitor as IDisposable)?.Dispose();
     }
 }

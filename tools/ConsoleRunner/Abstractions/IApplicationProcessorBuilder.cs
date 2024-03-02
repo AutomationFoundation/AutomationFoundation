@@ -2,10 +2,9 @@
 using AutomationFoundation.Runtime.Abstractions.Builders;
 using ConsoleRunner.Model;
 
-namespace ConsoleRunner.Abstractions
+namespace ConsoleRunner.Abstractions;
+
+public interface IApplicationProcessorBuilder
 {
-    public interface IApplicationProcessorBuilder
-    {
-        Processor Build(IRuntimeBuilder runtimeBuilder, AppProcessor config);
-    }
+    Processor Build(IRuntimeBuilder runtimeBuilder, AppProcessor config);
 }

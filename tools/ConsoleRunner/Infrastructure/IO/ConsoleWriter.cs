@@ -1,52 +1,51 @@
 ﻿using System;
 
-namespace ConsoleRunner.Infrastructure.IO
-{
-    public class ConsoleWriter : Abstractions.IConsoleWriter
-    {
-        private static readonly object SyncRoot = new object();
+namespace ConsoleRunner.Infrastructure.IO;
 
-        public void WriteEmptyLine()
+public class ConsoleWriter : Abstractions.IConsoleWriter
+{
+    private static readonly object SyncRoot = new object();
+
+    public void WriteEmptyLine()
+    {
+        lock (SyncRoot)
         {
-            lock (SyncRoot)
-            {
-                Console.WriteLine();
-            }
+            Console.WriteLine();
+        }
+    }
+
+    public void WriteLine(string text)
+    {
+        if (string.IsNullOrWhiteSpace(text))
+        {
+            throw new ArgumentNullException(nameof(text));
         }
 
-        public void WriteLine(string text)
+        lock (SyncRoot)
         {
-            if (string.IsNullOrWhiteSpace(text))
-            {
-                throw new ArgumentNullException(nameof(text));
-            }
+            Console.WriteLine(text);
+        }
+    }
 
-            lock (SyncRoot)
-            {                
+    public void WriteLine(string text, ConsoleColor foreColor)
+    {
+        if (string.IsNullOrWhiteSpace(text))
+        {
+            throw new ArgumentNullException(nameof(text));
+        }
+
+        lock (SyncRoot)
+        {
+            var previousForecolor = Console.ForegroundColor;
+
+            try
+            {
+                Console.ForegroundColor = foreColor;
                 Console.WriteLine(text);
             }
-        }
-
-        public void WriteLine(string text, ConsoleColor foreColor)
-        {
-            if (string.IsNullOrWhiteSpace(text))
+            finally
             {
-                throw new ArgumentNullException(nameof(text));
-            }
-
-            lock (SyncRoot)
-            {
-                var previousForecolor = Console.ForegroundColor;
-
-                try
-                {
-                    Console.ForegroundColor = foreColor;
-                    Console.WriteLine(text);
-                }
-                finally
-                {
-                    Console.ForegroundColor = previousForecolor;
-                }
+                Console.ForegroundColor = previousForecolor;
             }
         }
     }

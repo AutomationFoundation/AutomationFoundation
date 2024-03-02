@@ -2,22 +2,21 @@
 using ConsoleRunner.Abstractions.DataAccess;
 using ConsoleRunner.Model;
 
-namespace ConsoleRunner.Infrastructure.DataAccess
+namespace ConsoleRunner.Infrastructure.DataAccess;
+
+public class AppProcessorsRepository : IAppProcessorsRepository
 {
-    public class AppProcessorsRepository : IAppProcessorsRepository
+    public IList<AppProcessor> GetProcessorsForMachine(string machine)
     {
-        public IList<AppProcessor> GetProcessorsForMachine(string machine)
+        return new[]
         {
-            return new[]
+            new AppProcessor
             {
-                new AppProcessor
-                {
-                    AppProcessorId = 1,
-                    IsEnabled = true,
-                    Name = "Test 1",
-                    ProcessorType = ProcessorType.ProducerConsumer
-                }
-            };
-        }
+                AppProcessorId = 1,
+                IsEnabled = true,
+                Name = "Test 1",
+                ProcessorType = ProcessorType.ProducerConsumer
+            }
+        };
     }
 }

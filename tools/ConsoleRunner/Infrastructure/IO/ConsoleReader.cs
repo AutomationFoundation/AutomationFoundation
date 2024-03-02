@@ -1,12 +1,11 @@
 ﻿using System;
 
-namespace ConsoleRunner.Infrastructure.IO
+namespace ConsoleRunner.Infrastructure.IO;
+
+public class ConsoleReader : Abstractions.IConsoleReader
 {
-    public class ConsoleReader : Abstractions.IConsoleReader
+    public void WaitForAnyKey()
     {
-        public void WaitForAnyKey()
-        {
-            Console.ReadKey(true);
-        }
+        Console.ReadKey(true);
     }
 }

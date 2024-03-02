@@ -1,7 +1,6 @@
-﻿namespace ConsoleRunner.Abstractions
+﻿namespace ConsoleRunner.Abstractions;
+
+public interface IConsoleReader
 {
-    public interface IConsoleReader
-    {
-        void WaitForAnyKey();
-    }
+    void WaitForAnyKey();
 }

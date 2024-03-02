@@ -3,34 +3,33 @@ using AutomationFoundation.Hosting.Abstractions.Builders;
 using AutomationFoundation.Hosting.Builders;
 using Microsoft.Extensions.Configuration;
 
-namespace AutomationFoundation.Hosting
+namespace AutomationFoundation.Hosting;
+
+/// <summary>
+/// Contains extension methods for the runtime host builder.
+/// </summary>
+public static class RuntimeHostBuilderExtensions
 {
     /// <summary>
-    /// Contains extension methods for the runtime host builder.
+    /// Configures the application configuration.
     /// </summary>
-    public static class RuntimeHostBuilderExtensions
+    /// <param name="builder">The builder instance.</param>
+    /// <param name="callback">The callback which will configure the application configuration.</param>
+    /// <returns>The builder instance.</returns>
+    public static IRuntimeHostBuilder ConfigureAppConfiguration(this IRuntimeHostBuilder builder, Action<IConfigurationBuilder> callback)
     {
-        /// <summary>
-        /// Configures the application configuration.
-        /// </summary>
-        /// <param name="builder">The builder instance.</param>
-        /// <param name="callback">The callback which will configure the application configuration.</param>
-        /// <returns>The builder instance.</returns>
-        public static IRuntimeHostBuilder ConfigureAppConfiguration(this IRuntimeHostBuilder builder, Action<IConfigurationBuilder> callback)
+        if (builder == null)
         {
-            if (builder == null)
-            {
-                throw new ArgumentNullException(nameof(builder));
-            }
-            else if (callback == null)
-            {
-                throw new ArgumentNullException(nameof(callback));
-            }
-
-            builder.ConfigureServices(services => 
-                ConfigurationBuilderRegistration.OnConfigureServicesCallback(services, callback));
-
-            return builder;
+            throw new ArgumentNullException(nameof(builder));
         }
+        else if (callback == null)
+        {
+            throw new ArgumentNullException(nameof(callback));
+        }
+
+        builder.ConfigureServices(services =>
+            ConfigurationBuilderRegistration.OnConfigureServicesCallback(services, callback));
+
+        return builder;
     }
 }

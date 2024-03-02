@@ -1,13 +1,12 @@
-﻿namespace AutomationFoundation.Transactions.Abstractions
+﻿namespace AutomationFoundation.Transactions.Abstractions;
+
+/// <summary>
+/// Identifies an object which holds a transaction.
+/// </summary>
+public interface ITransactionContainer
 {
     /// <summary>
-    /// Identifies an object which holds a transaction.
+    /// Gets the transaction.
     /// </summary>
-    public interface ITransactionContainer
-    {
-        /// <summary>
-        /// Gets the transaction.
-        /// </summary>
-        ITransaction Transaction { get; }
-    }
+    ITransaction Transaction { get; }
 }

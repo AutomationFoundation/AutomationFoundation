@@ -1,12 +1,11 @@
 ﻿using System;
 
-namespace ConsoleRunner.Abstractions
-{
-    public interface IConsoleWriter
-    {
-        void WriteEmptyLine();
+namespace ConsoleRunner.Abstractions;
 
-        void WriteLine(string text);
-        void WriteLine(string text, ConsoleColor foreColor);
-    }
+public interface IConsoleWriter
+{
+    void WriteEmptyLine();
+
+    void WriteLine(string text);
+    void WriteLine(string text, ConsoleColor foreColor);
 }

@@ -1,32 +1,31 @@
 ﻿using System.Runtime.ConstrainedExecution;
 using AutomationFoundation.Runtime.Abstractions.Synchronization;
 
-namespace AutomationFoundation.Runtime.Synchronization
+namespace AutomationFoundation.Runtime.Synchronization;
+
+/// <summary>
+/// Provides a lock on a synchronization resource.
+/// </summary>
+public abstract class SynchronizationLock : CriticalFinalizerObject, ISynchronizationLock
 {
     /// <summary>
-    /// Provides a lock on a synchronization resource.
+    /// Gets the object used for synchronization.
     /// </summary>
-    public abstract class SynchronizationLock : CriticalFinalizerObject, ISynchronizationLock
+    protected object SyncRoot { get; } = new object();
+
+    /// <summary>
+    /// Releases the lock on the resource.
+    /// </summary>
+    public void Release()
     {
-        /// <summary>
-        /// Gets the object used for synchronization.
-        /// </summary>
-        protected object SyncRoot { get; } = new object();
-
-        /// <summary>
-        /// Releases the lock on the resource.
-        /// </summary>
-        public void Release()
+        lock (SyncRoot)
         {
-            lock (SyncRoot)
-            {
-                ReleaseLock();
-            }
+            ReleaseLock();
         }
-
-        /// <summary>
-        /// Releases the lock on the resource.
-        /// </summary>
-        protected abstract void ReleaseLock();
     }
+
+    /// <summary>
+    /// Releases the lock on the resource.
+    /// </summary>
+    protected abstract void ReleaseLock();
 }

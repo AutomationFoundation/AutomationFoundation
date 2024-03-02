@@ -1,14 +1,13 @@
-﻿namespace AutomationFoundation.Runtime.Abstractions.Builders
+﻿namespace AutomationFoundation.Runtime.Abstractions.Builders;
+
+/// <summary>
+/// Identifies a builder for processors.
+/// </summary>
+public interface IProcessorBuilder
 {
     /// <summary>
-    /// Identifies a builder for processors.
+    /// Builds the processor.
     /// </summary>
-    public interface IProcessorBuilder
-    {
-        /// <summary>
-        /// Builds the processor.
-        /// </summary>
-        /// <returns>The new processor which was built.</returns>
-        IProcessor Build();
-    }
+    /// <returns>The new processor which was built.</returns>
+    IProcessor Build();
 }

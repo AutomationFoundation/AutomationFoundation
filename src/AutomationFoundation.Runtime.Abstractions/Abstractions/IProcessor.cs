@@ -1,30 +1,29 @@
 ﻿using System;
 
-namespace AutomationFoundation.Runtime.Abstractions
+namespace AutomationFoundation.Runtime.Abstractions;
+
+/// <summary>
+/// Identifies a processor.
+/// </summary>
+public interface IProcessor : IDisposable
 {
     /// <summary>
-    /// Identifies a processor.
+    /// Gets the name.
     /// </summary>
-    public interface IProcessor : IDisposable
-    {
-        /// <summary>
-        /// Gets the name.
-        /// </summary>
-        string Name { get; }
+    string Name { get; }
 
-        /// <summary>
-        /// Gets the processor state.
-        /// </summary>
-        ProcessorState State { get; }
+    /// <summary>
+    /// Gets the processor state.
+    /// </summary>
+    ProcessorState State { get; }
 
-        /// <summary>
-        /// Starts the processor.
-        /// </summary>
-        void Start();
+    /// <summary>
+    /// Starts the processor.
+    /// </summary>
+    void Start();
 
-        /// <summary>
-        /// Stops the processor.
-        /// </summary>
-        void Stop();
-    }
+    /// <summary>
+    /// Stops the processor.
+    /// </summary>
+    void Stop();
 }

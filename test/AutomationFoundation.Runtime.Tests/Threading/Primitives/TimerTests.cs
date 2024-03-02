@@ -2,49 +2,48 @@
 using NUnit.Framework;
 using ManualResetEventSlim = System.Threading.ManualResetEventSlim;
 
-namespace AutomationFoundation.Runtime.Threading.Primitives
+namespace AutomationFoundation.Runtime.Threading.Primitives;
+
+[TestFixture]
+public class TimerTests
 {
-    [TestFixture]
-    public class TimerTests
+    [Test]
+    [Timeout(10000)]
+    public void RunsTheCallbackAsExpected()
     {
-        [Test]
-        [Timeout(10000)]
-        public void RunsTheCallbackAsExpected()
+        var called = false;
+
+        using var waitEvent = new ManualResetEventSlim(false);
+        using var target = new Timer();
+
+        target.Start(TimeSpan.FromSeconds(1), () =>
         {
-            var called = false;
+            called = true;
+        }, error => { });
 
-            using var waitEvent = new ManualResetEventSlim(false);
-            using var target = new Timer();
+        waitEvent.Wait(5000);
 
-            target.Start(TimeSpan.FromSeconds(1), () =>
-            {
-                called = true;
-            }, error => { });
+        Assert.True(called);
+    }
 
-            waitEvent.Wait(5000);
+    [Test]
+    [Timeout(10000)]
+    public void RunsTheErrorCallbackAsExpected()
+    {
+        var called = false;
 
-            Assert.True(called);
-        }
+        using var waitEvent = new ManualResetEventSlim(false);
+        using var target = new Timer();
 
-        [Test]
-        [Timeout(10000)]
-        public void RunsTheErrorCallbackAsExpected()
+        target.Start(TimeSpan.FromSeconds(1), () => throw new InvalidOperationException(), error =>
         {
-            var called = false;
+            Assert.IsInstanceOf<InvalidOperationException>(error);
 
-            using var waitEvent = new ManualResetEventSlim(false);
-            using var target = new Timer();
+            called = true;
+        });
 
-            target.Start(TimeSpan.FromSeconds(1), () => throw new InvalidOperationException(), error =>
-            {
-                Assert.IsInstanceOf<InvalidOperationException>(error);
+        waitEvent.Wait(5000);
 
-                called = true;
-            });
-
-            waitEvent.Wait(5000);
-
-            Assert.True(called);
-        }
+        Assert.True(called);
     }
 }

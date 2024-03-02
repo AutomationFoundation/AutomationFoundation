@@ -1,174 +1,173 @@
 ﻿using System;
 using AutomationFoundation.Runtime.Abstractions;
 
-namespace AutomationFoundation.Runtime
+namespace AutomationFoundation.Runtime;
+
+/// <summary>
+/// Represents a processor. This class must be inherited.
+/// </summary>
+public abstract class Processor : IProcessor
 {
+    private bool disposed;
+
     /// <summary>
-    /// Represents a processor. This class must be inherited.
+    /// Gets the object used for thread synchronization.
     /// </summary>
-    public abstract class Processor : IProcessor
+    protected object SyncRoot { get; } = new object();
+
+    /// <inheritdoc />
+    public string Name { get; }
+
+    /// <inheritdoc />
+    public ProcessorState State { get; protected set; }
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="Processor"/> class.
+    /// </summary>
+    /// <param name="name">The name of the processor.</param>
+    protected Processor(string name)
     {
-        private bool disposed;
-
-        /// <summary>
-        /// Gets the object used for thread synchronization.
-        /// </summary>
-        protected object SyncRoot { get; } = new object();
-
-        /// <inheritdoc />
-        public string Name { get; }
-
-        /// <inheritdoc />
-        public ProcessorState State { get; protected set; }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Processor"/> class.
-        /// </summary>
-        /// <param name="name">The name of the processor.</param>
-        protected Processor(string name)
+        if (string.IsNullOrWhiteSpace(name))
         {
-            if (string.IsNullOrWhiteSpace(name))
-            {
-                throw new ArgumentNullException(nameof(name));
-            }
-
-            Name = name;
+            throw new ArgumentNullException(nameof(name));
         }
 
-        /// <summary>
-        /// Finalizes an instance of the <see cref="Processor"/> class.
-        /// </summary>
-        ~Processor()
-        {
-            Dispose(false);
-        }
+        Name = name;
+    }
 
-        /// <inheritdoc />
-        public void Start()
-        {
-            GuardMustNotBeDisposed();
+    /// <summary>
+    /// Finalizes an instance of the <see cref="Processor"/> class.
+    /// </summary>
+    ~Processor()
+    {
+        Dispose(false);
+    }
 
+    /// <inheritdoc />
+    public void Start()
+    {
+        GuardMustNotBeDisposed();
+
+        GuardMustNotHaveEncounteredAnError();
+        GuardMustNotAlreadyBeStarted();
+
+        lock (SyncRoot)
+        {
             GuardMustNotHaveEncounteredAnError();
             GuardMustNotAlreadyBeStarted();
 
-            lock (SyncRoot)
+            try
             {
-                GuardMustNotHaveEncounteredAnError();
-                GuardMustNotAlreadyBeStarted();
+                State = ProcessorState.Starting;
 
-                try
-                {
-                    State = ProcessorState.Starting;
-                    
-                    OnStart();
+                OnStart();
 
-                    State = ProcessorState.Started;
-                }
-                catch (Exception)
-                {
-                    State = ProcessorState.Error;
-                    throw;
-                }
+                State = ProcessorState.Started;
+            }
+            catch (Exception)
+            {
+                State = ProcessorState.Error;
+                throw;
             }
         }
+    }
 
-        /// <summary>
-        /// Ensures the processor has not already been started.
-        /// </summary>
-        protected void GuardMustNotAlreadyBeStarted()
+    /// <summary>
+    /// Ensures the processor has not already been started.
+    /// </summary>
+    protected void GuardMustNotAlreadyBeStarted()
+    {
+        if (State >= ProcessorState.Started)
         {
-            if (State >= ProcessorState.Started)
-            {
-                throw new RuntimeException("The processor has already been started.");
-            }
+            throw new RuntimeException("The processor has already been started.");
         }
+    }
 
-        /// <summary>
-        /// Occurs when the processor is being started.
-        /// </summary>
-        protected abstract void OnStart();
+    /// <summary>
+    /// Occurs when the processor is being started.
+    /// </summary>
+    protected abstract void OnStart();
 
-        /// <inheritdoc />
-        public void Stop()
+    /// <inheritdoc />
+    public void Stop()
+    {
+        GuardMustNotBeDisposed();
+
+        GuardMustNotHaveEncounteredAnError();
+        GuardMustNotAlreadyBeStopped();
+
+        lock (SyncRoot)
         {
-            GuardMustNotBeDisposed();
-
             GuardMustNotHaveEncounteredAnError();
             GuardMustNotAlreadyBeStopped();
 
-            lock (SyncRoot)
+            try
             {
-                GuardMustNotHaveEncounteredAnError();
-                GuardMustNotAlreadyBeStopped();
+                State = ProcessorState.Stopping;
 
-                try
-                {
-                    State = ProcessorState.Stopping;
+                OnStop();
 
-                    OnStop();
-
-                    State = ProcessorState.Stopped;
-                }
-                catch (Exception)
-                {
-                    State = ProcessorState.Error;
-                    throw;
-                }
+                State = ProcessorState.Stopped;
             }
-        }        
-
-        /// <summary>
-        /// Ensures the processor has not already been stopped.
-        /// </summary>
-        protected void GuardMustNotAlreadyBeStopped()
-        {
-            if (State >= ProcessorState.Stopping && State <= ProcessorState.Stopped)
+            catch (Exception)
             {
-                throw new RuntimeException("The processor has not been started.");
+                State = ProcessorState.Error;
+                throw;
             }
         }
+    }
 
-        /// <summary>
-        /// Occurs when the processor is being stopped.
-        /// </summary>
-        protected abstract void OnStop();
-
-        /// <summary>
-        /// Ensures the processor has not encountered an error.
-        /// </summary>
-        protected void GuardMustNotHaveEncounteredAnError()
+    /// <summary>
+    /// Ensures the processor has not already been stopped.
+    /// </summary>
+    protected void GuardMustNotAlreadyBeStopped()
+    {
+        if (State >= ProcessorState.Stopping && State <= ProcessorState.Stopped)
         {
-            if (State <= ProcessorState.Error)
-            {
-                throw new RuntimeException("The processor has encountered an unrecoverable error and can no longer be started.");
-            }
+            throw new RuntimeException("The processor has not been started.");
         }
+    }
 
-        /// <inheritdoc />
-        public void Dispose()
+    /// <summary>
+    /// Occurs when the processor is being stopped.
+    /// </summary>
+    protected abstract void OnStop();
+
+    /// <summary>
+    /// Ensures the processor has not encountered an error.
+    /// </summary>
+    protected void GuardMustNotHaveEncounteredAnError()
+    {
+        if (State <= ProcessorState.Error)
         {
-            Dispose(true);
-            GC.SuppressFinalize(this);
+            throw new RuntimeException("The processor has encountered an unrecoverable error and can no longer be started.");
         }
+    }
 
-        /// <summary>
-        /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
-        /// </summary>
-        /// <param name="disposing">true to release both managed and unmanaged resources, otherwise false to release unmanaged resources.</param>
-        protected virtual void Dispose(bool disposing)
-        {
-            disposed = true;
-        }
+    /// <inheritdoc />
+    public void Dispose()
+    {
+        Dispose(true);
+        GC.SuppressFinalize(this);
+    }
 
-        /// <summary>
-        /// Guards against the processor being used after disposal.
-        /// </summary>
-        protected void GuardMustNotBeDisposed()
+    /// <summary>
+    /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+    /// </summary>
+    /// <param name="disposing">true to release both managed and unmanaged resources, otherwise false to release unmanaged resources.</param>
+    protected virtual void Dispose(bool disposing)
+    {
+        disposed = true;
+    }
+
+    /// <summary>
+    /// Guards against the processor being used after disposal.
+    /// </summary>
+    protected void GuardMustNotBeDisposed()
+    {
+        if (disposed)
         {
-            if (disposed)
-            {
-                throw new ObjectDisposedException(nameof(Processor));
-            }
+            throw new ObjectDisposedException(nameof(Processor));
         }
     }
 }

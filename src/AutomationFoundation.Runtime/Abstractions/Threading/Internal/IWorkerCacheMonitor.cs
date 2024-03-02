@@ -1,13 +1,12 @@
-﻿namespace AutomationFoundation.Runtime.Abstractions.Threading.Internal
+﻿namespace AutomationFoundation.Runtime.Abstractions.Threading.Internal;
+
+/// <summary>
+/// Identifies a mechanism which monitors a worker cache.
+/// </summary>
+internal interface IWorkerCacheMonitor
 {
     /// <summary>
-    /// Identifies a mechanism which monitors a worker cache.
+    /// Starts monitoring the cache.
     /// </summary>
-    internal interface IWorkerCacheMonitor
-    {
-        /// <summary>
-        /// Starts monitoring the cache.
-        /// </summary>
-        void Start();
-    }
+    void Start();
 }

@@ -1,6 +1,5 @@
-﻿using System.Threading.Tasks;
-using AutomationFoundation.Features.ProducerConsumer.Abstractions;
-
+﻿/* Unmerged change from project 'AutomationFoundation.Features.ProducerConsumer.Tests(net472)'
+Before:
 namespace AutomationFoundation.Features.ProducerConsumer.Strategies.TestObjects
 {
     public class StubConsumer<TItem> : IConsumer<TItem>
@@ -9,5 +8,24 @@ namespace AutomationFoundation.Features.ProducerConsumer.Strategies.TestObjects
         {
             return Task.CompletedTask;
         }
+After:
+namespace AutomationFoundation.Features.ProducerConsumer.Strategies.TestObjects;
+
+public class StubConsumer<TItem> : IConsumer<TItem>
+{
+    public Task ConsumeAsync(IProducerConsumerContext<TItem> context)
+    {
+        return Task.CompletedTask;
+*/
+using System.Threading.Tasks;
+using AutomationFoundation.Features.ProducerConsumer.Abstractions;
+
+namespace AutomationFoundation.Features.ProducerConsumer.Strategies.TestObjects;
+
+public class StubConsumer<TItem> : IConsumer<TItem>
+{
+    public Task ConsumeAsync(IProducerConsumerContext<TItem> context)
+    {
+        return Task.CompletedTask;
     }
 }

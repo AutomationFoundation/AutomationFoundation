@@ -2,13 +2,12 @@
 using AutomationFoundation.Hosting.Abstractions;
 using ConsoleRunner.Infrastructure;
 
-namespace ConsoleRunner
+namespace ConsoleRunner;
+
+internal partial class Startup : IConfigureContainer<ContainerBuilder>
 {
-    internal partial class Startup : IConfigureContainer<ContainerBuilder>
-    { 
-        public void ConfigureContainer(ContainerBuilder builder)
-        {
-            builder.RegisterModule<ContainerBindings>();
-        }
+    public void ConfigureContainer(ContainerBuilder builder)
+    {
+        builder.RegisterModule<ContainerBindings>();
     }
 }

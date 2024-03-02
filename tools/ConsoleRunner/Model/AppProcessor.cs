@@ -1,12 +1,11 @@
-﻿namespace ConsoleRunner.Model
+﻿namespace ConsoleRunner.Model;
+
+public class AppProcessor
 {
-    public class AppProcessor
-    {
-        public long AppProcessorId { get; set; }
-        public string Name { get; set; }
-        public bool IsEnabled { get; set; }
-        public ProcessorType ProcessorType { get; set; }
-        public int? ProducerCount { get; set; }
-        public int? ConsumerCount { get; set; }
-    }
+    public long AppProcessorId { get; set; }
+    public string Name { get; set; }
+    public bool IsEnabled { get; set; }
+    public ProcessorType ProcessorType { get; set; }
+    public int? ProducerCount { get; set; }
+    public int? ConsumerCount { get; set; }
 }

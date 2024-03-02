@@ -2,22 +2,21 @@
 using AutomationFoundation.Features.ProducerConsumer.Abstractions;
 using ConsoleRunner.Infrastructure.IO;
 
-namespace ConsoleRunner.Infrastructure.WorkProcessors
+namespace ConsoleRunner.Infrastructure.WorkProcessors;
+
+public class IntConsumer : IConsumer<int>
 {
-    public class IntConsumer : IConsumer<int>
+    private static readonly Monitor Monitor = new Monitor("Consumed", new ConsoleWriter());
+
+    static IntConsumer()
     {
-        private static readonly Monitor Monitor = new Monitor("Consumed", new ConsoleWriter());
+        Monitor.Start();
+    }
 
-        static IntConsumer()
-        {
-            Monitor.Start();
-        }
+    public Task ConsumeAsync(IProducerConsumerContext<int> context)
+    {
+        Monitor.Increment();
 
-        public Task ConsumeAsync(IProducerConsumerContext<int> context)
-        {
-            Monitor.Increment();
-            
-            return Task.CompletedTask;
-        }
+        return Task.CompletedTask;
     }
 }
