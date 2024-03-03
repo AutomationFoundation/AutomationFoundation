@@ -6,7 +6,8 @@
     ],
     "settings": {
         "files.exclude": {
-            "**/.vscode": true,
+            ".build": true,
+            ".vscode": true,
             "**/.git": true,
             "**/.svn": true,
             "**/.hg": true,
