@@ -5,5 +5,10 @@
         "ms-dotnettools.csdevkit",
         "visualstudioexptteam.vscodeintellicode",
         "ms-dotnettools.vscodeintellicode-csharp"
+    ],
+    "unwantedRecommendations": [
+        "hbenl.vscode-test-explorer",
+        "ms-vscode.test-adapter-converter",
+        "connorshea.vscode-test-explorer-status-bar"
     ]
 }
