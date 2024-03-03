@@ -1,15 +1,8 @@
 <Project>
     <PropertyGroup>
-        <SignAssembly>true</SignAssembly>
-        <AssemblyOriginatorKeyFile>..\..\Public.snk</AssemblyOriginatorKeyFile>
-        <DelaySign>false</DelaySign>
-
         <Version>0.0.0</Version>
         <PackageVersion>$(Version)</PackageVersion>
         <InformationalVersion>$(Version)</InformationalVersion>
-        <GenerateDocumentationFile>true</GenerateDocumentationFile>
-        <GeneratePackageOnBuild Condition=" '$(Configuration)' == 'Release'">true</GeneratePackageOnBuild>
-
         <Authors>Winnster.io</Authors>
         <RepositoryUrl>https://github.com/winnster/AutomationFoundation</RepositoryUrl>
         <RepositoryType>git</RepositoryType>
@@ -17,5 +10,19 @@
 
     <PropertyGroup>
         <LangVersion>10.0</LangVersion>
+    </PropertyGroup>
+
+    <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+        <SignAssembly>true</SignAssembly>
+        <AssemblyOriginatorKeyFile>..\..\Public.snk</AssemblyOriginatorKeyFile>
+        <DelaySign>false</DelaySign>
+    </PropertyGroup>
+
+    <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
+        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+        <SignAssembly>true</SignAssembly>
+        <AssemblyOriginatorKeyFile>..\..\Winnster.snk</AssemblyOriginatorKeyFile>
+        <DelaySign>false</DelaySign>
     </PropertyGroup>
 </Project>
